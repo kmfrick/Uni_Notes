@@ -1,0 +1,276 @@
+
+\documentclass[answers,a4paper,12pt]{exam}
+\usepackage{fontawesome5}
+\usepackage[italian]{babel}
+\usepackage[margin=1.5cm]{geometry}
+\title{Sistemi Operativi T}
+\author{Kevin Michael Frick}
+\setlength\linefillheight{.3in}
+\setlength\linefillthickness{0.4pt}
+\usepackage{listings}
+\lstset{
+	basicstyle=\ttfamily,
+	columns=fullflexible,
+}
+\renewcommand{\solutiontitle}{\noindent\textbf{Risposta:}\enspace}
+\begin{document}
+\maketitle
+\begin{questions}
+\section{Organizzazione dei SO}
+\question
+Organizzazione dei SO: sistemi monolitici, modulari, microkernel.
+\begin{solutionorlines}
+Un sistema operativo \textit{monolitico} (e.g. il kernel Linux) è composto da un unico modulo che implementa tutte le procedure necessarie per eseguire i propri compiti. Un sistema simile è molto veloce nell'esecuzione dato il ridotto numero di chiamate a funzioni, ma diventa facilmente complesso e pesante.
+
+Un sistema operativo \textit{a livelli} (e.g. TED) è diviso in una serie di moduli progressivamente più astratti: il modulo a livello più basso implementa le chiamate di sistema più semplici le quali vengono utilizzate dalle chiamate implementate dal livello superiore e così via. Ogni livello realizza un insieme di funzionalità che vengono offerti, tramite interfacce  ben definite, al livello superiore. Un sistema simile è più complesso da progettare e più lento dato il maggiore numero di chiamate di sistema e i vari livelli da attraversare: per questo motivo si cerca di limitare il più possibile il numero di livelli. Un sistema operativo modulare è facilmente estensibile aggiungendo moduli ulteriori o modificando quelli esistenti senza dover lavorare sui livelli di astrazione più bassi: ogni livello conosce quelli sottostanti solo tramite le interfacce fornite dal livello immediatamente inferiore.
+
+Un sistema operativo a \textit{microkernel} (e.g. Minix) implementa solo le chiamate di sistema strettamente necessarie per accedere alle risorse protette, mentre tutte le utilità di sistema ulteriori lavorano in modo utente e si servono delle funzioni del microkernel. Un sistema simile è molto affidabile, estendibile e semplice da progettare, ma è lento a causa del gran numero di chiamate di sistema necessarie per eseguire qualunque operazione, anche se molto semplice. I microkernel vengono spesso utilizzati per scopi didattici.
+\end{solutionorlines}
+\section{Allocazione della memoria centrale}
+\question
+Allocazione della memoria nei sistemi multiprogrammati.
+\begin{solutionorlines}[3.8in]
+	Nei sistemi multiprogrammati il sistema operativo svolge diversi compiti:
+	\begin{itemize}
+		\item \textbf{allocazione e deallocazione} della memoria ai processi;
+		\item \textbf{\textit{binding}} degli indirizzi logici a indirizzi fisici;
+		\item \textbf{protezione} della memoria da accessi non autorizzati;
+		\item realizzazione della \textbf{memoria virtuale}.
+	\end{itemize}
+	Gli indirizzi di memoria possono essere \textit{simbolici} (e.g. nomi di variabili), \textit{logici} o \textit{fisici}. Un file contenente codice di programma che utilizza indirizzi simbolici viene convertito dal compilatore in un \textit{file oggetto} che dopo la fase di \textit{linking} viene collegato con le librerie di sistema utilizzate, convertendo gli indirizzi in indirizzi logici. Quando poi il sistema operativo carica oltre all'eseguibile rilocabile generato dal linker anche le librerie a caricamento dinamico (\textit{dynamic link libraries}) gli indirizzi vengono tradotti in indirizzi fisici.
+	La memoria virtuale è una funzione svolta dai sistemi operativi che permette di svincolare la capacità di esecuzione di programmi dall'effettiva disponibilità di memoria centrale: ogni processo dispone del proprio \textit{spazio di indirizzamento virtuale} che può essere mappato nello spazio di indirizzamento fisico con una serie di politiche:
+	\begin{itemize}
+		\item \textbf{allocazione contigua a partizione singola}, lo spazio di indirizzamento virtuale è allocato in una porzione contigua dello spazio di indirizzamento fisico. Questa politica però vincola la dimensione della memoria virtuale alle dimensioni fisiche della memoria centrale e impedisce la multiprogrammazione;
+		\item \textbf{allocazione contigua a partizione multipla}, a ogni processo viene allocata una diversa area di memoria nello spazio di indirizzamento fisico. Le partizioni possono avere dimensione fissa, nel qual caso però si ha \textit{frammentazione interna} quando un processo non utilizza tutta la memoria allocatagli e si limitano le possibilità di multiprogrammazione, o a dimensione variabile, che permette di sfruttare un grado flessibile di multiprogrammazione ed elimina la frammentazione interna creando però \textit{frammentazione esterna} man mano che i processi vengono avviati e terminati, necessitando quindi di periodica \textit{compattazione};
+		\item \textbf{allocazione non contigua}, nella quale gli spazi di indirizzamento virtuali sono distribuiti in sezioni non contigue di memoria centrale e secondaria. L'allocazione non contigua può essere realizzata tramite \textit{paginazione}, \textit{segmentazione} o una combinazione delle due:
+		\begin{itemize}
+			\item la \textbf{paginazione} prevede il mapping di porzioni di memoria virtuale in posizioni non contigue della memoria fisica: ogni porzione di memoria virtuale, di dimensione costante, è detta \textit{pagina} o \textit{frame}. Le pagine possono essere memorizzate anche in memoria secondaria, nel qual caso vengono caricate in memoria centrale, su richiesta, dal \textit{pager}. Un pager che non carica una pagina in memoria centrale prima che essa venga richiesta è detto "pigro" (\textit{lazy pager}). È possibile che non vi sia abbastanza spazio in memoria secondaria per caricare una pagina richiesta: in tal caso si parla di \textit{page fault} e una \textit{pagina vittima} viene eliminata (ma lo swap-out viene eseguito solo se è stata modificata, in modo da risparmiare operazioni sulla memoria secondaria) per fare posto a quella richiesta. Il sistema operativo mantiene una struttura dati detta \textit{tabella delle pagine} nella quale a ogni indirizzo di pagina è associato un indirizzo di memoria fisica. All'interno di ogni pagina gli indirizzi sono contigui. La tabella delle pagine può diventare molto grande al crescere dei processi, perciò si utilizza la \textit{paginazione a più livelli}: anche la tabella delle pagine è paginata, e le sue pagine possono essere paginate a loro volta. Il tempo di accesso alla memoria virtuale cresce con i livelli di paginazione. Esiste anche una struttura dati particolare, detta \textit{tabella delle pagine invertita}, che memorizza in una tabella gli indirizzi delle pagine e il \textit{pid} del processo che le sta usando. La ricerca in questa struttura però è lenta e l'uso della tabella di pagine invertita rende difficile la condivisione di memoria virtuale tra processi. Può capitare che un processo impieghi più tempo a paginare che ad eseguire (fenomeno di \textit{thrashing}): per far fronte a ciò ci si serve di pager che precaricano in memoria centrale l'insieme di pagine che si prevede verranno usate da un processo durante la sua esecuzione (\textit{working set});
+			\item la \textbf{segmentazione} prevede la partizione dello spazio di indirizzamento virtuale in segmenti di dimensione variabile, identificati da un nome e divisi semanticamente (e.g. \textit{codice}, \textit{dati}, \textit{heap}, \textit{stack}). All'interno di ogni segmento i dati sono allocati in modo contiguo e non è fissato un ordine tra i segmenti: ognuno è identificato da un intero a cui il SO fa riferimento.
+		\end{itemize}
+	Spesso si utilizza una combinazione di queste due tecniche: lo spazio di indirizzamento virtuale è segmentato e ogni segmento è paginato. 
+	\end{itemize}
+\end{solutionorlines}
+\question
+Significato e trattamento dei \textit{page fault}.
+\begin{solutionorlines}[3.8in]Il \textit{paging} è una tecnica che permette di gestire la memoria virtuale di un processo allocandola in posizioni non contigue della memoria fisica: ogni porzione di memoria virtuale, di dimensione costante, è detta \textit{pagina} o \textit{frame}. Si ha un \textit{page fault} quando una pagina richiesta da un processo non risiede in memoria centrale ma in memoria secondaria. Se c'è spazio sufficiente in memoria centrale la pagina richiesta viene allocata, altrimenti viene rimossa una \textit{pagina vittima}. La pagina vittima può essere scelta secondo una serie di politiche:
+\begin{itemize}
+\item \textbf{Least Recently Used}, viene deallocata la pagina usata meno recentemente;
+\item \textbf{FIFO}, viene deallocata la pagina allocata per prima;
+\item \textbf{Least Frequently Used}, viene deallocata la pagina usata meno frequentemente.
+\end{itemize} 
+Per evitare i \textit{page fault} alcuni sistemi operativi si servono di politiche di \textit{preallocazione}, allocando preventivamente alcune pagine secondo il \textit{principio di località spaziale} (un processo tende ad accedere ad aree di memoria vicine tra loro) e \textit{temporale} (un processo accederà con probabilità maggiore alle aree di memoria vicine tra loro). Lo spazio di memoria preallocato secondo il principio di località viene detto \textit{working set}. \end{solutionorlines}
+\section{Allocazione della memoria secondaria}
+\question
+Organizzazione logica del file system Unix.
+\begin{solutionorlines}[3.8in]
+	
+	Il file system Unix gestisce tre tipi di file:
+	\begin{itemize}
+		\item \textbf{file regolari};
+		\item \textbf{direttori};
+		\item \textbf{dispositivi a blocchi}, file speciali residenti nel direttorio \texttt{/dev}.
+	\end{itemize}
+Anche i direttori, quindi, sono rappresentati da file in Unix.
+Il file system Unix è strutturato come un grafo aciclico: ogni direttorio può contenere sottodirettori e possono esserci più collegamenti allo stesso file. 
+
+A ogni file sono associati dodici bit di protezione: i primi nove permettono di assegnare o revocare i diritti di lettura, scrittura ed esecuzione rispettivamente al proprietario (User), al gruppo di cui fa parte (Group) e agli altri utenti (Others). Gli altri tre bit permettono di attivare o disattivare le proprietà \textit{suid}, \textit{sgid}, \textit{sticky}: \textit{suid} permette a chi esegue il file di "impersonare" l'utente proprietario del file; \textit{sgid} permette a chi esegue il file di "impersonare" un membro del gruppo del proprietario del file; \textit{sticky} permette al programma di rimanere in area di swap dopo che ha terminato la propria esecuzione in modo da poter essere riavviato più velocemente.
+
+\end{solutionorlines}
+
+\question
+Organizzazione fisica del file system Unix.
+\begin{solutionorlines}[3.8in]
+		Un dispositivo formattato in Unix è suddiviso in quattro parti:
+	\begin{itemize}
+		\item \textbf{boot block}, contenente le informazioni necessarie per l'avvio del SO;
+		\item \textbf{super block}, contenente informazioni sul numero di blocchi e la loro dimensione;
+		\item \textbf{data blocks}, l'area in cui vengono effettivamente allocati i blocchi di dati;
+		\item \textbf{ilist}, contenente la lista di file e direttori (detti \textit{inode}) indicizzati tramite gli \textit{inumber}.
+	\end{itemize}
+Ogni file è identificato da un \textit{inode}, che contiene informazioni quali il nome, il proprietario, la data di ultima modifica oltre ai 12 bit di protezione.
+	I file non sono allocati in maniera contigua: l'\textit{inode} di un file contiene informazioni sui blocchi sui quali è memorizzato nel \textit{vettore di indirizzamento}, costituito da una serie di indirizzi che consentono di individuare i blocchi in cui è allocato il file. L'indirizzamento di Unix è \textit{a più livelli}: gli ultimi puntatori del vettore di indirizzamento puntano a blocchi che contengono a loro volta altri indirizzi.
+Un blocco fisico su un disco è indicizzato da tre parametri: 
+\begin{itemize}
+	\item \textbf{F}, il numero della faccia sul disco;
+	\item \textbf{T}, il numero della traccia all'interno della faccia;
+	\item \textbf{S}, la posizione del settore all'interno della traccia.
+\end{itemize}
+L'insieme dei settori che compongono un disco può essere trattato come un array lineare di blocchi, nel quale l'indirizzo \texttt{i} di un blocco alla posizione $(f, t, s)$ è pari a $i = M \cdot N \cdot f + N \cdot t + s$ indicando con $M$ il numero di tracce per faccia e con $N$ il numero di settori per traccia.
+\end{solutionorlines}
+\question
+Politiche di \textit{scheduling} dei dischi.
+\begin{solutionorlines}[3.8in]
+Le richieste di accesso ai settori possono essere soddisfatte secondo una serie di politiche:
+\begin{itemize}
+	\item \textbf{First Come First Served}, le richieste vengono gestite nell'ordine in cui arrivano;
+	\item \textbf{Shortest Seek Time First}, viene stimato il tempo richiesto per portare la testina a un dato disco (\textit{seek time}) e le richieste con \textit{seek time} minore vengono gestite per prime;
+	\item \textbf{SCAN}, la testina esplora il disco e soddisfa le richieste non appena incontra i settori richiesti;
+	\item \textbf{CSCAN}, una variante della politica SCAN volta a ridurre i tempi di gestione delle richieste scansionando sempre nella stessa direzione, in modo da ridurre i tempi di attesa dato che le richieste più "vecchie" si troveranno al capo opposto del disco rispetto a quello in cui termina l'algoritmo SCAN.
+\end{itemize}
+	\end{solutionorlines}
+
+\section{Processi e thread}
+\question
+Scheduling della CPU in sistemi interattivi.
+\begin{solutionorlines}[3.8in]
+	Nei SO convivono tre livelli di \textit{scheduling}: quello a lungo termine, nei sistemi batch, si occupa di decidere quali processi vengono eseguiti; quello a medio termine si occupa di trasferire i processi dalla memoria centrale a quella secondaria quando non stanno eseguendo (\textit{swap-out}) e viceversa (\textit{swap-in}). Lo scheduler a breve termine, invece, si occupa di allocare la CPU ai vari processi già in esecuzione e in memoria centrale. La politica di scheduling influenza direttamente il numero di cambi di contesto e, quindi, l'\textit{overhead} del SO. Vi sono una serie di politiche diverse per lo scheduler a breve termine. Alcune sono più adatte per i sistemi batch, mentre per i sistemi interattivi è necessario uno scheduler in grado di minimizzare il tempo di \textit{attesa} (ovvero il tempo atteso dai programmi per avere la CPU allocata) e il tempo di \textit{risposta}, ovvero il tempo che intercorre tra un comando dell'utente e la risposta del programma.
+	
+	Gli scheduler a breve termine possono avere possibilità di prelazione (\textit{preemptive}) o meno (\textit{non-preemptive}). Uno scheduler con prelazione può revocare la CPU ad un processo una volta assegnatagli, cosa non possibile in un sistema non-preemptive. Le richieste continuamente variabili dei sistemi interattivi richiedono spesso scheduler con prelazione. Alcune delle politiche di \textit{scheduling} più comuni sono:
+\begin{itemize}
+	\item \textbf{First Come First Served}, i \textit{job} usano la CPU nell'ordine in cui la richiedono. Questo è un algoritmo senza prelazione non utilizzabile nei sistemi interattivi;
+	\item \textbf{Shortest Job First}, viene stimata una durata dei \textit{job} e viene data la priorità a quello che ha il tempo di esecuzione minore. Questo \textit{scheduler} senza prelazione è ottimale, ovvero minimizza il tempo necessario per l'esecuzione dei processi, ma non potendo disporre di una durata esatta per un processo è necessario stimarla;
+		\item \textbf{Shortest Remaining Time First}, viene periodicamente stimata una durata dei \textit{job} e viene data la priorità a quello che ha il tempo di esecuzione minore. Se un processo che entra in coda ha una durata minore di quella residua stimata del processo attualmente in esecuzione la CPU viene assegnata al nuovo processo. Questo scheduler può essere visto come una variante con prelazione del SJF;
+	\item \textbf{Round Robin}, ogni \textit{job} può utilizzare la CPU per un tempo predeterminato, terminato il quale essa viene assegnata ad un altro \textit{job}. Questo è un algoritmo con prelazione molto utilizzato nei sistemi interattivi che tuttavia introduce un notevole overhead a causa dei frequenti cambi di contesto;
+	\item \textbf{con priorità}, a ogni \textit{job} si assegna una priorità e i processi con priorità più alta possono utilizzare la CPU più frequentemente e/o per un tempo maggiore. Ciò può creare problemi di \textit{starvation} dei processi con priorità bassa che non riescono mai a completare la propria esecuzione; per far fronte a ciò la priorità dei processi viene aumentata man mano che rimangono in coda (\textit{aging}). Uno scheduler con priorità può essere definito internamente (ovvero assegnando la priorità in base a caratteristiche intrinseche di ogni processo, come nel caso dello SRTF) o esternamente (assegnando la priorità ai processi secondo fattori esterni, e.g. lasciandola definire all'utente) e statico (la priorità dei processi è fissa) o dinamico.
+\end{itemize}
+Spesso vengono combinati più scheduler, ad esempio i sistemi interattivi solitamente utilizzano uno scheduler detto \textbf{Multiple Level Feedback Queues}: vi sono più code nelle quali risiedono i processi di diverso tipo (foreground, background, batch ecc.), ognuna con una diversa priorità e un diverso 
+algoritmo di scheduling e i processi possono muoversi da una coda all'altra secondo la propria storia (es. un processo che ha utilizzato da molto tempo la  CPU vede la sua priorità calare).
+\end{solutionorlines}
+
+\question
+Interazione tra processi nel modello ad ambiente globale (detto anche a memoria comune).
+\begin{solutionorlines}[3.8in]
+Nel \textit{modello a memoria comune} i processi condividono uno spazio di indirizzamento. Ogni applicazione è rappresentata da un insieme di \textit{processi} (componenti attive) e \textit{risorse} (componenti passive). I processi comunicano tramite l'accesso a risorse comuni. In questo modello, i processi e i thread vengono trattati allo stesso modo dato che entrambi condividono il proprio spazio di indirizzamento con altri processi/thread. 
+
+Le risorse comuni devono gestire l'accesso in maniera \textit{mutualmente esclusiva}: mentre un processo opera su una risorsa comune (in una \textit{sezione critica} del proprio codice) la risorsa non deve essere accessibili da altri processi (cfr. domanda 11). È inoltre necessario evitare \textit{deadlock}, situazioni di stallo nelle quali nessun processo può proseguire la propria esecuzione: ogni processo è in attesa di un evento che può eseguire solo un altro processo. Si verifica un deadlock \textbf{se e solo se} si ha:
+\begin{enumerate}
+	\item \textbf{mutua esclusione}: un solo processo alla volta può accedere alle risorse comuni;
+	\item \textbf{possesso e attesa}: un processo può richiedere un'altra risorsa mentre ne sta occupando una;
+	\item \textbf{assenza di prelazione}: una risorsa non può essere tolta a un processo che la sta occupando;
+	\item \textbf{attesa circolare}: dato l'insieme di processi $\{P_1, ..., P_n\}$ ogni processo $P_k, k < n$ necessita di una risorsa da $P_{k + 1}$ e $P_n$ necessita una risorsa da $P_1$.
+\end{enumerate} 
+Se anche una sola delle condizioni non è verificata non si verifica deadlock. Le soluzioni al problema della mutua esclusione (cfr. domanda 11) devono tenerne conto ed evitare possibilità di deadlock.
+\end{solutionorlines}
+
+\question
+Interazione tra processi nel modello ad ambiente locale.
+\begin{solutionorlines}[3.8in]
+Nel \textit{modello ad ambiente locale}, secondo il quale gli spazi di indirizzamento dei processi sono rigidamente separati, i processi interagiscono esclusivamente \textit{comunicando} tramite meccanismi di IPC (\textit{Inter-Process Communication}). La comunicazione tra processi avviene tramite due primitive, \texttt{send} e \texttt{receive}. La comunicazione può essere diretta o indirietta. 
+Nel caso della comunicazione diretta si può avere un meccanismo \textit{simmetrico}, nel quale il canale di comunicazione utilizzato è univoco per ogni coppia di processi; se invece il meccanismo è \textit{asimmetrico} un processo può ricevere messaggi da più processi e la \texttt{receive} prende in ingresso anche il \textit{pid} del processo dal quale intende ricevere un messaggio. Nel caso di comunicazione indiretta il sistema operativo gestisce delle \textit{porte} (o \textit{mailbox}) e ogni \texttt{send} o \texttt{receive} prende in ingresso, oltre al messaggio, anche la \textit{mailbox} a cui inviarlo o da cui prelevarlo.
+
+Per quanto concerne la sincronizzazione, la \texttt{send} può essere \textit{sincrona}, \textit{asincrona} o \textit{a chiamata di procedura remota} mentre la \texttt{receive} può essere o non essere \textit{bloccante}. Una \texttt{send} sincrona blocca il processo che invia il messaggio finché il ricevente non chiama la \texttt{receive}; una \texttt{send} asincrona permette invece al processo di proseguire la propria esecuzione; una \texttt{send} a chiamata di procedura remota, invece, richiede un servizio dal processo destinatario e permette la prosecuzione dell'esecuzione solamente dopo che il destinatario ha chiamato la procedura e ne ha comunicato l'esito. Una \texttt{receive} bloccante blocca il processo che tenta di riceve un messaggio nel caso in cui non ci siano messaggi da ricevere, mentre una non bloccante permette al processo di proseguire la propria esecuzione qualora non ci siano messaggi. 
+
+\end{solutionorlines}
+
+
+\question
+Rappresentazione dei processi Unix.
+\begin{solutionorlines}[3.8in]
+Nel sistema operativo Unix i processi seguono il \textit{modello a memoria locale} e interagiscono solo tramite comunicazione. Ogni processo ha il proprio spazio di indirizzamento, ma i processi Unix sono \textit{rientranti} ovvero possono condividere codice. Le informazioni normalmente contenute nel descrittore di un processo (PCB, \textit{Process Control Block}) sono suddivise in due strutture: la \textit{Process Structure} e la \textit{User Structure}. La PS deve rimanere in memoria centrale per tutta la durata del processo mentre la US è swappable. 
+
+La PS contiene le informazioni necessarie per la gestione del processo anche quando esso è \textit{swapped}: il \textit{pid} del processo, riferimenti alle sue aree dati/stack, informazioni sul suo stato (init, ready, running, waiting, terminated, zombie o swapped - \textit{zombie} e \textit{swapped} sono due stati particolari che Unix aggiunge al modello a cinque stati e che indicano, rispettivamente, un processo che è terminato e attende che il padre si accorga della sua terminazione e un processo spostato dalla memoria centrale a quella secondaria dallo scheduler di medio termine), la sua priorità, il puntatore alla US e il puntatore al prossimo processo nella coda corrispondente al proprio stato. La US contiene le informazioni che non sono necessarie quando il processo è \textit{swapped} e che possono essere quindi allocate in memoria secondaria a loro volta: una copia dei registri CPU, informazioni sulle risorse allocate e sui segnali, il direttorio corrente, informazioni sul proprietario e sul suo gruppo. 
+
+Le corrispondenze tra ogni processo e la sua PS/US sono conservate nella \textit{tabella dei processi}, che contiene una voce per ogni processo aperto. Il kernel gestisce inoltre una tabella del codice, detta \textit{text table}, che contiene il codice eseguito dai vari processi e i pid dei processi che lo stanno utilizzando. Nel PCB, quindi, il codice è espresso mediante un riferimento a una voce della text table. L'immagine di un processo è dunque composta da PCB, aree dati e stack e da una voce della text table (detta \textit{text structure}). Il kernel mantiene inoltre una \textit{text structure} contenente il codice delle chiamate di sistema. 
+\end{solutionorlines}
+\question
+Possibili soluzioni al problema della mutua esclusione.
+\begin{solutionorlines}[3.8in]
+	Le soluzioni al problema della mutua esclusione possono essere di tipo \textit{algoritmico}, \textit{hardware} o \textit{software}. Le soluzioni al problema della mutua esclusione hanno tre requisiti da rispettare:
+	\begin{enumerate}
+	\item \textbf{mutua esclusione};
+	\item un processo all'esterno di una sezione critica non può rendere \textbf{impossibile ad altri processi} eseguire sezioni critiche;
+	\item assenza di \textbf{deadlock}.
+	\end{enumerate}
+	
+	Due possibili soluzioni algoritmiche sono l'\textit{algoritmo di Dekker} e l'\textit{algoritmo di Peterson}; entrambe si basano su tre variabili \texttt{busy1}, \texttt{busy2} e \texttt{turn}.	Seguendo l'algoritmo di Dekker, il primo processo ad arrivare alla propria sezione critica assegna un valore vero a \texttt{busy1} (segnalando \textit{volontà di eseguire la sezione critica}) ed entra in un ciclo \texttt{while} di \textit{attesa attiva}: se \texttt{busy2} è vera, imposta \texttt{busy1} a 0, attende (con un secondo ciclo \texttt{while} di attesa attiva) la fine del turno dell'altro processo e in seguito riassegna un valore vero a \texttt{busy1}. Dato che questi controlli si trovano in un ciclo \texttt{while}, prima di entrare nella propria sezione critica il processo ricontrolla che l'altro non stia eseguendo la propria. Se è libero di proseguire, il processo esegue la propria sezione critica e dopo averla eseguita assegna il turno all'altro processo e imposta \texttt{busy1} a 0.
+	
+	L'algoritmo di Peterson è simile, ma vi è un ciclo di attesa attiva in meno. Inoltre è possibile utilizzarlo per sincronizzare $n$ processi (l'algoritmo di Dekker funziona solo con due) e risolve il problema della \textit{starvation} ovvero assicura che ogni processo possa eseguire la propria sezione critica entro un tempo finito. Ogni processo, secondo questo algoritmo, prima di entrare nella sezione critica imposta la propria variabile \texttt{busyX} a 1, imposta \texttt{turn} in modo che sia il turno dell'\textit{altro} processo, poi entra in un ciclo di attesa attiva che termina quando l'altro processo ha terminato la propria sezione critica (\texttt{busyY = 0}) e assegnato il turno al primo processo. Il processo esegue quindi la propria sezione critica e imposta \texttt{busyX} a 0. Ciò assicura che un processo possa eseguire se e solo se altri non stanno \textit{già eseguendo} la propria sezione critica.
+		\begin{minipage}{.50\textwidth}
+			\centering
+			\label{alg:alg1}
+			\begin{lstlisting}[language=C]
+busy1 = true;
+while (busy2) {
+	busy1 = 0;
+	while (turn != 1) {
+	// attesa attiva
+	}
+	busy1 = true;
+}
+// sezione critica
+turn = 2;
+busy1 = 0;
+\end{lstlisting}
+
+Algoritmo di Dekker.
+
+		\end{minipage}
+		\begin{minipage}{.50\textwidth}
+			\centering
+			\label{alg:alg2}
+			\begin{lstlisting}[language=C]
+busyX = true;
+turn = Y;
+while (turn == y && busyY) {
+// attesa attiva
+}
+// sezione critica
+busyX = 0;
+\end{lstlisting}
+Algoritmo di Peterson.
+		\end{minipage}
+	
+Una possibile soluzione hardware è disabilitare le interruzioni mentre un processo sta eseguendo la propria sezione critica. Ciò assicura che la CPU non interrompa mai un processo all'interno di una sezione critica, ma rende anche l'intero sistema insensibile agli eventi esterni durante qualunque sezione critica, rende impossibile la concorrenza e non è utilizzabile nei sistemi con più CPU: mentre un processo che esegue sulla CPU X disabilità le interruzioni mentre accede ad una risorsa, le interruzioni rimangono abilitate sulla CPU Y che può eseguire un processo che richiede la stessa risorsa.
+
+Una seconda soluzione hardware si basa sull'esistenza, nell'ISA del processore, dell'istruzione atomica \texttt{tsl}, \textit{test-and-set}, la quale permette di controllare il valore di verità di una variabile e cambiarlo nello stesso ciclo di memoria. Questa istruzione permette di implementare una struttura dati detta \textit{lock}, che viene \textit{chiusa} prima di ogni sezione critica e \textit{aperta} alla fine. Prima di entrare nella sezione critica, ogni processo controlla (tramite test-and-set) che il lock sia aperto e se lo è lo chiude nello stesso ciclo di memoria per poi proseguire nella propria sezione critica. La test-and-set impedisce corse critiche del tipo:
+\begin{enumerate}
+	\item P1 controlla il lock e lo trova aperto
+	\item P2 controlla il lock e lo trova aperto
+	\item P1 chiude il lock
+	\item P2 chiude il lock
+\end{enumerate}
+che permetterebbero sia a P1 che a P2 di eseguire la propria sezione critica nello stesso momento. 
+
+Soluzioni software possibili sono il \textit{semaforo} e il \textit{monitor} (cfr. domande 14 e 15).
+\end{solutionorlines}
+
+\question
+Comunicazione tra processi Unix.
+\begin{solutionorlines}[3.8in]
+I processi in Unix comunicano con \textit{socket} (fra processi nella stessa rete), \textit{pipe} (fra processi nella stessa gerarchia) e \textit{fifo} (tra processi sulla stessa macchina). 
+
+Una \textit{pipe} è un canale bidirezionale di comunicazione aperta tramite la \textit{system call} \texttt{pipe}. Una pipe è un canale unidirezionale (accessibile a un estremo in lettura e a un altro in scrittura)  molti-a-molti (più processi possono condividere la stessa pipe). Ogni processo figlio del creatore della pipe ha accesso a due \textit{file descriptor} che permettono di scrivere o leggere sulla pipe. Non c'è naming esplicito del destinatario (modello a \textit{mailbox}) e la comunicazione è asincrona: una pipe immagazzina messaggi (fino a una capienza massima) finché essi non vengono letti da un altro processo. Un processo può leggere da o scrivere sulla pipe come da un qualunque altro file descriptor e chiudere l'accesso in lettura o in scrittura con le stesse chiamate di sistema. Una pipe realizza automaticamente la sincronizzazione: un processo che scrive su una pipe piena o legge da una vuota si sospende automaticamente. 
+
+Una \textit{fifo} è una pipe realizzata con un file che permette la comunicazione anche tra processi non appartenenti alla stessa gerarchia. La comunicazione è unidirezionale e \textit{first-in-first-out}. Una \textit{fifo} viene creata con la \textit{system call} \texttt{mkfifo} che prende in ingresso il nome del file dove sarà memorizzata. Lettura e scrittura sulla fifo avvengono come un qualunque altro file descriptor. 
+
+\end{solutionorlines}
+
+
+\question 
+I thread: caratteristiche e realizzazione.
+\begin{solutionorlines}[3.8in]I thread, o processi leggeri, sono processi che rappresentano un singolo \textit{flusso di esecuzione} all'interno di un processo normale (detto \textit{pesante}) e condividono tra di loro e con il processo pesante codice, dati e spazio di indirizzamento. Non possedendo risorse è molto facile creare e distruggere i thread. Nei SO tradizionali (e.g. UNIX) ogni processo ha un solo thread; altri SO, detti \textit{multithreaded}, sono in grado di associare più thread a ogni processo. 
+	
+	La gestione dei thread può avvenire a livello kernel o a livello utente. Nel caso di gestione a livello utente si ha una libreria di funzioni che si occupa di creare, eseguire e distruggere i thread. Ogni processo parte con un solo thread e può, senza richiami a chiamate di sistema, crearne altri. Il SO ignora completamente i thread, vedendo solo processi, e quando il processo principale viene sospeso anche tutti i suoi thread vengono sospesi. Questo metodo di gestione può essere implementato anche in sistemi che non supportano nativamente i thread (e.g. UNIX) ed è più efficiente dato che l'intera gestione dei thread non richiede chiamate di sistema, ma non è in grado di sfruttare il parallelismo offerto dai sistemi multiprocessore. In caso di gestione dei thread a livello kernel, invece, a ogni funzione di libreria corrisponde una system call e il sistema è in grado di distinguere thread e processi, applicando il proprio scheduler a entrambi. Questo sistema è meno efficiente dato il maggiore numero di chiamate di sistema ma permette di sfruttare il parallelismo in caso di sistemi multiprocessore, eseguendo thread diversi di uno stesso processo in parallelo.
+	
+	In Java essi sono realizzati tramite la classe \texttt{Thread} e l'interfaccia \texttt{Runnable}. Una classe può estendere la prima o implementare la seconda: in entrambi i casi va implementato il metodo \texttt{run} che implementa le azioni del thread. Per avviare una classe estensione di \texttt{Thread} è sufficiente chiamare il metodo \texttt{start}, mentre per avviare una classe che implementi \texttt{Runnable} è necessario creare un nuovo \texttt{Thread} tramite l'operatore \texttt{new} al cui metodo \texttt{start} passare la classe come argomento. \end{solutionorlines}
+\question
+Il semaforo.
+\begin{solutionorlines}[3.8in]
+Un semaforo è una particolare struttura dati che permette di implementare semplicemente meccanismi \textit{produttore-consumatore} e di mutua esclusione. Esso consiste in una variabile intera non-negativa \texttt{value}, e due procedure \texttt{up} e \texttt{down}. Quando un processo vuole operare sulla risorsa gestita dal semaforo esso chiama la funzione \texttt{down}. Se \texttt{value} è non nullo, il processo lo decrementa, esegue le proprie operazioni e alla fine chiama la funzione \texttt{up}. In caso contrario il processo si mette in attesa finché non viene chiamata la funzione \texttt{up} da un altro processo che ha al momento accesso alla risorsa. \texttt{up} incrementa \texttt{value}. 
+
+Le due operazioni sono \textit{atomiche} ovvero vengono eseguite in un'unica soluzione indivisibile. Questa proprietà permette di evitare corse critiche che possono sorgere se, ad esempio, due processi chiamano \texttt{down} contemporaneamente.
+
+Un semaforo è realizzato tramite un intero non negativo che può avere un valore iniziale non nullo e una coda FIFO contenente i processi in attesa. 
+\end{solutionorlines}
+\question
+Il monitor.
+\begin{solutionorlines}[3.8in]
+	Il monitor è un costrutto realizzato dal compilatore che permette di gestire in maniera mutualmente esclusiva l'accesso ad una risorsa da parte di più processi. Oltre a risolvere il problema della mutua esclusione un monitor permette anche di assegnare diverse priorità ai processi che vogliono accedere alla risorsa mediante l'uso di \textit{variabili condizione}.
+	
+	Un monitor è realizzato con una classe che implementi alcuni metodi, detti \textit{entry}, che permettono l'accesso alla risorsa in maniera mutualmente esclusiva: quando un processo sta chiamando un metodo entry, nessun altro processo può accedere alla risorsa. Se un processo tenta di accedere a un monitor mentre un altro sta eseguendo un metodo entry, esso si sospende nella \textit{entry queue}, che gestisce le richieste di entrata in maniera FIFO.
+	
+	Le variabili condizione sono variabili che vengono controllate prima di permettere l'accesso alla risorsa: se al momento in cui un processo tenta di accedervi la risorsa è occupata, esso si mette in attesa nella coda corrispondente alla propria priorità (\textit{condition queue}) \textit{e libera il monitor}. Un processo può svegliare gli altri processi in attesa in una coda tramite il metodo \texttt{signal}. Vi è però un problema: un processo potrebbe chiamare la \texttt{signal} e poi continuare ad accedere alla risorsa. Vi sono due possibili soluzioni: la semantica \textit{signal-and-continue}, adottata da Java, prevede che un processo che chiami la \texttt{signal} svegli il primo processo segnalato che passa dalla condition queue alla entry queue; la semantica \textit{signal-and-wait} invece prevede che non appena un processo chiami la \texttt{signal} esso si sospenda nella entry queue facendo accedere alla risorsa il processo segnalato. Come variante della \textit{signal-and-wait} si ha la \textit{signal-and-urgent-wait}, che prevede che il processo segnalante non si sospenda nella entry queue ma in un'altra coda, detta \textit{urgent queue}, che ha priorità sulla entry queue. Quando una \textit{signal-and-urgent-wait} corrisponde ad una istruzione di ritorno dal metodo entry il processo segnalato entra nel monitor \textit{senza rilasciare la mutua esclusione}. È possibile inoltre risvegliare tutti i processi in attesa mediante la chiamata \texttt{signal\_all} che risveglia tutti i processi in attesa in una data condition queue e li sposta nella entry queue.
+\end{solutionorlines}
+\section{Input/Output}
+\question
+Gestione dell'I/O: interazione tra processo e periferica nel caso di dispositivo abilitato alle interruzioni. 
+\begin{solutionorlines}[3.8in]
+Per gestire i sistemi abilitati alle interruzioni il SO assegna a ognuno di essi un semaforo inizializzato a 0. Quando un processo deve leggere un dato dal dispositivo esegue una \texttt{down} su questo semaforo, sospendendosi quindi se il dato non è al momento disponibile. Quando il dispositivo manda in segnale di \textit{interrupt} alla CPU l'\textit{handler} preposto si occupa di chiamare la primitiva \texttt{up} del semaforo. Il processo può quindi proseguire con il prelievo del dato dal dispositivo. 
+
+Quando al dispositivo non è richiesto un dato solo ma (ad esempio con un ciclo \texttt{for}) una serie di $n$ dati è inefficiente risvegliare il processo che interagisce con il dispositivo per poi sospenderlo subito nuovamente. Si definisce quindi una struttura dati apposita, detta \textit{descrittore del dispositivo}, che assieme alle funzioni associate del processo applicativo e di gestione delle interruzioni costituisce il \textit{driver del dispositivo}. La funzione di lettura dal dispositivo ogniqualvolta viene richiesta una serie di dati imposta una variabile di stato (detta \textit{contatore}) all'interno del descrittore al numero di dati richiesti e inizializza un buffer per poi sospendersi. A quel punto la funzione di gestione delle interruzioni, quando viene chiamata, è in grado di discernere dal valore del contatore se l'interruzione è dovuta ad un errore, è in mezzo a un ciclo di lettura o ne è la conclusione. Nel primo caso viene svegliata la funzione di lettura e viene impostato un apposito codice di errore nel descrittore, che verrà poi restituito al processo chiamante; nel secondo caso l'handler memorizza nel buffer il dato letto e sposta la "testina" indicata da un apposito puntatore; al termine di un ciclo invece l'handler sveglia la funzione di lettura la quale restituisce il numero di dati letti. 
+\end{solutionorlines}
+\end{questions}
+\textbf{Disclaimer}: Questo documento può contenere errori e imprecisioni che potrebbero danneggiare sistemi informatici, terminare relazioni e rapporti di lavoro, liberare le vesciche dei gatti sulla moquette e causare un conflitto termonucleare globale. Procedere con cautela.
+
+Questo documento è rilasciato sotto licenza CC-BY-SA 4.0. \faCreativeCommons\ \faCreativeCommonsBy\ \faCreativeCommonsSa
+\end{document}

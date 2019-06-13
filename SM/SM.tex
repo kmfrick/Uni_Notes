@@ -1,0 +1,128 @@
+\documentclass[a4paper, landscape]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[italian]{babel}
+\usepackage[margin=2cm]{geometry}
+\usepackage{multicol}
+  \setlength{\columnseprule}{.4pt}% adjust if you'd like thicker or thinner vertical rules
+\usepackage{breqn}
+\title{Statistical Models}
+\author{Kevin Michael Frick}
+\begin{document}
+\begin{multicols}{3}
+\maketitle
+\section{Formulario}
+\subsection{Stima di valori attesi e intervalli di predizione}
+\begin{equation}
+E[\hat{y}_h]=X^T \beta  \end{equation}
+\begin{equation} Var[\hat{y}_h]=\sigma^2x_h^T(X^T X)^{-1}x_h \end{equation}
+\begin{equation}
+ s^2[\hat{y}_h]=MSE \cdot x_h^T (X^TX)^{-1} x_h \end{equation}
+\begin{equation} (6) \implies \hat{y}_h \sim N \end{equation}
+\begin{equation}
+ (6) \implies \frac{\hat{y}_h-x_h^T \beta}{\sqrt{s^2[\hat{y}_h]}} \sim t(n-p) \end{equation}
+\begin{equation} E[y_{h(new)}-\hat{y}_h]=0 \end{equation}
+\begin{equation}
+Var[y_{h(new)}-\hat{y}_h]=\sigma^2(1+x_h^T (X^T X)^{-1} x_h) \end{equation}
+\begin{equation} s^2[y_{h(new)}-\hat{y}_h]=MSE \cdot (1+x_h^T (X^T X)^{-1} x_h) \end{equation}
+\begin{equation}
+\frac{y_{h(new)}-\hat{y}_h}{\sqrt{s^2[y_{h(new)}-\hat{y}_h]}} \sim t(n-p)
+\end{equation}
+\subsection{Variabili standardizzate}
+\begin{equation}
+y_{is}=\frac{y_i-\bar{y}}{\sqrt{s^2_y}} \end{equation}
+\begin{equation} x_{ks}=\frac{x_k-\bar{x}_k}{\sqrt{s^2_k}} \end{equation}
+\begin{equation}
+X_{RS}=X_{RC}D_R^{-1} \end{equation}
+\begin{equation} D_R=\textrm{diag}_k\{\sqrt{s^2_k}\} \end{equation}
+\begin{equation}
+b_{0s}=0 \end{equation}
+\begin{equation} R_{xx}=D_R^{-1}S_{xx}D_R^{-1}\end{equation}
+\begin{equation}
+y_s=\frac{M_0 y}{\sqrt{s^2_y}} \end{equation}
+\begin{equation} r_{yx}=\frac{D_R^{-1}s_{yx}}{\sqrt{s^2_y}} \end{equation}
+\begin{equation}
+b_{Rs}=\frac{D_R b_R}{\sqrt{s^2_y}}=R_{xx}^{-1}r_{yx} \end{equation}
+\begin{equation} b_{kR}=\sqrt{\frac{s^2_y}{s^2_k}}b_{ks}
+\end{equation}
+\subsection{Diagnostiche di regressione}
+\begin{equation}
+h_{ii}=x_i^T(X^TX)^{-1}x_i \end{equation}
+\begin{equation} e\sim MVN(0,\sigma^2M) \end{equation}
+\begin{equation}
+r_i=\frac{e_i}{\sqrt{MSE\cdot(1-h_{ii})}} \end{equation}
+\begin{equation} d_i=y_i-\hat{y}_{i(i)} \end{equation}
+\begin{equation}
+t_i=\frac{d_i}{\sqrt{s^2[d_i]}}=e_i\sqrt{\frac{n-p-1}{SSE(1-h_{ii})-e^2_i}} \end{equation}
+\begin{equation} y_i\textrm{ non outlier}\implies t_i\sim t(n-1-p)\end{equation}
+\begin{equation}
+\Pr[\textrm{Err. t. 1 su famiglia}]\approx (1-\alpha)^n \end{equation}
+\begin{equation} \Pr[\textrm{Err. t. 1 su famiglia (c/ corr. Bonf.)}] \approx 1-(1-\frac{\alpha}{n})^2 \longrightarrow \alpha \end{equation}
+\begin{equation}
+\sum_i h_{ii}=p \end{equation}
+\begin{equation} \bar{h}=\frac{p}{n} \end{equation}
+\begin{equation}
+n\gg 3p\implies h_{ii}\geq 2p/n(\textrm{o } 3p/n)\textrm{ valore grande} \end{equation}
+\begin{equation} D_i=\frac{\sum_{j-1}^n(\hat{y}_j-\hat{y}_{j(i)})^2}{p\cdot MSE}\end{equation}
+\begin{equation}
+D_i=\frac{r_i^2h_{ii}}{p(1-h_{ii})} \end{equation}
+\begin{equation} D_i > F(1/2;n,p)\implies y_i\textrm{ influente}
+\end{equation}
+\subsection{Regressori categorici}
+\begin{equation}
+b_0=\bar{y}_{reg} \end{equation}
+\begin{equation} b_k=\bar{y}_{k.}-\bar{y}_{reg}
+\end{equation}
+\subsection{Selezione del modello}
+\begin{equation}
+R^2_a=1-(\frac{SSE}{SSTOT}\cdot\frac{n-1}{n-p})=1-\frac{MSE}{s^2_y} \end{equation}
+\begin{equation} AIC=n\log(\frac{SSE}{n})+2p\end{equation}
+\begin{equation}
+SBC=n\log(\frac{SSE}{n})+p\log(n)
+\end{equation}
+\subsection{Regressione logistica semplice}
+\begin{equation}
+L(\beta_0,\beta_1)=\prod_i(\frac{e^{\beta_0+\beta_1x_i}}{1+e^{\beta_0+\beta_1x_i}})^{y_i}(1-\frac{e^{\beta_0+\beta_1x_i}}{1+e^{\beta_0+\beta_1x_i}})^{1-y_i} \end{equation}
+\begin{equation}
+l(\beta_0,\beta_1)=\log L(\beta_0,\beta_1) \end{equation}
+\begin{equation}
+\hat{\pi}_i=\frac{e^{\beta_0+\beta_1x_i}}{1+e^{\beta_0+\beta_1x_i}}
+\end{equation}
+\subsection{Regressione logistica multipla}
+\begin{equation}
+E[b]\longrightarrow\beta \end{equation}
+\begin{equation} Var[b]\longrightarrow-E^{-1}[\frac{\partial^2}{\partial\beta\partial\beta^T}\log L(\beta)]\end{equation}
+\begin{equation}
+b\sim MVN_p \end{equation}
+\begin{equation} s[b]=(-G)^{-1} \end{equation}
+\begin{equation}
+G = \frac{\partial^2}{\partial\beta\partial\beta^T}\log L(\beta)|_{\beta=b} \end{equation}
+\begin{equation} b_k\in_\alpha Z(1-\alpha/2)\sqrt{s^2[b_k]}\end{equation}
+\begin{equation}
+\frac{b_k-\beta_k}{\sqrt{s^2[b_k]}}\longrightarrow N(0,1) \end{equation}
+\begin{equation} G^2 = 2\log\frac{L(F)}{L(R)}\geq 0\approx \chi^2(p-q)|H_0\end{equation}
+\begin{equation}
+G^2\approx N^2(0,1) = \frac{b_k^2}{s^2[b_k]}
+\end{equation}
+\section{Ipotesi}
+\subsection{Approccio di regressione all'analisi della varianza}
+\begin{enumerate}
+	\item $y_{ij} = \beta_0 + \sum_k \beta_k x_{ijk} + \sum_k \beta_k x_{ijk} + \epsilon_{ij}$;
+	\item $x_{ijk}$ fissi $\implies n $ fissi;
+	\item $\epsilon_{ij} \sim N(0, \sigma)$ iid.
+\end{enumerate}
+\subsection{Regressione logistica semplice}
+\begin{enumerate}
+	\item $y_i \sim Be(\pi_i)$ iid;
+	\item $\pi_i = \frac{e^{\beta_0 + \beta_1 x_i}}{1 + e^{\beta_0 + \beta_1 x_i}}; \pi_i' = \log(\frac{\pi_i}{1 - \pi_i})$;
+	\item $x_i$ fissi.
+\end{enumerate}
+\subsection{Regressione logistica multipla}
+\begin{enumerate}
+	\item $y_i \sim Be(\pi_i)$ iid;
+	\item $\pi_i = \frac{e^{x_i^T \beta}}{1 + e^{x_i^T \beta}}; \pi_i' = \log(\frac{\pi_i}{1 - \pi_i})$;
+	\item $x_i$ fissi.
+\end{enumerate}
+\end{multicols}
+\end{document}
+

@@ -1,0 +1,284 @@
+
+\documentclass[answers, a4paper,12pt]{exam}
+\usepackage{fontawesome5}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{relsize}
+\usepackage{amssymb}
+\usepackage{mathrsfs}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\DeclareMathOperator{\sign}{sign}
+\def\dbar{{\mathchar'26\mkern-12mu d}}
+\usepackage{amsthm}
+\usepackage[italian]{babel}
+\title{Elettrotecnica T}
+\author{Kevin Michael Frick}
+\setlength\linefillheight{.4in}
+\setlength\linefillthickness{0.4pt}
+\renewcommand{\solutiontitle}{\noindent\textbf{Risposta:}\enspace}
+\newcommand{\bigint}{\mathop{\mathlarger{\int}}}
+\newcommand{\bigoint}{\mathop{\mathlarger{\oint}}}
+\newcommand{\bigiiint}{\mathop{\mathlarger{\iiint}}}
+\newcommand{\bigiint}{\mathop{\mathlarger{\iint}}}
+\begin{document}
+\maketitle
+\begin{questions}
+	\question
+	Legge di Kirchhoff delle tensioni.
+	\begin{solution}
+	La LKT afferma che, data una linea chiusa $l$ che passi per alcuni nodi del circuito senza intersecare elementi circuitali, la somma delle differenze di potenziale tra i nodi che intersecano $l$ è nulla ($\sum_l v_{jk} = 0$). La LKT è una conseguenza della conservatività del campo elettrostatico: dato che $\bigoint_l \textbf{E} \cdot \textbf{dl} = 0$ allora $\sum\bigint_j^k \textbf{E} \cdot \textbf{dl} = 0$ ed è possibile definire una funzione potenziale $v$ tale che $\textbf{E} = - \nabla v$. Si ha quindi $\bigint_j^k \textbf{E} \cdot \textbf{dl} = \bigint_j^k - \nabla v \cdot \textbf{dl} = v_{jk}$ e $\sum_{j, k} v_{jk} = 0$. Quando $l$ rappresenta una maglia chiusa, la LKT si può riformulare e afferma che la somma delle tensioni di ramo lungo una maglia è nulla. 
+	\end{solution}
+	\question
+	Legge di Kirchhoff delle correnti.
+	\begin{solution}
+		La LKC afferma che, data una sezione di circuito racchiusa da una superficie $S$, la somma delle correnti entranti e uscenti è nulla ($\sum_S i_k = 0$). Ciò è una conseguenza del principio di conservazione della carica elettrica: dato che il vettore densità di corrente elettrica è solenoidale si ha $\nabla \cdot \textbf{J} = 0$ e, per il teorema della divergenza, $\bigiiint_V \nabla \cdot \textbf{J} = \bigiint_S \textbf{J} \cdot \textbf{dS} = \sum_S i_k = 0$. Se S contiene un solo nodo si ottiene l'\textit{equazione di nodo}: la somma delle correnti che entrano in un nodo è uguale alla somma delle correnti che ne escono.
+	\end{solution}
+	\question
+	Serie e parallelo di bipoli.
+	\begin{solution}
+		Attraverso bipoli in serie fluisce la stessa corrente, mentre ai capi di bipoli in parallelo insiste la stessa tensione. Se uno dei bipoli in serie smette di funzionare, l'intero ramo smette di ricevere corrente; in caso di bipoli in parallelo, invece, la rottura di uno dei bipoli non inficia il funzionamento degli altri. 
+		
+		Nel caso di resistori in serie, la legge di Ohm permette di scrivere l'equazione $v_{ab} = \sum_k R_k i_k = i \sum_k R_k$. $n$ resistori in serie possono quindi essere sostituiti da un solo resistore con resistenza $R_{eq} = \sum_k R_k$.
+		
+		Se i resistori sono invece collegati in parallelo la legge di Ohm permette di scrivere $v_{ab} = i_k R_k$, da cui $i_{in} = \sum_k \frac{v_{ab}}{R_k} \implies v_{ab} = i_{in} (\sum_k \frac{1}{R_k})^{-1}$. $n$ resistori in parallelo possono quindi essere sostituiti da un unico resistore con resistenza $R_{eq} = (\sum_k \frac{1}{R_k})^{-1}$
+		\end{solution}
+		\pagebreak
+	\question
+	Equivalenza fra collegamento a stella e collegamento a triangolo.
+	\begin{solution} Le proprietà geometriche di un sistema di resistenze a stella o a triangolo permettono di convertire una configurazione nell'altra senza variare la resistenza equivalente. I valori delle singole resistenze trasformate da una configurazione all'altra si calcolano connettendo due nodi su tre e calcolando le resistenze equivalenti in entrambe le configurazioni per tre volte e risolvendo il sistema di tre equazioni in tre incognite. \end{solution}
+	\question
+	I bipoli ideali passivi.
+	\begin{solution}
+		Un bipolo ideale passivo è un bipolo che assorbe o comunque non produce potenza. La \textit{convenzione dell'utilizzatore} dà segno positivo alla potenza se la corrente entra nel polo positivo ed esce dal negativo. I bipoli passivi ideali sono \textit{resistori}, \textit{condensatori} e \textit{induttori}, le cui caratteristiche sono rispettivamente la \textit{resistenza} $R$, la \textit{capacità} $C$ e l'\textit{induttanza} $L$.
+		
+		L'equazione caratteristica di un resistore è $v_R (t) = i(t) R$ (prima legge di Ohm).
+		
+		L'equazione caratteristica di un condensatore è $v_C (t) = \frac{Q(t)}{C} = \frac{\bigint_{-\infty}^t i(t) dt}{C}$.
+		
+		L'equazione caratteristica di un induttore è $v_L (t) = L \frac{di}{dt}$.
+	\end{solution}
+	\question
+	I bipoli con memoria.
+	\begin{solution}
+		Un bipolo ideale con memoria è un bipolo nel quale la corrente o la tensione dipendono dai valori passati o futuri della corrente o della tensione stessa. In caso di dipendenza dai valori passati nell'equazione caratteristica del bipolo comparirà un integrale; in caso di dipendenza dai valori futuri comparirà una derivata.
+	\end{solution}	
+	\question
+	Induttori accoppiati: coefficienti di auto e mutua induttanza.
+	\begin{solution}
+		Per un induttore ideale il flusso del campo magnetico indotto è pari a $\Phi_B (t) = L i (t)$. Le equazioni di Maxwell legano la tensione al flusso ($v = \frac{d}{dt}\Phi_B$) e quindi all'induttanza ($v = L \frac{di}{dt}$). 
+		
+		Se ci sono due circuiti nei quali scorrono le correnti $i_1$ e $i_2$ si hanno due contributi al flusso del campo magnetico generati dalle due correnti e il flusso può essere misurato attraverso ciascun circuito. Attraverso il primo circuito il flusso è pari a $\Phi_{C_1} = L_1 i_1 + M_{12} i_2$ e attraverso il secondo il flusso è $\Phi_{C_2} = L_2 i_2 + M_{21} i_1$. $L_1$ e $L_2$ sono i \textit{coefficienti di autoinduzione} mentre $M_{12}$ e $M_{21}$ sono i \textit{coefficienti di mutua induzione}. Si dimostra che $M_{21} = M_{12}$. 
+		
+		Per descrivere i circuiti accoppiati tramite induttore si disegna un pallino su un terminale di ogni induttore secondo una convenzione: Se $M > 0$ si segnano i terminali da cui esce la corrente per entrambi gli induttori mentre se $M < 0$ si segna il terminale in cui entra la corrente per il primo circuito e il terminale da cui esce per il secondo circuito.
+		
+		L'energia immagazzinata in due induttori accoppiati è pari a $W_L (t) = \frac{1}{2} L_1 i_1^2(t) + \frac{1}{2} L_2 i_2^2(t) + M i_1(t) i_2(t)$. \textit{Dim:} segue integrando le somme dei due prodotti $v_k i_k$.
+	\end{solution}
+		\pagebreak
+	\question
+	L'elemento circuitale a n morsetti e l’elemento circuitale a n porte.
+	\begin{solution}
+		Un elemento circuitale a n poli (n-polo) è un elemento circuitale che può essere schematizzato come una stella di $n - 1$ bipoli con un polo in comune. Tra ogni polo $k$ e il centro della stella insiste una tensione $v_k - v_0$ e tra i poli $i$ e $j$ insiste una tensione $v_k - v_j$. Per convenzione, il potenziale ha segno positivo per ogni polo nel quale entra una corrente $i_k$  e segno negativo per il centro della stella (polo 0) dal quale esce la corrente $i_0$. 
+		
+		Un elemento circuitale a n porte è un elemento circuitale con $2n$ poli. Tra ogni coppia di poli insiste una tensione $e_k$. La corrente che entra da un polo esce dall'altro polo corrispondente inalterata: in tal caso l'elemento circuitale si definisce \textit{multiporta intrinseco}. La potenza dissipata da un elemento circuitale multiporta è pari a $p(t) = \sum\limits_{k = 1}^n v_k i_k$.
+	\end{solution}
+	\question
+	Grandezze sinusoidali e fasori.
+	\begin{solution}
+		Ogni grandezza sinusoidale si può esprimere come numero complesso sfruttando la formula di Eulero ($e^{j\phi} = \cos \phi + j \sin \phi$, indicata con $j = \sqrt{-1}$ l'unità immaginaria). Una grandezza nella forma $x(t) = A \cos(\omega t + \phi)$ si può scrivere come $\Re \{Ae^{j(\omega t + \phi))}\}$. Si definisce quindi il \textit{fasore} $\dot{X} = A_e e^{j\phi} = A_e \angle \phi$, con $A_e = A / \sqrt{2}$. In un circuito isofrequenziale, in cui cioè le grandezze sinusoidali hanno la medesima frequenza $\omega$, $\dot{X}$ definisce $x(t)$ in maniera biunivoca tramite l'ampiezza $A$ e la fase $\phi$. Il dominio dei fasori è detto anche dominio delle frequenze. 
+	\end{solution}
+	\question
+	Lemmi di unicità, linearità e derivazione nel regime sinusoidale.
+	\begin{solution}
+		\begin{itemize}
+			\item Unicità: In un sistema isofrequenziale due grandezze sono uguali se e solo se hanno lo stesso fasore. 
+			
+			\textit{Dim:} $a(t) = b(t) \\
+			\implies
+			\Re\{\dot{A} e^{j \omega t}\} = \Re\{\dot{B}e^{j\omega t}\} \\ \implies
+			\Re\{\dot{A} (cos (\omega t) + j sin (\omega t))\} = \Re\{\dot{B}(cos (\omega t) + j sin (\omega t))\}
+			\\ \implies
+			\Re\{\dot{A}\} \cos(\omega t) - \Im\{\dot{A}\}\sin(\omega t) = \Re\{\dot{B}\} \cos(\omega t) - \Im\{\dot{B}\}\sin(\omega t)
+			$ \qed
+			\item 
+			Derivazione: $\frac{dx}{dt} = j \omega \dot{X}$. 
+			
+			\textit{Dim:} $\frac{d}{dt} A_e e^{j \omega t} = j \omega A_e e^{j \omega t}$ \qed
+			\item 
+			Linearità: Il fasore della somma di due grandezze è la somma dei fasori delle due grandezze singole e il fasore di una grandezza moltiplicata per una costante è il fasore della grandezza di partenza moltiplicato per la stessa costante. 
+			
+			\textit{Dim:} Segue dalla linearità dell'operatore parte reale $\Re$.\qed
+		\end{itemize}
+	\end{solution}
+		\pagebreak
+	\question
+	Impedenza complessa e sua derivazione.
+	\begin{solution}
+		Si consideri un ramo composto da tre bipoli passivi ideali (R, L, C) in serie sottoposto ad una tensione sinusoidale $v(t) = V cos (\omega t + \phi)$. Per la LKT si ha $v(t) = Ri + L \frac{di}{dt} + \frac{\bigint_{-\infty}^t i(t) dt}{C}$. Passando ai fasori e derivando si ha $j \omega \dot{V} = j \omega R \dot{I} - L \omega^2 \dot{I} + \frac{1}{C} \dot{I}$, da cui $\dot{V} = \dot{I} (R + j \omega L - \frac{j}{\omega C})$. 
+		
+		La quantità $\dot{Z} = R + jX$, che è un numero complesso e non un fasore, prende il nome di impedenza e si misura in Ohm. La parte reale dell'impedenza è la resistenza, mentre la parte immaginaria $X = \omega L - \frac{1}{\omega C}$ viene detta \textit{reattanza}.
+\end{solution}
+	\question
+Risonanza nei circuiti in regime sinusoidale.
+\begin{solution}
+	In un circuito RLC in serie alimentato da una tensione sinusoidale con pulsazione $\omega = \omega_0 = \frac{1}{\sqrt{LC}}$ l'impedenza equivalente dei tre bipoli in serie è $\dot{Z} = R + j X = R + j(\omega L - \frac{1}{\omega C}) = R + j (\sqrt{\frac{L}{C}} - \sqrt{\frac{L}{C}}) = R$. Si ha dunque solo impedenza resistiva e sfasamento nullo ($\phi = \arctan {\frac{X}{R}} = 0$): tensione e corrente sono in fase e la potenza dissipata è interamente attiva. 
+\end{solution}
+	\question
+	Anti-risonanza nei circuiti in regime sinusoidale.
+	\begin{solution}
+			In un circuito RLC nel quale l'induttore e il condensatore sono in parallelo alimentato da una tensione sinusoidale con pulsazione $\omega = \omega_0 = \frac{1}{\sqrt{LC}}$ il reciproco dell'impedenza equivalente dei due bipoli in parallelo è $\dot{Z}^{-1} = \frac{1}{j \omega L} + j \omega C = j (-\sqrt{\frac{C}{L}} + \sqrt{\frac{C}{L}}) = 0$. Si ha dunque reattanza infinita nel ramo con condensatore e induttore in parallelo e non viene dissipata potenza nel carico resistivo: in ogni semiperiodo un elemento con memoria si scarica interamente nell'altro, senza mai permettere alla corrente di fluire nei carichi resistivi. Tensione e corrente sono in quadratura.
+	\end{solution}
+	\question
+	Potenza attiva istantanea e potenza attiva: definizione e significato fisico.
+	\begin{solution}
+		Dato un circuito in regime sinusoidale la potenza dissipata all'istante $t$ è pari a $p(t) = v(t) i(t) = V I \cos(\omega t) \cos(\omega t - \phi) = V \cos (\omega t)  (I \cos(\omega t) \cos \phi +  I \sin(\omega t) \sin \phi) = v(t) (i_A (t) + i_R(t))$. 
+		
+		Le due grandezze $i_A (t)$ e $i_R (t)$ si definiscono corrente attiva e corrente reattiva e permettono di definire di conseguenza la potenza attiva istantanea $p_A (t) = v(t) i_A (t) = V I \cos^2 (\omega t) \cos \phi$ e il suo valore medio in un periodo, la potenza attiva $P = \frac{1}{T} \bigint_{t_0}^{t_0 + T}  V I \cos^2 (\omega t) \cos \phi dt =  \frac{1}{2} V I \cos \phi = V_e I_e cos \phi$. 
+		
+		La potenza attiva è quella realmente dissipata nei carichi resistivi di un circuito.
+	\end{solution}
+		\pagebreak
+	\question
+	Potenza reattiva istantanea e potenza reattiva: definizione e significato fisico.
+	\begin{solution}		Dato un circuito in regime sinusoidale la potenza dissipata all'istante $t$ è pari a $p(t) = v(t) i(t) = V I \cos(\omega t) \cos(\omega t - \phi) = V \cos (\omega t)  (I \cos(\omega t) \cos \phi +  I \sin(\omega t) \sin \phi) = v(t) (i_A (t) + i_R(t))$. 
+		
+		Le due grandezze $i_A (t)$ e $i_R (t)$ si definiscono corrente attiva e corrente reattiva e permettono di definire di conseguenza la potenza reattiva istantanea\\ $p_R (t) = v(t) i_R (t) = V I \cos (\omega t) \sin (\omega t) \sin \phi =\frac{V I }{2} \sin (2 \omega t) \sin \phi$. 
+		
+		La potenza reattiva $Q$ è pari al valore massimo della potenza istantanea reattiva con il segno dell'angolo di sfasamento: $Q = \max\{p_R (t)\} \sign \phi = \frac{1}{2} V I \sin \phi = V_e I_e \sin \phi$.   
+		
+		La potenza reattiva è quella scambiata fra gli elementi con memoria nel circuito e che non viene utilizzata dai carichi resistivi. Se il carico reattivo è un induttore la potenza reattiva è positiva, se invece è un condensatore è negativa.\end{solution}
+	\question
+	Potenza complessa.
+	\begin{solution}
+		La potenza complessa è definita come $\dot{N} = \dot{V} \dot{I}^*$, da cui si ha $\dot{N} = V_e I_e e^{j \theta_v - j \theta_i} = V_e I_e e^{j \phi} = V_e I_e \cos \phi + j V_e I_e \sin \phi = P + jQ$, essendo $P$ e $Q$ la potenza attiva e reattiva. Da queste espressioni della potenza complessa si ottiene $P = R I_e ^2$ e $Q = X I_e ^2$. Il modulo $N = I_e V_e = P / \cos\phi$ della potenza complessa si definisce potenza apparente.
+	\end{solution}
+	
+	\question
+	Fattore di potenza.
+	\begin{solution}Il fattore di potenza è il rapporto tra la potenza attiva $P$ e la potenza apparente $N$. Dalla definizione di potenza complessa si ha che il fattore di potenza è pari al coseno dell'angolo di sfasamento tra corrente e tensione $\phi$. In caso di carichi solo attivi il fattore di potenza è 1 (tensione e corrente sono in fase); se i carichi sono solo reattivi il fattore di potenza è 0 (tensione e corrente in quadratura). Nei sistemi di potenza si desidera mantenere il fattore di potenza il più alto possibile per fare sì che la potenza fornita dal generatore sia il più vicina possibile alla potenza effettivamente utilizzata dalla rete elettrica.\end{solution}
+	\question
+	Sovrapposizione degli effetti.
+	\begin{solution}Il principio di sovrapposizione degli effetti afferma che in un circuito lineare con $n$ generatori \textbf{indipendenti} le tensioni e le correnti di ramo sono uguali alla somma delle tensioni e delle correnti di ramo che si avrebbero negli $n$ circuiti che si ottengono mantenendo acceso uno solo dei generatori e spegnendo gli altri. Spegnere un generatore di corrente vuol dire portare a 0 la corrente di ramo (circuito aperto) e spegnere un generatore di tensione vuol dire portare a 0 la tensione ai capi del generatore (circuito chiuso).\end{solution}
+			\pagebreak
+	\question
+	Metodo dei potenziali di nodo.
+	\begin{solution}Il metodo dei potenziali di nodo è un metodo di analisi circuitale.
+	\begin{itemize}
+		\item Si definisce arbitrariamente un nodo collegato a terra, a potenziale 0.
+\item 		Si scrivono le espressioni delle correnti di ramo in funzione delle differenze di potenziale tra i nodi.
+\item Si sostituiscono queste espressioni nelle $n - 1$ equazioni di nodo. 
+\item Si risolve il sistema.
+\end{itemize}
+Questo metodo permette di semplificare il sistema ottenuto dal metodo generale ottenendone uno con solo $n - 1$ equazioni e incognite. Quando nel circuito vi sono rami con solo un generatore di tensione senza carico non è possibile esprimere la corrente di ramo direttamente: si racchiude dunque il generatore di tensione e i suoi capi in una superficie chiusa $S$ detta \textit{supernodo}, si scrive una sola equazione per le correnti entranti e uscenti da $S$ e si osserva che la differenza tra i potenziali dei due terminali del generatore è pari alla tensione del generatore stesso. \end{solution}
+	\question
+	Teorema di Tellegen.
+	\begin{solution}Il teorema di Tellegen afferma che in ogni circuito isolato la somma algebrica delle potenze di ramo ($p = vi$) è nulla. Una formulazione alternativa afferma che la potenza richiesta agli elementi attivi è uguale a quella assorbita dagli elementi passivi. Il teorema di Tellegen e una conseguenza del principio di conservazione dell'energia. \end{solution}
+		
+	\question
+	Metodo generale d’analisi circuitale e metodo di eliminazione delle tensioni.
+	\begin{solution}
+		Il metodo generale di analisi circuitale prevede la descrizione di un circuito tramite $n - 1$ equazioni di nodo date dalla LKC, $r$ equazioni caratteristiche di ramo ($v_k = V_{gk} + R_k i_k$) e $r - n + 1$ equazioni di maglia date dalla LKT. Questo sistema ha una sola soluzione.
+		
+		IL metodo di sostituzione delle tensioni prevede la sostituzione delle tensioni con le correnti di ramo in modo da ridurre il sistema a $r$ equazioni nelle $r$ incognite date dalle correnti di ramo. Il sistema ha la forma $\sum_k i_k = 0; \sum_k R_k i_k = - \sum_k V_{gk}$
+	\end{solution}
+	\question
+	Teorema di Thevenin nelle reti con e senza generatori pilotati.
+	\begin{solution}Il teorema di Thevenin afferma che ogni circuito lineare collegato ai capi di un carico è equivalente a un generatore di tensione con un resistore collegato in serie. La tensione del generatore si ottiene risolvendo il circuito senza il ramo del carico e calcolando la tensione fra i due capi del ramo, mentre la resistenza equivalente si può ottenere in due modi:
+	\begin{itemize}
+		\item nel caso non siano presenti generatori pilotati si spengono tutti i generatori indipendenti, si scollega il carico e si calcola la resistenza equivalente con le regole della serie, del parallelo e della sostituzione stella-triangolo. 
+		\item in caso siano presenti generatori pilotati si spengono tutti i generatori indipendenti, si collega al posto del carico un generatore di tensione da 1 V e si calcola la corrente $I_S$ fornita dal generatore, ottenendo la resistenza equivalente come $R_{eq} = \frac{1 V}{I_S}$.
+\end{itemize}
+Il teorema di Thevenin vale anche per i circuiti in regime sinusoidale trasformati secondo Steinmetz nello spazio dei fasori.
+\end{solution}
+	\question
+	Teorema di Norton nelle reti con e senza generatori pilotati.
+	\begin{solution}Il teorema di Norton afferma che ogni circuito lineare collegato ai capi di un carico è equivalente a un generatore di corrente con un resistore collegato in parallelo. La corrente del generatore si ottiene risolvendo il circuito sostituendo il carico con un cortocircuito e calcolando la corrente in quel ramo, mentre la resistenza equivalente si può ottenere in due modi:
+		\begin{itemize}
+			\item nel caso non siano presenti generatori pilotati si spengono tutti i generatori indipendenti, si scollega il carico e si calcola la resistenza equivalente con le regole della serie, del parallelo e della sostituzione stella-triangolo. 
+			\item in caso siano presenti generatori pilotati si spengono tutti i generatori indipendenti, si collega al posto del carico un generatore di tensione da 1 V e si calcola la corrente $I_S$ fornita dal generatore, ottenendo la resistenza equivalente come $R_{eq} = \frac{1 V}{I_S}$.
+		\end{itemize}
+		Il teorema di Norton vale anche per i circuiti in regime sinusoidale trasformati secondo Steinmetz nello spazio dei fasori.\end{solution}
+		
+	\question
+	Rifasamento
+	\begin{solution}Dato che la presenza di potenza reattiva fa aumentare le perdite di energia di un sistema è desiderabile minimizzare la potenza reattiva massimizzando il fattore di potenza.  Il componente che assorbe potenza reattiva invece di dissiparla è il condensatore: collegare un condensatore in parallelo al carico di un circuito permette di aumentare il fattore di potenza: questa operazione prende il nome di \textit{rifasamento}. Solitamente si rifasa per portare il fattore di potenza a $\cos \phi' = 0.9$. La potenza reattiva dopo il rifasamento con un condensatore C è pari a $Q' = Q - Q_c = P \tan \phi - Q_c \implies Q_c = V_e^2 / X_c - V_e^2 \omega C \implies P \tan \phi' = P \tan \phi - V_e^2 \omega C$, dunque la capacità $C$ del condensatore di rifasamento necessario è $C = \frac{P}{\omega V_e^2} (\tan \phi - \tan \phi')$. 
+	\end{solution}
+\question
+	Metodo generale di analisi del transitorio.
+	\begin{solution}
+		La risposta nel tempo di un circuito che subisce un'eccitazione improvvisa è divisa in due fasi: la prima, di tipo \textit{transitorio}, è dovuta all'immagazzinamento di energia da parte degli elementi con memoria di un circuito. L'energia contenuta in questi elementi non può variare in modo istantaneo, quindi la corrente in un'induttore ($W = Li^2$) e la tensione tra le armature di un condensatore ($W = C v^2$) non possono variare in modo discontinuo in seguito ad un'eccitazione istantanea. La seconda è il regime stazionario. La risposta di un circuito a un transitorio si calcola come \textit{risposta totale = risposta di transitorio + risposta in regime stazionario}; la risposta totale si può calcolare scrivendo le equazioni topologiche e risolvendole in modo da ottenere una sola equazione differenziale di ordine $n$, dove $n$ è il numero di elementi con memoria la cui soluzione è $x(t) = x_t(t) + x_s$, rispettivamente risposta di transitorio e stazionaria. $x_t(t)$ si può determinare risolvendo l'equazione caratteristica associata e imponendo le condizioni iniziali per $t = 0^+$, mentre $x_s$ si determina analizzando il circuito in regime stazionario. $x$ può essere tensione o corrente.
+	\end{solution}
+	\question
+	Sistemi trifase simmetrici ed equilibrati.
+	\begin{solution}Un sistema trifase e un sistema di tre linee elettriche in regime sinusoidale con tensioni sfasate tra loro. Un sistema trifase simmetrico è un sistema trifase nel quale le tensioni dei tre fili, dette \textit{tensioni concatenate}, hanno la stessa ampiezza. In tal caso, le fasi delle tensioni differiscono tra loro di 120 gradi. Un sistema trifase simmetrico collegato a carichi tali che le correnti passanti nei tre fili (dette \textit{correnti di linea}) abbiano uguale ampiezza si dice \textit{sistema trifase simmetrico equilibrato}. In tal caso il valore efficace delle correnti di linea è $\sqrt{3}$ volte quello delle correnti passanti per i carichi. \textit{Dim:} segue dalla rappresentazione geometrica delle correnti di linea (che si trovano ai lati del triangolo) e di quelle passanti per i carichi (che collegano il vertici con il centro) e dalla LKC.
+		\end{solution}
+	\question
+	Sistemi trifase con neutro.
+	\begin{solution}I sistemi trifase con neutro sono sistemi trifase ai quali viene aggiunto un quarto filo collegato al centro della stella. Tra questo filo (detto \textit{neutro}) e ogni altro filo del sistema trifase insiste una tensione (detta \textit{tensione di fase}) che nei sistemi bilanciati e pari a $E = V / \sqrt{3}$ essendo $V$ l'ampiezza delle tensioni concatenate. È possibile collegare un carico sia alle tensioni concatenate sia alle tensioni di fase: ciò viene usato per la distribuzione domestica dell'energia elettrica monofase: i due poli sono il neutro e uno dei fili del sistema trifase.\end{solution}
+	\question
+	Fattore di potenza nei sistemi trifase.
+	\begin{solution}Nei sistemi trifase, come nei sistemi monofase, il fattore di potenza è definito come $\cos \phi = P / N$. In un sistema trifase la potenza attiva $P$ è pari a $P = E_{e_1} I_{e_1} \cos \phi_1 + E_{e_2} I_{e_2} \cos \phi_2 + E_{e_3} I_{e_3} \cos \phi_3$ mentre la potenza reattiva $Q$ vale $Q = E_{e_1} I_{e_1} \sin \phi_1 + E_{e_2} I_{e_2} \sin \phi_2 + E_{e_3} I_{e_3} \sin \phi_3$. Se si ruota il sistema di correnti rispetto a quello di tensioni di un angolo $\theta$, ricordando che $\phi_k$ sono gli angoli di sfasamento tra le tensioni e le correnti nelle tre fasi, si ottiene $P = \sum_k E_k I_k \cos (\phi_k - \theta)$. Il massimo di $P$ si ha quando $\frac{dP}{d\theta} = 0 \implies \sum_k - E_k I_k \sin (\phi_k - \theta) = \sum_k E_k I_k \cos (\phi_k)\sin\theta - \sum_k E_k I_k \sin (\phi_k) \cos \theta = 0 \implies \frac {\sin \theta}{\cos\theta} = \frac{\sum_k E_k I_k \cos (\phi_k)}{\sum_k E_k I_k \sin (\phi_k)} = Q/P = \tan \theta$, per cui $\theta = \cos \arctan (Q / P) = \frac{P}{\sqrt{Q^2 + P^2}} = P/N$ è l'angolo la cui rotazione rende massima la potenza attiva $P$.
+	\end{solution}
+		\pagebreak
+	\question
+	Energia magnetica.
+	\begin{solution}In un anello di materiale ferromagnetico avvolto da una spira di $N$ avvolgimenti con induttanza $L$ nella quale scorre una corrente $i$ il lavoro magnetico infinitesimo compiuto per incrementare il flusso magnetico di $d\Phi$ è $dE_m = P_m dt = v_{IND} i dt = i \frac{d \Phi_c}{dt} dt = i d\Phi_c$. Nell'ipotesi di linearità il flusso magnetico concatenato all'intera spira è $\Phi_c = L i$ quindi $dE_m = L i di$ e $E_m = \bigint_0^i L i di = \frac{1}{2} L i^2$ (se $i = 0$ per $t = 0$). Se L è costante allora $E_m = \frac{1}{2} \Phi_c i = \frac{1}{2}N i \Phi$. In un sistema composto da due spire accoppiate con $N_1$ e $N_2$ avvolgimenti si ha $\Phi_{C1} = L_1 i_1 + M i_2$ e $\Phi_{C2} = L_2 i_2 + M i_1$, quindi $dE_m = i (d\Phi_{C2} + d\Phi_{C1})$ e l'energia magnetica è pari a $E_m = \frac{1}{2}{L_1 i_1^2 + L_2 i_2^2} + M i^1 i_2$. Ciò mostra come per l'energia magnetica non valga il principio di sovrapposizione: in un circuito isolato non si ha il termine di mutua induzione.  \end{solution}
+	\question
+	Forza magnetica e forza meccanica equilibrante sull’ancora di un elettromagnete.
+	\begin{solution}Un elettromagnete che agisce su un'ancora a distanza $x$ può essere visto come un circuito magnetico con due traferri di spessore $x$. L'elettromagnete esercita una forza $\mathbf{F}$ sull'ancora controbilanciata da una forza esterna $\mathbf{F_e}$. Il lavoro elementare è dunque pari a $\dbar L = dE_m = d(\frac{1}{2}i \Phi_c) = \frac{1}{2} \Phi_c di + \frac{1}{2} i d\Phi_c = \mathbf{F_e} dx + i d\Phi_c$. Se $i$ è costante allora $\mathbf{F_e} dx = -\frac{1}{2} i d\Phi_c$. Dalla legge di Hopkinson $N i = \Phi \mathcal{R}, \mathcal{R} = \frac{\Delta l}{\mu S}$ e dalla linearità ($\Phi_c = N \Phi = L i$) si ha $\Phi = \frac{Ni}{\mathcal{R}} \implies \Phi_c = \frac{N^2 i}{2\mathcal{R}} = \frac{\mu S N^2 i}{2x} = Li$. Si ha quindi $\mathbf{F_e} = -\frac{1}{2} i \frac{d\Phi_c}{dx} = -\frac{1}{2} i^2 \frac{dL}{dx} = -\frac{1}{2} i^2 \frac{dL}{d\mathcal{R}} \frac{d\mathcal{R}}{dx} = \frac{i^2 N^2}{\mathcal{R}^2 \mu S} = \Phi^2 / (\mu S) = S B^2 / \mu$ e la pressione magnetica sulla superficie totale, pari a  $2S$ è $p_m = B^2 / (2 \mu)$
+		\end{solution}
+	\question
+	Ciclo di isteresi magnetica.
+	\begin{solution}
+		Il campo di induzione magnetica $B$ generato in un anello di materiale ferromagnetico non è costante al variare del campo magnetico indotto $H = \frac{Ni}{2 \pi r}$ che lo attraversa. Si ha una regione entro la quale all'aumentare di $i$ il campo di induzione magnetica aumenta quasi linearmente, per poi vedere il proprio incremento ridursi molto velocemente nella cosiddetta \textit{regione di saturazione}. Dopo questa \textit{prima magnetizzazione} un calo di corrente fino a $i = 0$ porta a osservare un \textit{campo di induzione magnetica residua} $B_R$. Per annullare questo campo bisogna indurre un \textit{campo magnetico coercitivo} $H_M$. Con una corrente che si sposta dal minimo $-i_0$ al massimo $i_0$ il campo magnetico coercitivo varia da $H_M$ a $-H_M$ e viceversa. Il grafico che rappresenta questa evoluzione descrive il \textit{ciclo di isteresi magnetica}. Durante un intero ciclo di isteresi si dissipa un'energia pari all'area interna al ciclo, $e_M = \bigint_{-B_m}^{B_m} H dB + \bigint_{B_m}^{-B_m} H dB$ (corrispondente alla curva percorsa in senso antiorario).
+	\end{solution}
+	\question
+	Risposta in frequenza.
+	\begin{solution}
+In un circuito in regime sinusoidale il comportamento degli elementi con memoria (e quindi la loro impedenza) varia con la frequenza: il comportamento del circuito è legato alla frequenza a cui opera. Nel dominio delle frequenze un circuito può essere visto come un sistema che a un'eccitazione $\dot{X}(\omega)$ risponde con una risposta $\dot{Y}(\omega)$. Dato che è possibile misurare sia in ingresso che in uscita corrente e tensione la risposta può essere di quattro tipi. Il rapporto $\frac{\dot{Y}(\omega)}{\dot{X}(\omega)} = \dot{H}(\omega)$ si definisce \textit{funzione di trasferimento}.
+	\end{solution}
+	\question
+	Filtri passivi
+	\begin{solution}\begin{itemize}
+			\item Passa-banda: \textbf{LCR} con uscita ai capi di \textbf{R};
+			\item Arresta-banda: \textbf{LCR} con uscita ai capi di \textbf{LC};
+			\item Passa-basso: \textbf{RC} con uscita ai capi di \textbf{C};
+			\item Passa-alto: \textbf{RL} con uscita ai capi di \textbf{L}.
+	\end{itemize}\end{solution}
+	\question
+	Il trasformatore.
+	\begin{solution}
+		Un trasformatore è composto da un nucleo ferromagnetico attorno al quale sono avvolti due circuiti (primario e secondario) immobili l'uno rispetto all'altro. La corrente nel circuito primario induce un flusso magnetico che, nel caso ideale, si concatena perfettamente con il circuito secondario. Le tensioni primaria e secondaria valgono $v_1 = R_1 i_1 + L_1 \frac{d i_1}{dt} + M \frac{d i_2}{dt}$ e $v_2 = R_2 i_2 + L_2 \frac{d i_2}{dt} + M \frac{d i_1}{dt}$. Nel caso ideale in cui $\Phi_{\{1,2\}} = N_{\{1,2\}} \Phi = L_{\{1,2\}} i_{\{1,2\}} + M i_\{2,1\}$ si ha $v_1 = N_1 \Phi, v_2 = N_2 \Phi$ da cui $v_1  / v_2 = N_1 / N_2 = k$, dove $k$ è detto \textit{rapporto spire}. 
+	\end{solution}
+	\question
+	fem trasformatorica (transformer EMF) e fem dinamica (motional EMF).
+	\begin{solution}
+		Due circuiti elettrici accoppiati magneticamente possono influire l'uno sull'altro elettricamente o magneticamente. Nel caso il flusso concatenato ai due circuiti vari a causa di una variazione nelle posizioni reciproche si ha un effetto mozionale mentre nel caso vari a causa di una variazione nelle correnti che lo generano si ha un effetto trasformatorico. Nel caso di $n$ circuiti accoppiati il flusso concatenato al circuito $j$ è $\Phi_j$ funzione delle $n$ correnti e dell'angolo $\theta$ che individua le posizioni reciproche. La tensione del circuito $j$ è quindi $v_j = R_j i_j + \frac{d \Phi_j}{dt}$. Essendo $\Phi_j$ una funzione delle altre correnti e della posizione reciproca($\Phi_j = \Phi_j(i_1, ..., i_n, \theta)$) si ha $d \Phi_j = \sum_k \frac{d \Phi_j}{d i_k} d i_k + \frac{d \Phi_j}{d\theta} d\theta$. Se il materiale è lineare e $\Phi_j = \sum_k L_{jk} i_k$ allora $\frac{d \Phi_j}{d i_k} = L_{jk}$ da cui  $d \Phi_j = \sum_k L_{jk} d i_k + \frac{d \Phi_j}{d\theta} d\theta \implies \frac{d \Phi_j}{dt} = \sum_k L_{jk} \frac{d i_k}{dt} + \frac{d \Phi_j}{d\theta} \omega$. La \textit{fem trasformatoria è} $\varepsilon_t =  \sum_k L_{jk} \frac{d i_k}{dt}$ e la \textit{fem dinamica} è $\varepsilon_m = \frac{d \Phi_j}{d\theta} \omega$
+	\end{solution}
+	\question
+	Il campo magnetico rotante.
+	\begin{solution}In un modello di sistema statore-rotore con un unico circuito di statore la corrente nella bobina induce un campo magnetico che passa attraverso il rotore inducendo una corrente. Se la corrente è continua il campo magnetico è costante nel tempo. Se la corrente è invece sinusoidale il campo magnetico varia in intensità e il punto di massimo e minimo si invertono dopo un semiperiodo.  
+		
+		Se ci sono tre circuiti di statore alimentati da correnti trifase equilibrate allora i campi magnetici generati dai tre campi danno un campo risultante nel quale le parti rotanti in senso orario si sommano e quelle controrotanti in senso antiorario si elidono: il campo magnetico è rotante con pulsazione $\omega = \omega_c$ e intensità costante. 
+		
+		Nei motori reali vi sono più coppie nord-sud (dette \textit{coppie polari}): in tal caso la velocità del campo è $\omega_c = \omega / p$, essendo $p$ il numero di coppie polari. \end{solution}
+	
+	\question
+	La macchina asincrona (induction machine).
+	\begin{solution}In una macchina asincrona statore e rotore sono entrambi avvolti da bobine trifase con lo stesso numero di coppie nord-sud (dette \textit{coppie polari}). Le bobine possono essere collegate a stella o a triangolo. 
+		
+		Il campo rotante di statore si concatena con le bobine del rotore inducendo una terna di correnti che inducono a loro volta un campo magnetico rotante di rotore che ruota trascinato alla stessa pulsazione del campo magnetico rotante di statore, trascinando a sua volta il rotore facendolo ruotare con pulsazione $\omega_m < \omega_c$. 	Si definisce lo scorrimento $s = \frac{\omega_c - \omega_m}{\omega_c}$.
+		
+		Tipicamente nelle macchine asincrone il rotore ha una struttura \textit{a gabbia di scoiattolo} con barre oblique cortocircuitate da anelli.  \end{solution}
+	\question
+	La macchina sincrona (synchronous machine).
+	\begin{solution}Nella macchina sincrona il motore è alimentato in corrente continua mentre gli avvolgimenti di statore sono trifase. La corrente continua induce un campo magnetico stazionato che ruota con il rotore quando esso viene fatto ruotare e si concatena con il circuito di statore inducendo in esso una terna di tensioni alternate. Dato che il campo magnetico del rotore è stazionario esso può essere fornito da magneti permanenti invece che da correnti elettriche. Questo tipo di motore è privo di contatti striscianti. 
+	\end{solution}
+	\question
+	La macchina in corrente continua (DC machine).
+	\begin{solution}La macchina in corrente continua funziona come un anello di Pacinotti: il rotore è una bobina avvolta attorno ad un nucleo ferromagnetico e lo statore fornisce un campo magnetico costante tramite corrente elettrica continua o magneti permanenti. L'anello di Pacinotti può funzionare come generatore o come motore. Quando il rotore ruota viene indotta una forza elettromotrice sulle spire. Per ogni spira $j$ la forza elettromotrice indotta è $e_j = -\frac{d\Phi_j}{dt} = -\omega\frac{d\Phi_j}{d\theta}$. L'inclinazione di ogni spira rispetto alla precedente compie un angolo giro passando dalla prima alla $N$-esima spira, quindi la tensione totale è nulla, ma tra due contatti striscianti posti a poli opposti dl rotore si ha una tensione $V_{AB} = \sum_1^{N/2}e_j + \sum_{N/2}^1 e_j = 2 \sum_1^{N/2}e_j$ dato che la tensione è composta dalle forze elettromotrici indotte sul percorso A-B percorso in senso orario e antiorario.\end{solution}
+\end{questions}
+\textbf{Disclaimer}: Questo documento può contenere errori e imprecisioni che potrebbero danneggiare sistemi informatici, terminare relazioni e rapporti di lavoro, liberare le vesciche dei gatti sulla moquette e causare un conflitto termonucleare globale. Procedere con cautela.
+
+Questo documento è rilasciato sotto licenza CC-BY-SA 4.0. \faCreativeCommons\ \faCreativeCommonsBy\ \faCreativeCommonsSa
+
+\end{document}
