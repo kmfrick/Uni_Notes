@@ -9,8 +9,7 @@ Included courses are:
 - 28177 - Statistical Models (A.Y. 2019-2020)
 - 28021 - Software Engineering T (A.Y. 2019-2020)
 
-
-#
+---
 
 Questo repository ospita gli appunti che ho scritto in LaTeX per alcuni corsi universitari.
 
