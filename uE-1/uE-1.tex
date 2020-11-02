@@ -1,0 +1,162 @@
+
+\documentclass[answers, a4paper, 11pt]{exam}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage[english]{babel}
+\usepackage{ccicons}
+\usepackage{hyperref} % Has to be loaded before cleveref
+\usepackage{cleveref}
+\usepackage[utf8]{inputenc} % Has to be loaded before csquotes
+\usepackage[autostyle=false, style=english]{csquotes}
+\usepackage[margin=2cm]{geometry}
+\usepackage{graphicx}
+\usepackage{mathrsfs}
+\usepackage{multicol}
+\usepackage{relsize}
+\usepackage{parskip}
+
+\pagestyle{plain} 
+\graphicspath{{./images/}}
+\MakeOuterQuote{"}
+\setlength{\columnseprule}{.4pt}
+\renewcommand{\solutiontitle}{\noindent\textbf{R:}\enspace}
+\def\dbar{{\mathchar'26\mkern-12mu d}}
+
+\title{Microeconomics 1}
+\author{Kevin Michael Frick}
+\begin{document}
+\maketitle
+\begin{questions}
+\question \textbf{Static games of complete information}
+\begin{parts}
+\part What is a static game of complete information?
+\begin{solution}
+A static game is a game in which no player has any information on the other players' strategies until all players have selected a strategy to play.
+A static game of complete information is a static game in which all players' payoffs for all possible combinations of strategies are common knowledge.
+
+Static games are usually represented in normal form.
+A game with $n$ players in normal form is defined as a set $G = \{I, S, v\}$ where $I$ is the set of players ($|A| = n$), $S_i$ the set of strategies for player $i$ and $v_i: S \rightarrow R$ is the utility function for player $i$ that matches every possible combination of strategy to a payoff for said player.
+A vector $s \in S$ (that is, a choice of strategy for each player) is defined as a \textit{profile of strategies}.
+\end{solution}
+\part What is a Nash equilibrium?
+\begin{solution}
+A \textit{mixed strategy} $\sigma_i$ is defined as a probability distribution over $S_i	$. 
+If the probability distribution is such that there can only be one possible draw, i.e. the choice of strategy is deterministic, the strategy is said to be \textit{pure}.
+The set of all possible mixed strategies for a player $i$ is denoted by $\Delta_i$.
+A vector $\sigma \in \Delta$ is defined as a profile of mixed strategies.
+In a static game, a strategy $\sigma_i$ is a \textit{best response} to the vector of the other players' strategies $\sigma_{-i}$ if $E[v_i(\sigma_i, \sigma_{-i})] \geq E[v_i(\sigma'_i, \sigma_{-i})]$ for all possible $\sigma'_i \in \Delta_i$.
+The function that associates the other players' possible profiles of strategies to their best responses (of which there can be more than one) is set-valued and denoted by $BR_i(\sigma_{-i})$.
+
+A Nash equilibrium is a set of strategies $\sigma^*$ such that each of its elements $\sigma^*_i$ is a best response to the remaining elements $\sigma^*_{-i}$.
+
+A Nash equilibrium can be \textit{in pure strategies} if there exists a profile of strategies $s$ that satisfies the definition of Nash equilibrium.
+\end{solution}
+\part What are the requirements for a pure-strategy Nash equilibrium to exist?
+\begin{solution}
+A game is finite if the set of players $I$ is finite and, for each players $i$, the set of strategies $S_i$ is finite.
+Every finite game has a Nash equilibrium, possibly in mixed strategies.
+
+If all sets $S_i$ are non-empty, compact and convex subsets of $R^m$, $m = |S_i|$, and all payoff functions $v_i$ are continuous and quasi-concave (that is, for all strategies $s_i, z_i \in S_i$ we have $v_i(\lambda s_i + (1 - \lambda)z_i) \leq \max \{v_i(s_i), v_i(z_i)\}$)  then there exists a Nash equilibrium in pure strategies.
+\end{solution}
+\end{parts}
+\question \textbf{Dynamic games of complete information}
+\begin{parts}
+\part What is a dynamic game of complete information?
+\begin{solution}
+In a dynamic game of complete information, some players can observe some of the other players' actions before choosing their own.
+In this type of game, players may act sequentially, they may act several times, and their information may depend on what has happened in the past.
+In such games information is complete, but might not be perfect: players might not know the complete history of all actions made by other players.
+For example, in a simultaneous game, information is complete but not perfect, because players cannot observe any other action before making their own.
+
+Dynamic games are usually represented in game tree form, also known as extensive form, in which every node of the tree contains the player that actions if the state of the game reaches that node and the set of actions that said player can choose from. 
+
+A set of nodes $H_i$ such that player $i$ has to choose an action at every node in the set, but has no way to know which node has been reached, is known as an \textit{information set}.
+
+In a dynamic game, actions and strategies have different meanings: an action is a choice made when called to move, a strategy is a complete plan of action, i.e. a set that, for each possible time a player is called on to move, contains the action to be taken.
+\end{solution}
+\part What does the principle sequential rationality imply?
+\begin{solution}
+The principle of sequential rationality requires that whenever a player is called on to move, they must play a strategy that is optimal from that point on. 
+For a Nash equilibrium to be sequentially rational, this condition must be satisfied for all possible nodes in the game tree, even if those points are never reached on the equilibrium path.
+\end{solution}
+\part What is a subgame perfect Nash equilibrium?
+\begin{solution}
+A subgame of a game in extensive form is a subset of the game that starts from an information set containing a single node and contains all nodes that can be reached from that node, and only those nodes, without breaking any information set: if a node is in the subgame, all nodes in the same information set must be in the subgame for it to be valid. 
+A subgame perfect Nash equilibrium (SPNE) is a Nash equilibrium that, when played, induces a Nash equilibrium in every subgame of the game. 
+Every finite game of perfect information has at least one SPNE and, if no player has the same payoffs at any pair of terminal nodes, that SPNE is unique.
+\end{solution}
+\part How does one find a subgame perfect Nash equilibrium in a finitely repeated game?
+\begin{solution}
+A repeated game is a game that is constructed by taking a finite game that can be either static or dynamic and playing it many (possibly infinitely) times in a row. 
+The game being repeated is known as the \textit{stage game}.
+If a finite game that is being played a finite number of times has a unique Nash equilibrium, then the unique SPNE of the repeated game is constructed by always playing said Nash equilibrium at every repetition.
+\end{solution}
+\part What does it mean that a player is discounting future payoffs in a repeated game?
+\begin{solution}
+If a game is repeated an infinite number of time, and players are assumed to be maximized the sum of their payoffs, then said sum can eventually be infinite, causing the maximization problem to not be well defined. 
+This problem can be resolved by maximizing the \textit{sum of discounted payoffs} instead, that is by multiplying all payoffs function by $\delta^t$ for every repetition $t$.
+If $\delta < 1$, then the sum $\sum_t^\infty u(t)\delta^t$ is finite. 
+\end{solution}
+\part State the one-shot deviation principle.
+\begin{solution}
+The one-shot deviation principle says that a strategy profile $s_i$ is a SPNE if and only if there is no incentive to deviate from that strategy only once. 
+In other words, for any player $i$ there isn't any strategy $s'_i$ that \textit{only} differs from $s_i$ in one period $t$ and after one history $h(t)$ and is strictly better than $s_i$ if the subgame starting after $h(t)$ is reached.
+\end{solution}
+\end{parts}
+\question \textbf{Static games of incomplete information}
+\begin{parts}
+\part What is the difference between a game of imperfect information and one of incomplete information?
+\begin{solution}
+A game of incomplete information is one in which players might not know some characteristic of other players.
+A game of imperfect information, instead, is one in which players do not necessarily know the entire history of other players' actions. In some cases, known as games of imperfect recall, players might even not know their own past action in some states. 
+
+Games of incomplete information can be translated into games of imperfect information by adding an initial move by Nature, a fictitious player that gets no payoff from playing and that plays some exogenous "mixed strategy" which corresponds to the missing or uncertain pieces of information. 
+Any game in which Nature does not move first can be transformed into one in which it does move first. 
+\end{solution}
+\part What is a Bayesian game?
+\begin{solution}
+In a game of imperfect information a player $i$ that has private information can summarize it into a \textit{type} $t_i \in T_i$, $T_i$ being known as the type space of said player. 
+Player $i$'s payoff then becomes a function $v_i(a, t_i)$ of both other players' actions $a_{-i}$ and the player's type $t_i$ and action $a_i$.
+
+A Bayesian game consists of a set $\{I, T, A, p, v\}$ comprising the set of players $I$, the set of players' types $T$, the set of players' actions $A$, the set of payoff functions $v$, and a set of beliefs $p$ so that $p_i$ is player's $i$ probability distribution over the vector of other players' types $T_{-i}$.
+
+In a Bayesian game, types are chosen by Nature before the first stage of the game, according to some \textit{prior probability distribution} $p(t), t \in T$ which is known and shared by all players. 
+The latter statement is known as the \textit{common prior assumption}.
+Types can be correlated, in which case upon learning their own type players update their beliefs about other players, using Bayes's rule to derive distribution $p(t_{-i}|t_i)$.
+\end{solution}
+\part What is a Bayesian Nash equilibrium?
+\begin{solution}
+In Bayesian games, as in dynamic games, strategies are different from actions.
+Specifically, a pure strategy for player $i$ is a function $s_i : T_i \rightarrow A_i$ that assigns a possible action to each possible type for player $i$, while a mixed strategy is a function $\sigma_i : T_i \rightarrow \Delta(A_i)$ that assigns a probability distribution over $A_i$ to each possible type.
+
+A Bayesian Nash equilibrium is a (possibly mixed) strategy profile that maximizes the \textit{expected} payoff for all players of every possible type.
+If types are correlated, expected payoffs have to be calculated using the posterior distribution of updated beliefs $p(t_{-i}|t_i)$ once players learn their type.
+
+In other words, a Bayesian Nash equilibrium is a Nash equilibrium which requires the equilibrium conditiion to be true for all possible types of each player.
+A Bayesian Nash equilibrium, possibly in mixed strategies, can be proven to exist for every finite game of incomplete information/
+\end{solution}
+\end{parts}
+\question \textbf{Dynamic games of imperfect information}
+\begin{parts}
+\part What is a principal/agent game?
+\begin{solution}
+A principal/agent game is a dynamic game of incomplete information with two players, one informed and one uninformed, in which the uninformed player, known as the agent, moves first. 
+There are two classes of principal/agent games: one in which the principal does not know the agent's type and one in which the agent's action is known only as a probability distribution over the agent's set of actions. 
+\end{solution}
+\part What is a signaling game?
+\begin{solution}
+A signaling game is a dynamic game of incomplete information with two players, one informed and one uninformed, in which the informed player moves first, thus possibly signaling some information to the other player. 
+A signaling game is defined as a set $G = \{I, T, A, M, Pr, v\}$ comprising the set of players $I$, the set of players' types $T$, the set of possible actions for the receiving players $A$, the set of possible actions (known as messages) for the sending players $M$, the (common) prior distribution on types $Pr$ and the set of payoff function $v$.
+\end{solution}
+\part What is a perfect Bayesian equilibrium?
+\begin{solution}
+A continuation game is a subset of a dynamic game that, unlike a subgame, can start at any information set, and not only at an information set that only contains one node. 
+In every information set in which a player is called on to move, said player must have a probability distribution over all possible decision nodes in the starting information set, known as their \textit{beliefs}.
+A perfect Bayesian equilibrium is a profile of strategies $\sigma^*$ and a probability distribution $\mu^*$ such that $\mu^*$ is derived from $\sigma^*$ using Bayes's rule and $\sigma^*$ is sequentially rational given $\mu^*$, that is in every information set players will play a best response to their beliefs.
+\end{solution}
+\end{parts}
+\end{questions}
+\textbf{Disclaimer}: This document may contain errors and inaccuracies that may damage your system, cause your partner to leave you, your boss to fire you, your cats to pee on your furniture and clothing, and global thermonuclear war. Proceed with caution. 
+\end{document}
+
