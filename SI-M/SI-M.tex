@@ -1,0 +1,630 @@
+\documentclass[answers, a4paper, 11pt]{exam}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage[italian]{babel}
+\usepackage{ccicons}
+\usepackage{hyperref} % Has to be loaded before cleveref
+\usepackage{cleveref}
+\usepackage[utf8]{inputenc} % Has to be loaded before csquotes
+\usepackage[autostyle=false, style=english]{csquotes}
+\usepackage[margin=2cm]{geometry}
+\usepackage{graphicx}
+\usepackage{mathrsfs}
+\usepackage{multicol}
+\usepackage{relsize}
+\usepackage{parskip}
+
+\pagestyle{plain} 
+\graphicspath{{./images/}}
+\MakeOuterQuote{"}
+\setlength{\columnseprule}{.4pt}
+\renewcommand{\solutiontitle}{\noindent\textbf{R:}\enspace}
+\def\dbar{{\mathchar'26\mkern-12mu d}}
+
+\title{Sicurezza dell'Informazione M}
+\author{Kevin Michael Frick}
+\begin{document}
+\maketitle
+\begin{questions}
+
+\question \textbf{Meccanismi crittografici di base}
+\begin{parts}
+\part Si enuncino le proprietà delle funzioni hash crittograficamente sicure.
+\begin{solution}
+Una funzione hash crittografica $H(x)$ in generale deve presentare quattro proprietà:
+\begin{enumerate}
+\item Efficienza: il calcolo di $H(x)$ è computazionalmente facile $\forall x$.
+\item Robustezza debole alle collisioni: per ogni $x$ è computazionalmente infattibile trovare $y \neq x : H(y) = H(x)$.
+\item Resistenza forte alle collisioni: è infattibile trovare una qualunque coppia $y, x: y \neq x \land H(y) = H(x)$.
+\item Unidirezionalità: il calcolo di $H^{-1}(h) \forall h : H(x) = h$ è infattibile.
+\end{enumerate}
+
+\end{solution}
+\part In quali casi sono particolarmente importanti alcune proprietà delle funzioni hash?
+\begin{solution}
+La proprietà di resistenza debole alle collisioni è importante per evitare attacchi con collisione ai segreti. 
+La resistenza forte, invece, è importante per evitare attacchi che sfruttino il paradosso del compleanno.
+L'unidirezionalità è particolarmente importante se la funzione hash viene utilizzata per autenticare un dato, ad esempio accodando a $m$ il suo hash quando concatenato a un segreto $s$.
+\end{solution}
+\part Si descrivano le proprietà di Pseudo Random Number Generator, True RNG e PRNG sicuro. A cosa serve il seed?
+\begin{solution}
+Un TRNG è un generatore di numeri casuali che si serve di segnali provenienti da fenomeni fisici, ad esempio registrati da un microfono o da altre periferiche del calcolatore.
+Questi segnali vengono registrati digitalizzati ed  elaborati (deskewing) prima di venire memorizzati.
+I TRNG possono produrre dati casuali a frequenza relativamente bassa, e non hanno la possibilità di generare sequenze di numeri casuali identici come è richiesto da alcuni tipi di algoritmi.
+
+Un PRNG è un generatore di numeri casuali che si serve di una macchina a stati finiti basata su algoritmi deterministici che generano sequenze di numeri a partire da un dato iniziale detto \textit{seed}.
+Un PRNG può produrre dati a frequenza molto alta e permette di riprodurre le sequenze utilizzando lo stesso seed, ma ciò significa che in assenza di accorgimenti appositi può essere possibile prevedere i numeri generati successivamente partendo da una sequenza di numeri già generati. 
+Inoltre, le sequenze generate da un PRNG sono finite e destinate a presentare ripetizioni.
+
+Un PRNG sicuro (Cryptographically Secure PRNG) garantisce la proprietà di imprevedibilità: deve essere computazionalmente molto difficile risalire al seed o ai numeri generati in futuro partendo da una sequenza di numeri generati. 
+Ciò implica che il periodo di ripetizione (ovvero la lunghezza delle sequenze possibili) sia molto grande ($>10^{50}$), che il seed sia imprevedibile (possibilmente generato da un TRNG) e che dati $L(\cdot)$ bit di una sequenza generata non sia possibile prevedere l'$L+1$-esimo bit con probabilità maggiore di 0.5.
+Ricordando che un PRNG, essendo una macchina a stati finiti, presenta una funzione di stato futuro e una di uscita, l'imprevedibilità richieda che una di queste due funzioni siano unidirezionali. 
+Esempi di PRNG sicuri sono il \texttt{SecureRandom} di Java, la cifratura di un contatore utilizzando il seed come chiave e il PRNG X9.17.
+\end{solution}
+\part Si descriva l'attacco con estensione delle funzioni hash crittograficamente sicure servendosi di opportuni schemi.
+\begin{solution}
+Gli algoritmi di hash crittograficamente sicuri si basano sul principio della compressione iterata.
+Per calcolare uno hash ci si serve di una funzione di compressione $f$ resistente alle collisioni e facile da calcolare, che abbia come stato interno un dato di $n$ bit e come input uno di $r$ bit, $r > n$ e produca una stringa di $n$ bit. 
+Si suddivide il messaggio $m$ da comprimere in blocchi di lunghezza $r$ e si applica la funzione di compressione a ogni blocco, assumendo come stato interno il risultato della compressione precedente, $h_i = f(m{i - 1}, h_{i - 1})$. 
+Lo stato iniziale $h_0$ è detto vettore di inizializzazione, il risultato finale $h$ è l'\textit{impronta
+} $H(m)$. 
+L'attacco con estensione è una vulnerabilità del protocollo di comunicazione che prevede che con ogni messaggio $m$ venga inviato al destinatario un "autenticatore" $H(s\#\#m)$, con $s$ segreto concordato, nel caso in cui alla fine di $m$ non venga aggiunta un'indicazione di quanto è lungo. 
+Un attaccante, dopo aver intercettato $m$ e $H(s\#\#m)$,  può individuare un'estensione $m'$ e formare un messaggio $m\#\#m'$, calcolando $H(m')$ fornendo come stato iniziale non $h_0$ ma $H(s\#\#m)$ intercettato. 
+Il risultato ottenuto, per costruzione, è uguale a quella di $H(s\#\#(m\#\#m'))$ e il messaggio viene giudicato valido.
+Di seguito viene riportato lo schema di questo attacco.
+\includegraphics[width=0.6\textwidth]{lengthext}
+\end{solution}
+
+\end{parts}
+
+%PRNG
+%Funzioni Hash crittograficamente sicure
+
+\question \textbf{Cifrari simmetrici e meccanismi simmetrici per la riservatezza e l'autenticazione}
+\begin{parts}
+\part Si evidenzi la differenza tra cifratura monoalfabetica e polialfabetica.
+\begin{solution}
+La cifratura monoalfabetica sostituisce a uno o più simboli nel testo in chiaro uno e un solo simbolo nel testo cifrato proveniente dallo stesso alfabeto in cui e scritto il testo in chiaro.
+La cifratura polialfabetica, al contrario, si avvale di più alfabeti per poter scegliere tra più omofoni il simbolo che sarà inserito nel testo cifrato secondo una funzione della posizione del simbolo all'interno della stringa. 
+Il punto debole della sostituzione monoalfabetica è la vulnerabilità ad attacchi di tipo statistico: conoscendo le ridondanze del linguaggio naturale in cui è scritto il messaggio in chiaro (e.g. la lettera E è la più comune nelle parole inglesi) è possibile cercare queste ridondanze anche nel testo cifrato e servirsene per rompere la cifratura.
+Il punto debole della sostituzione polialfabetica, invece, è che data una chiave lunga $l$, simboli distanti $l$ l'uno dall'altro nel testo cifrato discendono dalla stessa sostituzione alfabetica. 
+\end{solution}
+\part Si descrivano i cifrari simmetrici a flusso, autosincronizzanti e a flusso sincrono. Perché non è possibile usare un TRNG in cifrari a flusso? 
+In quali casi un cifrario a flusso sincrono perde sincronismo? 
+Quali sono le condizioni necessarie per rendere sicuro l'utilizzo di un cifrario a flusso sincrono?
+\begin{solution}
+Non è possibile usare un TRNG in cifrari a flusso perché il RNG viene usato per generare la chiave, che deve essere a conoscenza della sorgente e del destinatario.
+Un cifrario a flusso sincrono perde sincronismo in caso di inserimento o cancellazione di un bit.
+Perché un cifrario a flusso sincrono sia sicuro è necessario che la funzione interessata dalla casualità (avanzamento di stato o generazione dell'output) sia unidirezionale, in modo che non sia possibile risalire alla chiave da un messaggio cifrato.
+\end{solution}
+\part Si descriva il funzionamento di Electronic Code Book (ECB) e Cipher Block Chaining (CBC) e i vantaggi e gli svantaggi di ognuno dei due. 
+Si discuta l'importanza della pseudocasualità dell'$IV$ per CBC.
+\begin{solution}
+Il cifrario a blocchi ECB suddivide il testo $m$ in $n$ blocchi $m_i, i \in 1..n$ e cifra ciascun blocco con una funzione $E_k$ e una chiave $k$, uguali per tutti i blocchi. 
+Nel caso in cui l'ultimo blocco sia più corto degli altri, vengono aggiunti dei bit in eccesso (padding).
+La regola di trasformazione $E_k$ è una sostituzione monoalfabetica.
+ECB permette di parallelizzare la cifratura (cifrando più blocchi alla volta) e garantisce la non propagazione degli errori fuori dal blocco interessato.
+Tuttavia, presenta un alto grado di determinismo: a blocchi identici in chiaro corrispondono blocchi identici cifrati.
+
+CBC prevede che ogni blocco del testo in chiaro sia sommato modulo 2 con il blocco cifrato precedente, poi cifrato a sua volta. 
+Il primo blocco è sommato con un valore casuale $IV$ per impedire a un eventuale intruso di dedurre che due messaggi abbiano la stessa intestazione.
+Chiaramente $IV$ deve essere conosciuto da entrambe le parti: può essere inviato come primo blocco del cifrato oppure concordato in partenza.
+In ogni caso, $IV$ dev'essere pseudocasuale (per poter essere conosciuto da entrambe le parti), imprevedibile e usato una sola volta (per assicurare non determinismo).
+CBC risolve il problema del determinismo, ma fa perdere la possibilità di parallelizzare la cifratura, soffre di propagazione degli errori e non garantisce alcun tipo di verifica di integrità.
+Di seguito viene riportato lo schema di implementazione di CBC.
+
+\includegraphics[width=0.6\textwidth]{cbc}
+
+\end{solution}
+\part In quali casi è più opportuno usare cifrature a blocchi o a flusso?
+\begin{solution}
+I cifrari a flusso sono tipicamente più veloci di quelli a blocco e richiedono meno memoria, dato che lavorano su pochi bit alla volta e non hanno "riporti" da blocchi precedenti. 
+I cifrari a blocco sono più suscettibili agli errori di trasmissione, mentre in un cifrario a flusso un errore su un bit non ha ripercussioni sugli altri bit. 
+I cifrari a flusso non garantiscono autenticazione o integrità, ma solo confidenzialità; alcuni tipi di cifrari a blocco, invece, possono garantire anche integrità.
+Per questi motivi, i cifrari a flusso sono consigliabili quando la quantità di dati è sconosciuta o continua, come nelle trasmissioni su reti, mentre i cifrari a blocco lo sono quando è nota la quantità di dati da trasferire, come nel caso di file, protocolli a richiesta e risposta o campi dati prefissati.
+\end{solution}
+\part Si enuncino le differenze tra HMAC e MAC, si traccino gli schemi di funzionamento e se ne evidenzino i vantaggi e gli svantaggi.
+\begin{solution}
+HMAC prevede che, per trasmettere un messaggio $m$ su un canale non affidabile, le due parti si accordino su un dato segreto $s$, una funzione hash sicura e una funzione di cifratura di $H(m)$ indicata con $HMAC(m, s)$.
+Sul canale viene trasmesso $m \#\# HMAC(m, s)$. 
+La destinazione suddivide il messaggio nelle due parti, calcola $HMAC(m, s)$ e ne verifica la congruenza.
+
+MAC, invece, prevede che il messaggio $m$ venga cifrato secondo uno schema CBC e che venga trasmesso sul canale non affidabile $m \#\# MAC$, dove $MAC$ è l'ultimo blocco cifrato.
+La destinazione effettua nuovamente la cifratura e quando lo desidera può controllare la congruenza di $MAC$.
+
+HMAC è più efficiente data la maggiore efficienza delle funzioni hash. 
+La robustezza di HMAC e MAC è paragonabile.
+MAC è poco utilizzato nella pratica perché il messaggio tende a diventare eccessivamente lungo.
+
+Di seguito viene riportato lo schema di funzionamento di HMAC.
+Lo schema di MAC ricalca quello di CBC.
+
+\includegraphics[width=0.6\textwidth]{hmac}
+
+
+\end{solution}
+\part Si descrivano il modello di Feistel e il Data Encryption Standard (DES).
+Su cosa si basa il blocco $F(\cdot)$ del modello di Feistel in DES?
+\begin{solution}
+Il modello di Feistel prevede che ogni blocco di testo cifrato sia ottenuto dal corrispondente blocco in chiaro iterando più volte una sostituzione e una trasposizione. 
+In generale, un blocco di testo $(L_i \#\# R_i)$ lungo $2w$ bit è generato a partire da quello precedente seguendo le relazioni
+\begin{equation}
+\begin{array}{ll}
+L_i &= R_{i-1} \\
+R_i &= L_{i-1} \oplus F(R_{i-1}, k_i)
+\end{array}
+\label{eq:feistel}
+\end{equation}
+Ogni round si serve di una regola di sostituzione diversa, funzione della sottochiave $k_i$. 
+La decrittazione si esegue con lo stesso algoritmo, invertendo l'ordine delle $k_i$.
+Prima della concatenazione che permette di ottenere il testo cifrato, $L_n$ e $R_n$ vengono nuovamente scambiati di posto.
+Di seguito viene riportato uno schema del funzionamento del cifrario di Feistel.
+
+Il DES è una implementazione di Feistel che usa 16 round, blocchi di 64 bit e una chiave di 64 bit di cui 8 di parità.
+La $F(\cdot)$ di DES prevede in cascata una espansione e permutazione da 32 a 48 bit, una somma mod 2 del risultato con la sottochiave, una sostituzione e scelta che fornisce un dato di 32 bit e una permutazione senza chiave. 
+\end{solution}
+\end{parts}
+
+%Casi di studio: RC4, DES, AES, HMAC.
+
+\question \textbf{Fondamenti di teoria dei numeri. Scambio DH. Cifrari asimmetrici, cifrari ibridi e meccanismi asimmetrici di autenticazione. Firma digitale}
+\begin{parts}
+
+\part Si descriva il funzionamento delle firme digitali. 
+\begin{solution}
+Una firma digitale è un meccanismo crittografico atto ad assicurare autenticità e non ripudiabilità di un messaggio, ovvero a permettere al destinatario di essere certo che la sorgente non menta sulla propria identità e non possa negare la paternità del messaggio stesso.
+Una firma digitale deve consentire a chiunque di identificare univocamente la sorgente del messaggio, non deve essere imitabile da impostori, non deve essere trasportabile da un documento all'altro, non deve essere ripudiabile e deve rendere evidenti eventuali alterazioni del documento a cui è apposta.
+La sorgente deve quindi aggiungere informazioni non imitabili al messaggio che la destinazione sia in grado di verificare.
+Questa informazione può prendere due forme: quella di una trasformazione $S(\cdot)$ applicata allo hash del messaggio $m$ o quella dello hash $H(m\#\#s)$ costituito dallo hashing della concatenazione tra il messaggio $m$ e un segreto $s$.
+Nel primo caso, la destinazione deve ricevere di una funzione di verifica $V(\cdot)$ tale che, se la firma è valida, valga $V(S(H(m))) = H(m)$.
+È importante, in questo caso, che $H(\cdot)$ abbia la proprietà di resistenza alle collisioni, per evitare che due messaggi abbiano hash uguali.
+Nel secondo caso, invece, entrambe le parti devono conoscere il segreto $s$ in modo che la destinazione possa calcolare in autonomia $H(m\#\#s)$.
+Questo metodo, quindi, non garantisce la non ripudiabilità ed è utile se le due parti si fidano l'una dell'altra. 
+È importante la proprietà di unidirezionalità di $H(\cdot)$ per evitare che una terza parte possa risalire a $s$ a partire da un messaggio intercettato e poter quindi produrre hash per messaggi arbitrari.
+\end{solution}
+\part Si descrivano i modelli di distribuzione di chiavi Master Key, KDC e DH servendosi di opportuni schemi. 
+\begin{solution}
+Il modello di distribuzione master key prevede che ci sia un mutuo accordo tra tutte le possibili coppie di utenti A e B su una chiave $AB$, detta master key, che viene utilizzata solo per cifrare le chiavi di sessione $k$. 
+Ogni chiave di sessione viene usata per cifrare una sola comunicazione tra A e B, e comunicata cifrandola con la master key. 
+È possibile cifrare le chiavi di sessione con ECB perché il dato è aleatorio: usando CBC, la necessità di padding rallenterebbe il processo. 
+Ogni tanto, la master key deve comunque essere rinnovata mediante un incontro personale o un corriere fidato. 
+Il modello master key richiede la generazione di $\Sigma (n - 1)$ chiavi, il che rende apparenti i problemi di scalabilità di questo sistema.
+Di seguito viene riportato lo schema di funzionamento di questo modello.
+
+\includegraphics[width=0.6\textwidth]{masterkey}
+
+Il modello a centro di distribuzione di chiavi (KDC) prevede che un'autorità centrale, il KDC appunto, sia responsabile per la generazione e l'invio delle chiavi di sessione.
+Secondo questo modello prima di ogni comunicazione la sorgente chiede al KDC una chiave di sessione, che viene poi inviata dal KDC al mittente e dal mittente al destinatario.
+In questo modo l'autorità centrale deve memorizzare solamente un numero di chiavi pari al numero di utenti.
+Di seguito viene riportato lo schema di funzionamento di questo modello.
+
+\includegraphics[width=0.6\textwidth]{kdc}
+
+Il modello Diffie-Hellman (DH) anonimo non richiede una terza parte né una master key: è un algoritmo anonimo che permette a due parti di accordarsi per una chiave di sessione. 
+Le due parti generano due numeri $x_A, x_B \in 1..p-1$, essendo $p$ un numero primo. 
+Ognuna delle due calcola poi $y = F(x)$, con $F(\cdot)$ unidirezionale, e invia $y$ sul canale insicuro. 
+Una volta avvenuto lo scambio, le due parti devono disporre i una funzione $G(\cdot)$ tale che $G(x_A, y_B) = G(x_B, y_A) = k$.
+Diffie e Hellmann, nel loro articolo, suggeriscono l'esponenziazione modulare, ovvero
+\begin{equation}
+\begin{array}{ll}
+y = F(x) &= g^x \mod p \\
+k = G(x, y) = y^x \mod p
+\end{array}
+\end{equation}
+
+dove $g < p$ è un generatore del campo di Galois $GF(p)$, ovvero un numero le cui potenze modulo $p$ forniscono una permutazione di $Z^*_p$.
+$k$ è detto \textit{pre-master secret}.
+$p$ e $g$ non sono segreti e devono essere noti: possono essere stabiliti da un'autorità o semplicemente comunicati all'inizio del primo messaggio.
+Ottenere $k$ partendo solo da un $x$ corrisponde al problema del logaritmo modulare, computazionalmente molto difficile. 
+Il modello DH non fornisce alcuna garanzia di autenticità, dato che i numeri non contengono informazione sulla propria origine: ognuna delle due parti potrebbe essere un intruso.
+Per questo motivo, lo scambio appena descritto è noto anche come DH anonimo. 
+Di seguito viene riportato lo schema di funzionamento di questo modello.
+
+\includegraphics[width=0.6\textwidth]{dh}
+
+Una variante di DH prevede che l'iniziatore del protocollo abbia a disposizione $y_B$ ottenuto in precedenza e in modo sicuro, perdendo chiaramente tuttavia la possibilità di comunicare senza accordi fuori banda.
+In questo caso è sufficiente inviare $y = g^r \mod p$, con $r$ casuale, per generare il segreto one-time $k = g^{rx} \mod p$.
+
+Di seguito vengono riportati gli schemi di funzionamento dei tre modelli, nell'ipotesi di B sorgente e A destinazione per master key e KDC.
+\end{solution}
+\part Si descrivano i modelli di scambio di chiavi Diffie-Hellman anonymous, fixed ed ephemeral. Si disegni uno schema del funzionamento. In che modo si può rendere più efficiente il calcolo del coefficiente pubblico $Y$ nello scambio DH?
+\begin{solution}
+Lo scambio di chiavi DH anonimo (descritto nella domanda relativa allo scambio DH, ndr) non prevede autenticazione delle due parti. 
+Se si richiede autenticazione è possibile servirsi dello scambio fixed o dello scambio ephemeral.
+Lo scambio fixed prevede che si ottenga da una CA un certificato sui parametri pubblici $y_A, y_B$, che vengono fissati e rimangono sempre uguali.
+In questo modo però, per evitare che il pre-master secret sia sempre uguale, vengono generati e scambiati due nonce (numeri casuali usati una sola volta) $R_A, R_B$ e il segreto comune (master secret) viene calcolato come $H(R_A \#\# R_B \#\# k)$. 
+Di seguito è riportato lo schema di funzionamento dello scambio DH fixed.
+
+\includegraphics[width=0.6\textwidth]{dhfixed}
+
+Lo scambio ephemeral, invece, prevede che le due parti dispongano di una chiave pubblica certificata e i parametri pubblici $y_A, y_B$ siano firmati digitalmente in modo da garantire autenticità. 
+In ogni caso, per mantenere la compatibilità con il DH fixed, vengono comunque usati due nonce per generare il master secret.
+Di seguito è riportato lo schema di funzionamento dello scambio DH ephemeral.
+
+\includegraphics[width=0.6\textwidth]{dhephemeral}
+
+È possibile rendere più efficiente il calcolo di $Y$ mediante la tecnica del "repeated square and multiply", un metodo generale per calcolare rapidamente potenze intere arbitrarie di un numero.
+
+\end{solution}
+\part Perché può essere utile usare due chiavi differenti, una pubblica e una privata? Quali sono i possibili attacchi a cui è suscettibile un modello di questo tipo?
+\begin{solution}
+In un sistema asimmetrico, nel quale per firmare o criptare un messaggio si utilizza una chiave diversa da quella usata per verificare una firma o decriptare un messaggio, è risolto il problema dello scambio di chiavi che tradizionalmente deve avvenire attraverso un canale sicuro.
+La chiave pubblica, infatti, può essere diffusa senza timori, e solo quella privata deve essere tenuta segreta.
+
+I sistemi asimmetrici sono vulnerabili ad attacchi di vari tipi: brute-force, che tuttavia è impraticabile data una chiave sufficientemente lunga; matematici, come ad esempio, nel caso di RSA, la fattorizzazione di $n$ nei suoi fattori primi, la quale però nuovamente è impraticabile se $n$ è sufficientemente grande; a tempo, i quali si basano sul legame tra la chiave privata e il tempo impiegato per decifrare un messaggio, e possono essere combattuti con una tecnica chiamata \textit{blinding}; a testo cifrato scelto, che sfruttano la caratteristica di determinismo e si combattono rendendo il cifrario probabilistico; man-in-the-middle, che possono essere combattuti tramite una terza parte fidata che certifica l'autenticità della chiave pubblica.
+\end{solution}
+\part Si enuncino le formule per generare il testo cifrato a partire dal testo in chiaro e viceversa usando RSA. Da cosa è garantita la sicurezza di RSA?
+\begin{solution}
+La trasformazione operata sul testo in chiaro $m$ è $c = m^e \mod n$, in cui $n = p q$, $p$ e $q$ sono primi ed $e$ è coprimo con $\Phi(n) = (p - 1) (q - 1)$.
+La trasformazione operata sul testo cifrato è $c^d \mod n = (m^e \mod n)^d \mod n = m^{ed} \mod n = m$.
+Ciò vale perché $e$ e $d$ sono scelti in modo tale che 
+\begin{equation}
+m^{ed} \mod n = m \forall m \in 0..(n - 1)
+\label{eq:rsa}
+\end{equation}
+Scegliere tre interi $n, e, d$ tale che valga la \cref{eq:rsa} è computazionalmente facile.
+La chiave pubblica è costituita dalla coppia $(e, n)$, mentre la chiave privata è costituita dalla coppia $(d, n)$.
+La sicurezza di RSA è garantita dalla difficoltà del calcolo della radice $e$-esima $\sqrt[e]{c}$ in mancanza della trapdoor $d$ che permette di sfruttare la trasformazione riportata sopra.
+
+\end{solution}
+\part Si enuncino eventuali problemi derivanti dall'uso di RSA su un messaggio a 56 bit e le relative soluzioni.
+\begin{solution}
+Un messaggio a 56 bit è relativamente corto: per questo motivo, diventano fattibili vari tipi di attacchi: in primis il brute force, che richiederebbe tantissimo tempo se il messaggio fosse più lungo, ma anche attacchi di tipo replay.
+La soluzione è l'uso di padding: può essere allegato al messaggio un numero pseudo-casuale $r$, in modo da identificare univocamente il messaggio e allungarlo, o servirsi dell'Optimal Asymmetric Encryption Padding.
+L'OAEP trasforma RSA in un cifrario probabilistico: servendosi di un intero casuale $r$ e due funzioni hash $H_1, H_2$, il messaggio $m$ viene trasformato in $00\#\#X\#\#(r \oplus H_2(X)), X = m\#\#H_1(r)$, che contiene un elemento di casualità.
+Di seguito viene riportato uno schema del funzionamento dell'OAEP.
+
+\includegraphics[width=0.6\textwidth]{oaep}
+
+\end{solution}
+\part Si descriva il processo di firma con RSA. Perché una firma con recupero non può avere valore legale? Si descrivano i pro e i contro della firma recupero e appendice.
+\begin{solution}
+La proprietà dell'aritmetica modulare alla base dell'RSA permette sia di criptare un messaggio in modo tale che solo la destinazione possa decriptarlo, sia di creare un messaggio che può essere decriptato da chiunque, ma criptato da una sola persona. 
+Quest'ultima soluzione è quella che permette di realizzare una firma digitale con RSA.
+Gli algoritmi asimmetrici di firma si distinguono in firma con recupero e firma con appendice. 
+
+Gli algoritmi di firma con recupero dividono il messaggio $m$ in più blocchi $m_i$ tali che $m_i < n$. 
+A quel punto ogni blocco è trasformato con una funzione $R(\cdot)$ invertibile e poi criptato usando la chiave privata della sorgente. 
+La destinazione decripta i blocchi usando la chiave pubblica della sorgente, verifica se il risultato appartiene al codominio di $R(\cdot)$ e ricava il messaggio originale con $R^{-1}$. 
+Si noti che gli algoritmi di firma con recupero non richiedono la conoscenza del messaggio originale per verificare la firma, ma ciò significa che vengono meno i vincoli di non trasportabilità e inalterabilità del messaggio.
+
+Gli algoritmi di firma con appendice prevedano che venga invece criptato con la chiave privata della sorgente lo hash $H(m)$, con $H(\cdot)$ crittograficamente sicura, e che $E(H(m))$ venga allegato al messaggio.
+La sorgente decripta la firma, calcola l'impronta del messaggio ricevuto e verifica la congruenza.
+Gli algoritmi di firma con appendice richiedono il messaggio originale per verificarne l'autenticità.
+Si noti che tutti gli algoritmi con recupero possono essere impiegati anche come algoritmi con appendice, dato che per definizione la lunghezza di $H(m)$ è minore di $n$.
+
+Gli algoritmi di firma con recupero sono vulnerabili ad attacchi con testo cifrato arbitrario: un attaccante può scegliere un numero casuale $r$, calcolare $y = D(r)$ e disporre di un messaggio $y$ e della firma $r$. 
+Nella maggior parte dei casi $y$ non avrebbe senso, ma l'ipotesi non è da escludere.
+Nel caso delle firme con appendice, invece, l'attaccante dovrebbe calcolare anche $H^{-1}(y)$ e la cosa non è fattibile se $H(\cdot)$ è crittograficamente sicura.
+\end{solution}
+\part RSA è più o meno efficiente di DES?
+\begin{solution}
+Trattandosi di un cifrario asimmetrico, RSA è molto più lento dei cifrari simmetrici.
+Per la precisione, si ha una differenza di tre ordini di grandezza nella velocità di compressione.
+Questo, però, non è solitamente un problema perché RSA viene usata per cifrare messaggi piccoli, ad esempio le chiavi di sessione da usare per un cifrario simmetrico.
+\end{solution}
+
+\end{parts}
+
+\question \textbf{Protocolli d'identificazione passivi e attivi}
+\begin{parts}
+\part Si descriva la differenza tra identificazione passiva e attiva.
+\begin{solution}
+L'identificazione passiva avviene mediante l'uso di un identificativo e una password.
+Nella sua forma più semplice, l'utente trasmette in chiaro ID e PSW, la macchina atta all'identificazione estrae da un database la PSW corrispondente all'ID e la confronta con quella fornita. 
+Se coincidono, l'utente è identificato.
+
+L'identificazione attiva prevede una prova di identità che cambi continuamente.
+È possibile sviluppare un protocollo di identificazione attiva mediante una \textit{password usa e getta}, una \textit{sfida e risposta} o una \textit{prova d'identità a conoscenza zero}.
+In generale, un protocollo di identificazione attiva richiede di impostare un calcolo di una prova d'identità che deve essere facile per chi conosce un'informazione segreta e difficile per chi non la conosce, anche se dispone di prove inviate in precedenza.
+
+\end{solution}
+\part Si descrivano gli schemi per verificare l'origine di un documento.
+\begin{solution}
+Per verificare l'origine di un messaggio è necessario che la sorgente apporti al documento una trasformazione $S(\cdot)$ che deve essere computazionalmente difficile eseguire per qualunque altra parte.
+È possibile garantire l'autenticità tramite firma digitale o hash del messaggio e di un segreto.
+L'invio di uno hash del messaggio e del segreto non garantisce il non ripudio perché entrambe le parti devono conoscere il segreto $s$.
+Di seguito sono riportati gli schemi per i due casi.
+
+\includegraphics[width=0.6\textwidth]{authsign}
+
+\includegraphics[width=0.6\textwidth]{authhash}
+
+\end{solution}
+\part Si descriva il protocollo sfida e risposta. Quante chiavi servono?
+\begin{solution}
+Il protocollo sfida e risposta senza identificazione mutua è un protocollo a tre passi: B invia ad A un dato di sfida, A calcola una risposta di sfida e la rimanda a B, il quale ne verifica la congruenza.
+Se si richiede la mutua identificazione il protocollo richiede quattro passi: B invia ad A un dato di sfida, A ne calcola una risposta e la invia a B, concatenandola a un diverso dato di sfida, la risposta la quale viene calcolata da A dopo aver verificato la congruenza della risposta di B. 
+Alla fine, anche B verifica la congruenza della risposta di A.
+Il protocollo può essere realizzato servendosi di funzioni hash, di un cifrario o di uno schema di firma digitale.
+Di seguito sono riportati gli schemi per i tre casi.
+Per la funzione hash, è riportato anche il caso in cui sia necessaria mutua identificazione tra le due parti.
+
+\includegraphics[width=0.6\textwidth]{crhash}
+
+\includegraphics[width=0.6\textwidth]{crhashmut}
+
+\includegraphics[width=0.6\textwidth]{crciph}
+
+\includegraphics[width=0.6\textwidth]{crsign}
+
+Per rendere il protocollo più robusto nel caso dell'uso di firma digitale, è possibile:
+\begin{itemize}
+\item che la parte A, prima di firmare la sfida, vi concateni un nonce inviato in chiaro ($A \rightarrow B: R_A, S_A (R_A \#\# R_B)$), in modo da prevenire la decifratura di testi arbitrari da parte di una parte B maligna;
+\item che la parte A, prima di firmare la sfida, vi alleghi un certificato della propria chiave pubblica, in modo da prevenire attacchi dell'uomo in mezzo;
+\item che la parte A, prima di firmare la sfida, vi concateni un timestamp e un identificatore di B, in modo da prevenire attacchi del gran maestro di scacchi.
+\end{itemize}
+
+In ogni caso, la legge italiana impone che si utilizzino tre chiavi distinte: una per la cifratura, una per la verifica di integrità, una per l'autenticazione.
+\end{solution}
+\end{parts}
+
+%Password, protocolli a sfida e risposta.
+
+\question \textbf{Sistemi a supporto dell'identificazione e dell'autenticazione basati su certificati a chiave pubblica}
+\begin{parts}
+\part Si descrivano i certificati X.509 e i relativi campi. 
+\begin{solution}
+Un certificato X.509 contiene i seguenti campi:
+\begin{itemize}
+\item Versione
+\item Seriale certificato
+\item Algoritmo di firma usato
+\item Nome CA
+\item Periodo validità
+\item Nome soggetto
+\item Algoritmo chiave pubblica soggetto
+\item Parametri chiave pubblica soggetto
+\item Chiave pubblica soggetto
+\item ID CA
+\item ID soggetto
+\item Estensioni
+\item Firma
+\end{itemize}
+\end{solution}
+\part Si descriva il funzionamento del modello Public Key Infrastructure (PKI) servendosi di opportuni schemi.
+\begin{solution}
+Il modello PKI è una infrastruttura di distribuzione, aggiornamento e revoca dei certificati. 
+Questo modello prevede tre entità: la Certificate Authority, che rilascia, aggiorna, revoca e pubblica i certificati; la Registration Authority, che inoltra alla CA le richieste di firma (CSR) e revoca (RR), e il database o directory, un sistema informativo distribuito che ospita e fornisce i certificati. 
+La CA deve essere una macchina sicura, che comunica con gli utenti solo tramite la RA. 
+La directory è un database distribuito su vari nodi, che prendono il nome di Directory System Agent, coordinati in modo da assicurare ridondanza e scalabilità.
+Una PKI, per essere tale, deve presentare alcune caratteristiche: storico delle chiavi, cross certification, backup e ripristino delle chiavi, aggiornamento automatico delle chiavi, supporto al non ripudio, timestamping.
+Di seguito è riportato lo schema di funzionamento di una PKI.
+
+\includegraphics[width=0.6\textwidth]{pki}
+
+\end{solution}
+\part Si descrivano i modelli di rilascio dei certificati centralizzato e a tre parti servendosi di opportuni schemi.
+\begin{solution}
+Il modello centralizzato di rilascio di certificati prevede due sole parti: utenti e CA.
+La CA genera le chiavi a seguito delle richieste e le invia agli utenti attraverso un canale sicuro.
+Questa soluzione presenta due problemi sostanziali: la CA si ritrova sovraccaricata e conosce tutte le chiavi private.
+Viene quindi meno la proprietà di non ripudiabilità: ogni messaggio potrebbe essere stato firmato dall'utente di cui riporta la firma oppure da una CA malevola.
+Per questi motivi, il modello centralizzato viene utilizzato solo in situazioni nelle quali un'azienda desidera far proteggere ai dipendenti i propri dati, ma vuole fungere da CA per poter decrittare in caso di attacco di criptazione da parte di un dipendente malevolo.
+
+Il modello a tre parti, invece, prevede tre entità: utenti, RA e CA.
+In questo caso è possibile agire in tre modi:
+\begin{enumerate}
+\item Ogni utente si identifica di persona presso la RA, la quale invia le informazioni dell'utente alla CA che produce il certificato, inoltrato alla RA e poi all'utente.
+\item Ogni utente si identifica di persona presso la RA, la quale genera un segreto che l'utente potrà usare per ritirare le chiavi presso la CA, che le genera \textit{out of band}.
+\item Ogni utente genera le chiavi e richiede un certificato alla CA, che inoltra la richiesta alla RA la quale la approva e la rimanda indietro, permettendo alla CA di produrre il certificato.
+\end{enumerate}
+
+Di seguito sono riportati gli schemi di funzionamento nei tre casi.
+
+\includegraphics[width=0.6\textwidth]{certauth}
+
+Il primo modo è costoso in quanto ogni utente deve possedere una smart card o dispositivo simile e presentarsi di persona, ma la CA non è esposta.
+Il secondo modo espone la CA all'esterno, ma comunque meno del terzo modo che è per questo il meno utilizzato.
+\end{solution}
+\part Si tracci uno schema di richiesta presso RA con proof of possession (POP). Si descriva la certification path.
+\begin{solution}
+Per evitare che chiunque, impersonando un altro utente, richieda alla CA un certificato fornendo solo la chiave pubblica, la CA deve avere garanzie sul possesso della chiave privata da parte di chi richiede un certificato.
+Un metodo di fornire la POP è formulare la richiesta come un messaggio cifrato e firmato digitalmente contenente il proprio ID e la propria chiave pubblica. 
+In questo modo, la CA può verificare la firma e, con essa, il possesso della chiave privata da parte del richiedente. 
+Questo metodo è il protocollo PKCS\#10. 
+Il metodo più sicuro sarebbe la POP a tempo di firma, ovvero l'inserimento in tutti i messaggi di un riferimento al certificato firmato con la propria chiave privata.
+In questo modo, la destinazione può verificare la firma ed essere certo dell'identità del mittente.
+Questo metodo, tuttavia, non è ancora supportato dai protocolli.
+Esistono altri metodi online, come l'utilizzo di sfida e risposta o l'invio di un certificato cifrato che viene revocato in caso di inutilizzo, il quale lascia presupporre che il richiedente non fosse in possesso della chiave privata necessaria per decifrarlo.
+Esistono inoltre metodi out-of-band in cui la RA o la CA generano le chiavi e le rilasciano personalmente tramite smart card o crypto token.
+Tuttavia, questi metodi non garantiscono il non ripudio: chi genera i certificati mantiene una copia di tutte le chiavi private.
+\end{solution}
+
+\part Cosa comporta la revoca di un certificato? Si descrivano i problemi derivanti dall'uso di una Certificate Revocation List (CRL) e le relative soluzioni. Quali sono i carichi resi pesanti dalle CRL e quali vengono alleggeriti con Delta CRL e partizioni? Come è possibile accedere al primo tentativo alla partizione corretta in una CRL partizionata?
+\begin{solution}
+La revoca di un certificato prima della sua scadenza diventa necessaria qualora, ad esempio, la chiave privata venga compromessa.
+In questo caso, il ripudio della chiave, che comporta la revoca del certificato, deve essere comunicata tempestivamente alla RA e la CA deve comunicare a tutti gli utenti la revoca del certificato corrispondente. 
+In questo caso è possibile seguire un modello push, nel quale la CA comunica a tutti la revoca, o un modello pull, nel quale sono gli utenti a controllare le revoche su un database.
+Un'ulteriore classificazione dei modelli di controllo delle revoche è la divisione tra modelli online e offline.
+In generale si adottano solo modelli pull dato che un modello push richiederebbe un protocollo publisher/subscriber, molto complesso da gestire e poco scalabile, che viene utilizzato solamente se è necessario 
+Le Certificate Revocation List sono uno schema pull offline che prevede che la CA mantenga una lista autenticata dei certificati revocati, disponibile su una directory LDAP e che può essere scaricata e visionata offline. 
+Questa lista viene periodicamente aggiornata e contiene informazioni sul proprio periodo di validità.
+Il problema principale di una CRL è la dimensione della stessa, che cresce con l'aggiunta di nuove revoche.
+È possibile risolverlo eliminando i certificati già revocati a ogni nuova pubblicazione o dopo la loro scadenza, pubblicando aggiornamenti incrementali (Delta CRL) invece di ripubblicare l'intera lista costantemente, o partizionando la CRL in vari gruppi.
+Eliminare le revoche già pubblicate o aggiornare la lista in maniera incrementale fa ricadere sull'utente l'onere di scaricare pubblicazioni passate fino a ricostruire l'intera lista. 
+Nei fatti, quindi, la CRL viene partizionata secondo il numero seriale dei certificati.
+A questo punto, nel campo estensioni di ogni certificato viene specificato il valore del CRL Distribution Point, ovvero l'URL della partizione che conterrà una eventuale revoca.
+
+\end{solution}
+\part In quali casi il metodo Online Certificate Status Protocol è migliore di CRL?
+\begin{solution}
+Il protocollo OCSP permette di disporre di informazioni sempre aggiornate provenienti direttamente dalla RA e non da liste offline. 
+Per questo motivo, l'utilizzo di OCSP è preferibile quando è necessaria freschezza delle informazioni e quando si vuole evitare di far gravare sull'utente l'onere di scaricare una struttura dati potenzialmente molto pesante.
+\end{solution}
+\part Com'è organizzato il sistema di directory X.500 in cui sono poste le CRL?
+\begin{solution}
+Le directory X.500 sono un database distribuito su vari nodi detti Directory System Agent, distriubiti geograficamente e coordinare in modo tale da replicare l'informazione e assicurare scalabilità.
+Si tratta di un sistema di nomi gerarchico in cui ogni entry contiene una coppia tipo-valore. 
+Se un'informazione non è disponibile su un DSA, viene reperita da un altro. 
+Le entry vengono ricercate attraverso il loro nome assoluto (Distinguish Name) o relativo (Relative DN), proprio come in un filesystem. 
+Dato che il protocollo X.500 è molto costoso, viene utilizzata una versione più leggera chiamata LDAP.
+Per trovare un'entità in una CRL viene specificato solo il DN dell'entità menzionata nel certificato: le informazioni che contiene (azienda, Stato, dipartimento ecc.) sono una sequenza di RDN che vengono usati per trovare l'entità richiesta.
+\end{solution}
+\part Che cos'è una chain of trust? Si mostri un esempio di CA path discovery. Cos'è una Authority Revocation List?
+\begin{solution}
+Dato un grafo in cui i nodi sono CA e ogni arco indica che il nodo da cui parte ha fornito un certificato (detto cross-certificate) in favore del nodo a cui arriva, una chain of trust è un cammino che collega due CA.
+Si rende necessaria la costruzione di una chain of trust quando due utenti che vogliono comunicare fanno riferimento a due CA diverse. 
+Un dominio di certificazione è costituito da tutti i rilasci di certificati che hanno come origine una data CA.
+Ognuno dei due utenti deve attraversare più domini di certificazione fino a raggiungere quello dell'altro utente. 
+A ogni attraversamento di dominio di certificazione vanno verificati la firma digitale, il periodo di validità ed eventuali revoche del cross-certificate, oltre alle politiche di rilascio che non sono standardizzate e variano fra le CA.
+Un esempio di CA path discovery è mostrato nello schema seguente.
+Si noti che è possibile costruire una chain of trust dalla CA 0 alla CA 3, ma non il contrario.
+Il grafo mostrato non è strutturato e corrisponde a un modello di fiducia distribuito.
+Un altro modello di fiducia è quello gerarchico, nel quale il grafo è un albero. 
+Questo modello, però, richiede fiducia assoluta nella CA radice.
+Se gli archi sono tutti unidirezionali, si parla di modello gerarchico top-down.
+Ovviamente anche i certificati generati in favore di altre CA sono revocabili: in questo caso, invece che di CRL, si parla di ARL. 
+
+\includegraphics[width=0.6\textwidth]{capathdisc}
+
+\end{solution}
+\part Si descriva il funzionamento di PGP. Perché PGP genera la firma prima di applicare la compressione?
+\begin{solution}
+PGP è un programma di crittografia in grado di garantire autenticazione, integrità e confidenzialità.
+PGP si serve di cifrari simmetrici con modalità CFB per la cifratura, cifrari asimmetrici (RSA o DH ElGamal) per la distribuzione di chiavi, e della firma digitale con appendice per l'autenticazione. 
+PGP non usa una CA ma si basa invece sulla costruzione di una rete di fiducia reciproca: per questo motivo la fiducia ha una componente soggettiva e PGP non ha valore legale.
+Per generare le chiavi, PGP si avvale di un TRNG che genera continuamente dati casuali i quali vengono sottoposti a XOR e hashing prima di venire salvati in un archivio, detto random pool, dalla quale poi vengono estratti i bit necessari per generare le chiavi private e i seed del PRNG.
+Il PRNG di PGP, usato per le chiavi di sessione e i vettori di inizializzazione, si basa sullo standard ANSI X9.17.
+
+Ogni utente dispone di un portachiavi privato nel quale sono salvate le sue chiavi private, cifrate con un cifrario simmetrico che usa come chiave lo hash di una passphrase, e di un portachiavi pubblico nel quale vengono salvate le proprie chiavi pubbliche e quelle dei corrispondenti.
+
+Per firmare e cifrare un messaggio con PGP, la sorgente:
+\begin{enumerate}
+\item estrae dal proprio portachiavi privato una chiave di firma $S_A$ e la decifra utilizzando il cifrario simmetrico $D_k(\cdot)$ in cui la chiave è lo hash della passphrase;
+\item firma $H(m\#\#t)$ con la propria chiave di firma;
+\item estrae dal proprio portachiavi pubblico la chiave di cifratura $P_B$ della destinazione;
+\item genera la chiave di sessione $k$ servendosi del proprio random pool;
+\item cifra $k$ concatenato con il nome del cifrario simmetrico e un checksum del messaggio;
+\item cifra il messaggio firmato mediante il cifrario simmetrico $E_k(\cdot)$;
+\item invia alla destinazione il messaggio firmato con la propria chiave e cifrato con $E_k(\cdot)$ concatenato con la chiave pubblica e il checksum cifrati con la chiave $P_B$, il tutto concatenato all'ID della chiave della destinazione.
+\end{enumerate}
+
+Per decifrare questo messaggio, la destinazione mette in chiaro la propria chiave privata, decifra la chiave di sessione, la utilizza per decifrare il messaggio, estrae la chiave pubblica della sorgente dal proprio portachiavi, mette in chiaro lo hash del documento e verifica che l'impronta corrisponda.
+
+Per permettere la trasmissione di un messaggio cifrato tramite e-mail ci si serve della trasformazione base64: il messaggio vene scomposto in blocchi da 24 bit, a loro volta divisi in 4 stringhe di 6 bit, e ogni stringa viene poi sostituita al byte che, in ASCII 8-bit, rappresenta il carattere (stampabile) a cui corrisponde.
+
+Lo schema di autenticazione di PGP appone la firma prima della compressione per evitare che, firmando il messaggio compresso, la destinazione debba mantenere memorizzati sia il messaggio che la sua versione compressa per verificarne l'autenticità.
+Inoltre, il compresso può essere sempre diverso.
+Lo schema di riservatezza di PGP, invece, comprime e poi cifra, per eliminare eventuali ridondanze nel testo e renderlo più sicuro.
+\end{solution}
+\end{parts}
+%PKI e PGP.
+
+\question \textbf{Protocolli per la comunicazione sicura. Sicurezza a livello di rete: IPSEC, VPN. Sicurezza a livello di trasporto: SSL/TLS.}
+\begin{parts}
+\part Si descriva SSL/TLS. Come funziona? Quali protocolli se ne servono? Cosa garantisce?
+\begin{solution}
+SSL/TLS è un protocollo di sicurezza a livello di trasporto, progettato per essere collocato tra HTTP e TCP, in grado di garantire confidenzialità, autenticazione e integrità dei messaggi scambiati su una socket TCP.
+SSL/TLS garantisce semitrasparenza per le applicazioni: non è l'applicazione a dover garantire la confidenzialità prima di inviare il dato su una socket, se ne occupa SSL/TLS. 
+SSL/TLS viene usato, tra gli altri, dal protocollo HTTPS.
+
+SSL/TLS è strutturato in più protocolli: handshake, change cipherspec, alert, record.
+Il primo si occupa di negoziare tra client e server i meccanismi di sicurezza, cosa che si rende necessaria dato che non è sempre possibile sapere in anticipo quali siano supportati da entrambe le parti; 
+il secondo si occupa di rinegoziare, se necessario, i parametri e i meccanismi della connessione; 
+il terzo si occupa di gestire eventuali segnalazioni di allarme; 
+il quarto, infine, si occupa effettivamente di calcolare e verificare le firme e di cifrare e decifrare i dati. 
+
+Il protocollo record realizza il concetto di sessione e connessione: il protocollo di handshake definisce una sessione, all'interno della quale vengono create più connessioni che utilizzano gli stessi parametri crittografici.
+Lo stato di una sessione è definito da un ID, dal certificato X.509 del server, dai metodi di compressione, hashing e cifratura, e dal master secret.
+Lo stato di una connessione, invece, è definito da due nonce $R_C, R_S$, due segreti utilizzati per il MAC delle due parti, due chiavi condivise per la cifratura dei dati delle due parti, un vettore di inizializzazione se si usa CBC e un numero di sequenza per ogni  messaggio scambiato.
+
+Il protocollo handshake è diviso in quattro fasi: accordo sugli algoritmi, autenticazione server e client, controllo dello scambio.
+L'autenticazione del client presso il server è opzionale. 
+Il client indica i meccanismi di sicurezza e di compressione di cui è dotato con un messaggio detto \textit{client hello} a cui il server risponde con un \textit{server hello} che contiene i meccanismi scelti.
+Il client hello contiene anche un nonce $R_C$ e un ID di sessione, usato per distinguere tra i casi in cui è necessario creare una nuova sessione o fare riferimento a una già avviata. 
+In seguito, il server si autentica inviando il suo certificato X.509, eventualmente il parametro pubblico $Y_S$ per lo scambio DH, una \textit{certificate request} se anche il client si deve autenticare, e un segnale conclusivo di \textit{server hello done}.
+Il client risponde poi, se gli è stato richiesto, con un certificato, con il suo parametro $Y_C$ per lo scambio DH, ed eventualmente con una notifica di \textit{certificate verify} se desidera verificare con una sfida e risposta che il server possieda effettivamente la chiave privata corrispondente a quella pubblica fornita. 
+Infine, il protocollo change si serve di funzioni hash per controllare l'integrità dei dati scambiati, il protocollo change cipher spec viene eventualmente utilizzato per modificare le specifiche concordate, e la negoziazione viene conclusa con un messaggio \textit{finished}.
+
+\end{solution}
+\part Quali meccanismi di scambio di chiavi possono essere usati con SSL/TLS?
+\begin{solution}
+È possibile servirsi degli schemi DH anonymous, fixed o ephemeral oppure scambiare le chiavi con RSA (servendosi quindi di un cifrario ibrido).
+Non avrebbe senso utilizzare un KDC perché poco scalabile, né una master key dato che le chiavi non sono precondivise.
+Se si usa DH anonymous, sorgente e destinazione definiscono i parametri $p, g$ all'inizio della sessione e a ogni connessione si scambiano due nonce $R_C, R_S$, in modo da prevenire gli attacchi replay e rendere casuale la chiave per ogni connessione senza dover ripetere l'intero scambio DH.
+Se si usa DH fixed, le due parti si scambiano $p, g$ all'interno di un certificato ricevuto da una CA che contiene anche $Y_C, Y_S$: diventa ancora più importante la presenza dei nonce, dato che il certificato rimane fisso per tutta la sessione.
+Se si usa DH ephemeral, le due parti dispongono di una chiave pubblica certificata e di una chiave privata che utilizzano per firmare i parametri $Y_C, Y_S$ che vengono generati all'inizio di ogni connessione. 
+Con questo metodo l'uso dei nonce non è necessario, ma la loro presenza è comunque assicurata per motivi di uniformità.
+Se si usa un cifrario ibrido, solo il client sceglie la chiave di sessione e la comunica al server criptandola con RSA, servendosi di una chiave pubblica estratta dal certificato che il server ha inviato al client.
+\end{solution}
+\part Si confrontino le modalità di garanzia di sicurezza di SSL/TLS e IPSec. Cosa viene garantito dai due protocolli in termini di riservatezza e autenticazione?
+\begin{solution}
+SSL/TLS è un protocollo di sicurezza a livello di trasporto, mentre IPSec è implementato a livello di rete. 
+IPSec può proteggere tutto il traffico scambiato tra due nodi, anche se le applicazioni al livello superiore non implementano sistemi di protezione. 
+SSL/TLS, invece, può proteggere il traffico scambiato a livello di singola applicazione. 
+SSL/TLS garantisce l'autenticazione delle parti e l'origine dei dati servendosi di algoritmi di firma digitale.
+IPSec garantisce la riservatezza dei pacchetti in caso di intercettazione, certifica l'origine deii dati (proteggendo da spoofing e hijacking) servendosi di cifrari simmetrici o firma digitale e protegge da attacchi di Denial of Service. 
+In entrambi i casi la riservatezza è garantita usando cifrari simmetrici. 
+Nel caso di SSL, la riservatezza è sempre garantita, mentre in IPSec questa granzia è opzionale. 
+\end{solution}
+\part Si descriva IPSec ESP con autenticazione. Che ordine seguono le operazioni di autenticazione e cifratura? Che differenze ci sono in ricezione tra SSL/TLS e IPSec e perché IPSec è più performante?
+\begin{solution}
+L'Encrypted Security Payload è uno header apposto a un pacchetto di dati IPSec che viene poi cifrato dalla sorgente tramite una chiave segreta ed inviato. 
+L'uso di una chiave segreta concordata garantisce l'origine, la cifratura garantisce riservatezza. 
+IPSec ESP con autenticazione prevede che venga controllata l'integrità di un pacchetto mediante il campo Authentication Data, con il valore Integrity Check Value.
+IPSec prevede che in ricezione vengano verificate l'integrità e l'origine del pacchetto prima di procedere con la decifratura. 
+In caso di fallimento della verifica di integrità e origine, il pacchetto viene scartato senza essere decifrato.
+Un messaggio inviato con SSL/TLS invece viene firmato prima di essere cifrato: al momento della ricezione, quindi, deve prima essere decifrato, ma se in seguito il controllo di integrità fallisce si è effettuata inutilmente un'operazione di decifratura.
+\end{solution}
+\part Si descriva il sub-protocollo anti-replay di IPSec. Si descriva il funzionamento della finestra a scorrimento.
+\begin{solution}
+IPSec realizza il proprio servizio anti-replay servendosi di un Sequence Number Field posseduto da ogni pacchetto. 
+Dato che IP non garantisce l'arrivo in ordine dei pacchetti, ci si serve di una finestra scorrevole per permettere di individuare comunque eventuali pacchetti duplicati. 
+Ogni volta che viene ricevuto un pacchetto, dopo averne verificato l'integrità, se il suo SNF è minore dell'estremo sinistro della finestra esso viene scartato. 
+Se il SNF si trova all'interno della finestra, invece, la casella corrispondente viene segnata come occupata, e se viene ricevuto un pacchetto con lo stesso SNF quest'ultimo viene scartato.
+Se il SNF è maggiore dell'estremo destro della sequenza, invece, la finestra stessa viene spostata in modo che la casellla più a destra corrisponda con il SNF ricevuto. 
+Di default, la finestra è lunga 64 pacchetti.
+\end{solution}
+\part Si descrivano IPSec tunnel e transport. Come viene creato un pacchetto IPSec nelle due modalità? Quando è più opportuno usare l'uno o l'altro?
+\begin{solution}
+Nella modalità IPSec transport il pacchetto creato conserva invariata l'intestazione del pacchetto originale, che contiene gli indirizzi IP di sorgente e destinazione.
+Questa modalità può essere sicuramente applicata in tutte le possibili configurazioni di IPSec.
+Cio è vero perché non alterando l'intestazione, il pacchetto IPSec risultante è sempre instradabile. 
+Si ricordi che IPSec può essere applicato tra due end system, due gateway o un end system o un gateway.
+
+La modalità tunnel si chiama così perché tutto il pacchetto viene incapsulato all'interno di un nuovo pacchetto IPSec che a differenza di quello originale contiene potenzialmente un indirizzo IP destinazione diverso da quello del pacchetto oirignale. 
+Dall momento che  questo pacchetto IPSec ha nuovi indirizzi di sorgente e destinazione, non si può comunicare in modalità tunnel tra due end system, ma solo nel caso in cui il nodo finale voglia inviare un pacchetto IP a un nodo di una rete interna di cui non vuole far conoscere l'indirizzo IP: incapsula il proprio pacchetto all'interno di un  pacchetto IPSec nuovo in cui l'IP destinazione è quello del gateway, che riceve il pacchetto, lo ritrasforma in pacchetto IP e lo trasmette alla destinazione.
+La modalità tunnel può essere utilzizata anche tra due gateway per proteggere tutte le comunicazioni tra due nodi senza far conoscere sorgente e destinazione: l'indirizzo IP sorgente diventa quello del gateway di partenza, quello della destinazione quello del gateway di arrivo. 
+\end{solution}
+\part Si descrivano IPSec, SA, SAD e SPD e si illustri il flusso dei pacchetti.
+\begin{solution}
+IPSec è un'architettura che permette di rendere sicura la comunicazione mediante il protocollo IP. 
+Essa prevede tre componenti architetturali: Security Association, Security Association Database e Security Policy Database.
+Una SA è una struttura dati che identifica una connessione e i servizi di sicurezza utilizzati per essa.
+Una SA è identificata da tre parametri: un Security Parameters Index, un IP di destinazione e il protocollo utilizzato (AH o ESP).
+Il SPI permette alla destinazione di trovare la SA giusta per decodificare il pacchetto: viene concordata tra sorgente e destinazione e inviata insieme al pacchetto IPSec.
+Le SA non sono fisse, ma vengono generate e personalizzate per le varie connessioni. 
+
+Il SAD tiene traccia di quali tipi di servizi siano stati serviti, in che modo e dove siano indirizzati i pacchetti coinvolti, associando una SA a ogni servizio.
+In questo modo è possibile determinare quali algoritmi vadano applicati per proteggere un pacchetto IPSec e per decodificarlo una volta ricevuto. 
+Il SAD contiene i parametri di ogni SA: il suo tempo di vita, le informazioni necessarie per AH/ESP, la modalità usata (tunnel o transport). 
+Ogni host o gateway IPSec ha il proprio SAD. 
+
+Il SPD invece esamina tutto il traffico IP in ingresso e in uscita e decide quali pacchetti abbiano bisogno di quali servizi e politiche IPSec.
+
+Per inviare un messaggio, si interroga il SPD per decidere le regole da applicare in base ai contenuti del messaggio stesso.
+In seguito viene creata una nuova SA e inserita nel SAD, o letta una esistente, vengono applicati gli algoritmi richiesti dalla SAD e il pacchetto così creato viene trasmesso. 
+Il comportamento è speculare in ricezione: la SA appropriati viene cercata nel SAD, si applicano gli algoritmi relativi, viene verificato mediante la policy estratta dall'SPD se il pacchetto sia stato protetto adeguatamente e si arriva infine al pacchetto IP originario. 
+\end{solution}
+\end{parts}
+
+\end{questions}
+
+\section*{Notazione}
+\begin{itemize}
+\item $\#\#$: operatore di concatenazione
+\item $H(\cdot)$: funzione hash
+\item $E, D$: funzioni di cifratura/decifratura (e.g. con un cifrario)
+\item $S(\cdot)$: funzione di firma digitale
+\item $V(\cdot)$: funzione di verifica firma
+\item $t$: timestamp
+
+\end{itemize}
+\textbf{Disclaimer}:  Questo documento può contenere errori e imprecisioni che potrebbero danneggiare sistemi informatici, terminare relazioni e rapporti di lavoro, liberare le vesciche dei gatti sulla moquette e causare un conflitto termonucleare globale.
+Procedere con cautela.
+
+Questo documento è rilasciato sotto licenza CC-BY-SA 4.0. \ccbysa
+\end{document}
+
