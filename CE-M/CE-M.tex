@@ -1,0 +1,1017 @@
+\documentclass[a4paper]{article}
+\usepackage[italian]{babel}
+\usepackage{ccicons}
+
+\usepackage[margin=2cm]{geometry}
+\usepackage{parskip}
+\title{Esami svolti di Calcolatori Elettronici M}
+\author{Kevin Michael Frick}
+\begin{document}
+\maketitle
+\textbf{Nota}: Nell'anno accademico in cui questo documento è stato redatto, un modulo del corso è stato tenuto dal professor Bartolini, il quale ha strutturato il proprio modulo in maniera leggermente diversa dal professor Cinotti.
+Questo si è riflettuto nella formulazione delle prove d'esame, nelle quali non è più richiesto di disegnare nel dettaglio gli interfacciamenti delle periferiche come in passato, cosa che portava essenzialmente a dover ricopiare gli schemi presenti nelle slide.
+Lo stesso vale per la costruzione dei descrittori, anch'essa non più richiesta.
+Questo formulazione del corso e della prova d'esame si riflette nelle soluzioni dettagliate di seguito.
+\section{2018-12-20}
+\subsection{Specifiche}
+Il sistema dispone di:
+
+\begin{itemize}
+\item una porta seriale UART di I/O S1 gestita in DMA con velocità di 19200b/s.
+\item un PIC;
+\item 1 MiB di EPROM mappata agli indirizzi alti;
+\item 1 MiB di RAM mappata agli indirizzi bassi;
+\item 8 KiB di cache a 2 vie e linee da 32B, gestita con politica write-around.
+\end{itemize}
+
+Un segmento dati $SD$ mappato a \texttt{0x0000 3800} contiene due vettori di 64B ciascuno denominati $A$ e $B$.
+
+Il sistema esegue i seguenti passi:
+\begin{verbatim}
+A[0] <- 0;
+A[i] <- A[i - 1] + 3, i = 1..63;
+Per sempre:
+  Trasmissione di A su S_1 in DMA;
+  Ricezione di B da S_1 in DMA;
+  A <- A + B
+\end{verbatim}
+\subsection{Mappa della memoria}
+\begin{itemize}
+\item Il vettore $A$ è mappato (come da consegna) da \texttt{0x0000 3800} a \texttt{0x0000 383F}.
+\item Il vettore $B$ è mappato (come da consegna) da \texttt{0x0000 3840} a \texttt{0x0000 387F}.
+\item La UART è mappata (per scelta progettuale) da \texttt{0x4000} a \texttt{0x4007}.
+\item Il DMAC è mappato (per scelta progettuale) da \texttt{0x5000} a \texttt{0x500F}.
+\item I latch HL e HH che consentono al DMAC di emettere 32 bit di indirizzo sono mappati (per scelta progettuale) a \texttt{0x6000} e \texttt{0x7000}.
+\item Il PIC è mappato (per scelta progettuale) da \texttt{0x8000} a \texttt{0x8001}.
+\item La RAM è mappata da \texttt{0x0} a \texttt{0x000F FFFF}. 
+\item La EPROM è mappata da \texttt{0xFFF0 0000} a \texttt{0xFFFF FFFF}.
+\end{itemize}
+\subsection{Interfacciamento UART}
+Si considerino tutti i segnali come attivi alti, per chiarezza.
+Il pin chip select della porta seriale è collegato a \texttt{CS = !HOLDA * CS\_S\_1 + HOLDA * DACK0}, con \texttt{CS\_S\_1 = BA14}.
+
+I pin di indirizzamento della porta seriale sono collegati a \texttt{Ai = !HOLDA * BAi + HOLDA * 0} in modo da permettere di indirizzare gli 8 registri interni quando la CPU è master (\texttt{HOLDA = 0}) e di leggere il registro contenente il dato quando il DMAC è master (\texttt{HOLDA = 1}).
+
+Il segnale \texttt{SRQ} è collegato al pin \texttt{DRQ0} del DMAC.
+\subsection{DMAC}
+Il segnale \texttt{DRQ0} è collegato al pin \texttt{SRQ} di richiesta di servizio della UART.
+
+Il DMA è programmato come segue prima degli invii di A:
+
+\begin{enumerate}
+\item Maschera il canale 0
+
+\item Reset FF interni
+
+\item \texttt{BAR0 = 0x3800}
+
+\item \texttt{BCR0 = 0x003F}
+
+\item \texttt{MR = 01 0 0 10 00 = 0x48} (Single mode, autoincr, no autoinit, read, ch00)
+
+\item \texttt{HH = 0x00}
+
+\item \texttt{HL = 0x00}
+
+\item Smaschera il canale 0
+
+\end{enumerate}
+
+\begin{verbatim}
+mov al 0x04 ; agisci sul bit mask del canale 00, settalo a 1 (1b ## 00b)
+outb 0x500A ; Write Single Mask Register Bit (1010b)
+
+mov al 0x01
+outb 0x500B ; Clear Byte Pointer FlipFlop (1100b)
+
+mov al 0x00 ; BAR0 = 0x3800
+outb 0x5000 ; BAR0[7..0]
+mov al 0x38
+outb 0x5000 ; BAR0[15..8]
+
+mov al 0x3F ; BCR0 = 0x003F
+outb 0x5001 ; BCR0[7..0]
+mov al 0x00
+outb 0x5001 ; BCR0[15..8]
+
+mov al 0x48
+outb 0x500B ; MR0
+
+mov al 0x00
+outb 0x6000 ; HH
+
+mov al 0x00
+outb 0x7000 ; HL
+
+mov al 0x00 ; unmask ch00
+outb 0x500A
+
+\end{verbatim}
+
+E come segue prima delle ricezioni di B:
+
+\begin{enumerate}
+
+\item Maschera il canale 0
+
+\item Reset FF interni
+
+\item \texttt{BAR = 0x3840}
+
+\item \texttt{BCR = 0x003F}
+
+\item \texttt{MR = 01 0 0 01 00 = 0x44} (Single mode, autoincr, no autoinit, write, ch00)
+
+\item \texttt{HH = 0x00}
+
+\item \texttt{HL = 0x00}
+
+\item Smaschera il canale 0
+\end{enumerate}
+
+\begin{verbatim}
+mov al 0x04 ; agisci sul bit mask del canale 00, settalo a 1 (1b ## 00b)
+outb 0x500A ; Write Single Mask Register Bit (1010b)
+
+mov al 0x01
+outb 0x500B ; Clear Byte Pointer FlipFlop (1100b)
+
+mov al 0x40 ; BAR0 = 0x3840
+outb 0x5000 ; BAR0[7..0]
+mov al 0x38
+outb 0x5000 ; BAR0[15..8]
+
+mov al 0x3F ; BCR0 = 0x003F
+outb 0x5001 ; BCR0[7..0]
+mov al 0x00 
+outb 0x5001 ; BCR0[15..8]
+
+mov al 0x44
+outb 0x500B; MR0
+
+mov al 0x00
+outb 0x6000 ; HH
+
+mov al 0x00
+outb 0x7000 ; HL
+
+mov al 0x00 ; unmask ch00
+outb 0x500A
+
+\end{verbatim}
+
+\subsection{Cache}
+\subsubsection{Indici}
+La cache ha dimensione 8KiB, linee da 32 byte e 2 vie. Questo significa che vi sono $S = \frac{8192}{32 \cdot 2} = 128$ set. 
+Si hanno quindi 7 bit di set ID, 5 bit di offset, e i restanti 20 bit di tag.
+
+Il vettore A è mappato da \texttt{0x3800 = 0x03 \#\# 0x40 \#\# 0x00} a \texttt{0x383F = 0x03 \#\# 0x41 \#\# 0x1F}.
+
+A occuperà quindi i set \texttt{0x40, 0x41} e gli offset \texttt{0x00-0x1F} e avrà tag \texttt{0x03}.
+
+Il vettore B è mappato da \texttt{0x3840 = 0x03 \#\# 0x42 \#\# 0x00} a \texttt{0x387F = 0x03 \#\# 0x43 \#\# 0x1F}.
+
+B occuperà quindi i set \texttt{0x42, 0x43} e gli offset \texttt{0x00-0x1F} e avrà tag \texttt{0x03}.
+
+I due vettori hanno lo stesso tag e occupano gli stessi intervalli di offset, ma non collidono perché occpano set diversi.
+
+I vettori possono quindi stare contemporaneamente in cache, occupando 4 linee.
+
+\subsubsection{Dinamica della cache}
+\begin{enumerate}
+\item La scrittura di \texttt{A[0]} provoca \textbf{una miss} in scrittura.
+
+\item Al momento della lettura di \texttt{A[0]} si ha \textbf{una miss} in lettura.
+
+In risposta, i valori di \texttt{A[31..0]} vengono caricati in cache, \textbf{passando dallo stato $I$ allo stato $E$}. 
+
+Dopo la scrittura di \texttt{A[1]}, la linea \textbf{passa in stato $M$}.
+
+Si ha \textbf{una miss} in lettura al momento della lettura di \texttt{A[32]}, \textbf{portando i valori di \texttt{A[63..32]} in cache con stato $E$}.
+Come prima, dopo la scrittura di \texttt{A[32]}, la linea che contiene \texttt{A[63..32]} \textbf{passa in stato $M$}.
+
+I passi 1 e 2 coinvolgono 64 scritture, 63 letture e 2 miss.
+
+\item Al momento della trasmissione dei valori di \texttt{A[i]} le linee di cache che contengono \texttt{A[63..32]} e \texttt{A[31..0]} \textbf{passano dallo stato $M$ allo stato $S$}.
+
+In questa fase si hanno \textbf{due cicli di implicit WB}, uno per ogni metà del vettore.
+
+Questo passo non richiede accessi alla cache da parte della CPU.
+
+\item La ricezione dei valori di \texttt{B} in DMA non altera gli stati di alcun vettore.
+
+Queesto passo non richiede accessi alla cache da parte della CPU.
+
+\item Si hanno \textbf{due} miss in lettura al momento della lettura dei valori di \texttt{B[0]} e \texttt{B[32]}, che fanno passare rispettivamente \texttt{B[31..0]} e \texttt{B[63..32]} in cache, \textbf{portandoli dallo stato $I$ allo stato $E$}. 
+
+Come prima, dopo la scrittura di \texttt{A[0]}, la linea che contiene \texttt{A[31..0]} \textbf{passa in stato $M$}.
+Lo stesso accade alla linea che contiene \texttt{A[63..32]} dopo la scrittura di \texttt{A[32]}.
+
+Questa fase quindi richiede 64 letture dei valori di A, 64 letture dei valori di B, e 64 scritture dei valori di A, e provoca due miss.
+
+\item La seconda esecuzione del passo 3 si svolge in maniera analoga alla prima.
+
+\item La seconda esecuzione del passo 4 porta lo stato delle linee di cache nelle quali è memorizzato il vettore \texttt{B} \textbf{a passare da $E$ a $I$}.
+
+\item La seconda esecuzione del passo 5 si svolge in maniera analoga alla prima.
+\end{enumerate}
+
+
+I passi 1 e 2 richiedono quindi 127 accessi alla cache complessivi, mentre i passi 3, 4 e 5 ne richiedono 192. 
+Eseguire una volta i passi 1 e 2 e ripetere due volte i passi 3, 4, 5 richiede quindi 511 accessi in memoria. 
+
+Si hanno quindi 5 miss complessive su 511 accessi, per una \textbf{miss rate} totale pari a $MR = 0.97\%$.
+
+\section{2017-02-07}
+
+\subsection{Specifiche}
+Il sistema dispone di:
+
+\begin{itemize}
+\item una porta seriale di input \texttt{S\_IN} gestita in DMA con velocità di 9600 b/s;
+\item una porta seriale di output \texttt{S\_OUT} gestita in DMA con velocità di 9600 b/s;
+\item un PIC;
+\item 4 MiB di EPROM mappata agli indirizzi alti;
+\item 1 MiB di RAM mappata agli indirizzi bassi
+\item 8 KiB di cache a 2 vie con linee da 32B gestita in write-around.
+\end{itemize}
+
+Un segmento dati $SD$ mappato all'indirizzo \texttt{0x0002 1602} contiene tre vettori $A, B, C$ da 12B ciascuno.
+
+Il sistema esegue i seguenti passi:
+\begin{verbatim}
+Per sempre:
+  Ricezione di A in DMA da S_IN;
+  A <- A + 5;
+  Ricezione di B in DMA da S_IN;
+  C <- A + B;
+  Trasmissione di C in DMA su S_OUT;
+\end{verbatim}
+
+\subsection{Mappa della memoria}
+\begin{itemize}
+\item il vettore A è mappato (come da consegna) da \texttt{0x0002 1602} a \texttt{0x0002 160D};
+\item il vettore B è mappato (come da consegna) da \texttt{0x0002 160E} a \texttt{0x0002 1619};
+\item il vettore C è mappato (come da consegna) da \texttt{0x0002 161A} a \texttt{0x0002 1625};
+\item il DMAC è mappato (per scelta progettuale) da \texttt{0x3000} a \texttt{0x300F};
+\item \texttt{S\_IN} è mappata (per scelta progettuale) da \texttt{0x4000} a \texttt{0x4003};
+\item \texttt{S\_OUT} è mappata (per scelta progettuale) da \texttt{0x5000} a \texttt{0x5003};
+\item il PIC è mappato (per scelta progettuale) da \texttt{0x6000} a \texttt{0x6001};
+\item I latch HL e HH che consentono al DMAC di emettere 32 bit di indirizzo sono mappati (per scelta progettuale) a \texttt{0x7000} e \texttt{0x8000}.
+\item la RAM è mappata (come da consegna) da \texttt{0x0000 0000} a \texttt{0x000F FFFF};
+\item la EPROM è mappata (come da consegna) da \texttt{0xFFC0 0000} a \texttt{0xFFFF FFFF}.
+\end{itemize}
+
+\subsection{Interfacciamento UART}
+Si considerino tutti i segnali come attivi alti, per chiarezza.
+
+Il pin chip select di \texttt{S\_IN} è collegato a \texttt{CS = !HOLDA * CS\_S\_IN + HOLDA * DACK0}.
+
+Il pin chip select di \texttt{S\_OUT} è collegato a \texttt{CS = !HOLDA * CS\_S\_OUT + HOLDA * DACK1}.
+
+I pin di indirizzo \texttt{A[1..0]} di entrambe le porte sono collegati a \texttt{Ai = !HOLDA * BAi + HOLDA * 0} in modo da permettere alla CPU, quando essa è master, di abilitare o disabilitare la ricezione o la trasmissione quando è master e al DMAC, quando esso è invece master, di leggere o scrivere il singolo byte. 
+
+Non è necessario interfacciare anche il pin \texttt{A2} dato che ogni porta ha tre possibili indirizzi: abilitazione dell'I/O, disabilitazione dell'I/O, lettura/scrittura del singolo byte. 
+
+Il segnale \texttt{SRQ} di \texttt{S\_IN} è collegato al pin \texttt{DREQ0} del DMAC.
+Il segnale \texttt{SRQ} di \texttt{S\_OUT} è collegato al pin \texttt{DREQ1} del DMAC.
+
+\subsection{DMAC}
+Il DMAC è programmato come segue prima delle ricezioni di \texttt{A}:
+\begin{enumerate}
+\item Maschera il canale 0
+\item Reset FF interni
+\item \texttt{BAR0 = 0x1602}
+\item \texttt{BCR0 = 0x000B}
+\item \texttt{MR = 01 0 0 01 00} (Single mode, autoincr, no autoinit, write, ch00)
+\item \texttt{HH = 0x00}
+\item \texttt{HL = 0x02}
+\item Smaschera il canale 0
+\end{enumerate}
+
+Il DMAC è programmato come segue prima delle ricezioni di \texttt{B}:
+\begin{enumerate}
+\item Maschera il canale 0
+\item Reset FF interni
+\item \texttt{BAR0 = 0x160E}
+\item \texttt{BCR0 = 0x000B}
+\item \texttt{MR = 01 0 0 01 00} (Single mode, autoincr, no autoinit, write, ch00)
+\item \texttt{HH = 0x00}
+\item \texttt{HL = 0x02}
+\item Smaschera il canale 0
+\end{enumerate}
+
+\begin{verbatim}
+\end{verbatim}
+
+Il DMAC è programmato come segue prima degli invii di \texttt{C}:
+\begin{enumerate}
+\item Maschera il canale 1
+\item Reset FF interni
+\item \texttt{BAR0 = 0x160A}
+\item \texttt{BCR0 = 0x000B}
+\item \texttt{MR = 01 0 0 10 01} (Single mode, autoincr, no autoinit, read, ch01)
+\item \texttt{HH = 0x00}
+\item \texttt{HL = 0x02}
+\item Smaschera il canale 1
+\end{enumerate}
+
+\subsection{Cache}
+\subsubsection{Indici}
+La cache ha dimensione 8 KiB, linee da 32B e 2 vie. 
+Questo significa che vi sono $S = \frac{8K}{32 \cdot 2} = 128$ set. 
+Si hanno quindi 7 bit di set ID, 5 bit di offset, e i restanti 20 bit vengono usati per i tag.
+
+Il vettore A è mappato da \texttt{0x0002 1602} a \texttt{0x0002 160D}, indirizzi che in base 2 equivalgono a:
+
+\begin{verbatim}
+    0    2    1    6    0    2
+ 0000 0010 0001|0110000|0 0010
+           0x21     0x30  0x02
+
+    0    2    1    6    0    D
+ 0000 0010 0001|0110000|0 1101
+           0x21    0x30   0x0D
+\end{verbatim}
+
+il vettore A occuperà quindi gli offset \texttt{0x02-0x0D} del set \texttt{0x30} con tag \texttt{0x21}.
+
+Il vettore B è mappato da \texttt{0x0002 160E} a \texttt{0x0002 1619}, indirizzi che in base 2 equivalgono a:
+
+\begin{verbatim}
+    0    2    1    6    0    E
+ 0000 0010 0001|0110000|0 1110
+           0x21     0x30  0x0E
+
+
+    0    2    1    6    1    9
+ 0000 0010 0001|0110000|1 1001
+           0x21    0x30   0x19
+\end{verbatim}
+
+il vettore B occuperà quindi gli offset \texttt{0x0E-0x19} del set \texttt{0x30} con tag \texttt{0x21}.
+
+Il vettore C è mappato da \texttt{0x0002 161A} a \texttt{0x0002 1625}, indirizzi che in base 2 equivalgono a:
+
+\begin{verbatim}
+
+    0    2    1    6    1    A
+ 0000 0010 0001|0110000|1 0110
+           0x21    0x30   0x1A    
+
+    0    2    1    6    2    5
+ 0000 0010 0001|0110011|0 0101
+           0x21    0x31   0x05
+\end{verbatim}
+
+il vettore C occuperà quindi gli offset \texttt{0x1A-0x1F} del set \texttt{0x30} e gli offset \texttt{0x00-0x05} del set \texttt{0x31} con tag \texttt{0x21}.
+
+I tre vettori non presentano collisioni e possono stare contemporaneamente in cache, occupando due linee.
+
+\subsubsection{Dinamica della cache}
+
+\begin{enumerate}
+\item La ricezione di \texttt{A} in DMA non richiede accessi alla memoria da parte della CPU.
+
+Il DMAC opera su un byte alla volta, quindi questa fase implice \textbf{12 cicli di bus esterni}.
+
+\item La lettura di \texttt{A[0]} provoca \textbf{una miss} in lettura. 
+
+In risposta, la CPU porta in cache la porzione di memoria che contiene \texttt{A[11..0]}, \texttt{B[11..0]} e \texttt{C[5..0]}.
+La linea di cache corrispondente a questa porzione di memoria \textbf{passa dallo stato $I$ allo stato $E$}.
+
+Al momento della scrittura di \texttt{A[0]} la stessa linea \textbf{passa dallo stato $E$ allo stato $M$}.
+
+Questo passo richiede 12 letture dalla memoria e 12 scritture.
+
+Si ha \textbf{un ciclo burst di bus esterno} per riempire la linea di cache.
+
+\item La lettura di \texttt{B} in DMA porta la linea di cache contenente il vettore \textbf{dallo stato $M$ allo stato $I$}.
+
+Questo passo non richiede accessi alla memoria da parte della CPU.
+
+Il DMAC opera su un byte alla volta, quindi questa fase implice \textbf{12 cicli di bus esterni}.
+
+Si ha \textbf{un ciclo di WB} prima del trasferimento del vettore, che assicura che le modifiche apportate al vettore \texttt{A} siano salvate in memoria prima che la cache venga invalidata.
+
+\item La lettura di \texttt{A[0]} provoca \textbf{una miss} in lettura e la CPU porta in cache la porzione di memoria che contiene \texttt{A[11..0]}, \texttt{B[11..0]} e \texttt{C[5..0]}.
+La linea di cache corrispondente a questa porzione di memoria \textbf{passa dallo stato $I$ allo stato $E$}.
+
+La scrittura di \texttt{C[0]} \textbf{porta la linea di cache in stato $M$}.
+
+La scrittura di \texttt{C[11..6]} provoca \textbf{sei miss} in scrittura.
+
+Qesto passo richiede 24 letture dalla memoria e 12 scritture.
+
+Si ha \textbf{un ciclo burst di bus esterno} per riempire la linea di cache e \textbf{sei cicli di bus esterni} per scrivere gli ultimi 6 bit di \texttt{C}
+
+\item La scrittura di \texttt{C[0]} in DMA fa passare la linea di cache corrispondente \textbf{dallo stato $M$ allo stato $S$}.
+
+Questo passo non richiede accessi alla memoria da parte della CPU.
+
+Questo passo provoca \textbf{un ciclo di implicit WB}, che corrisponde a \textbf{un ciclo burst di bus esterno}, e \textbf{12 cicli di bus esterni} richiesti dal DMAC.
+
+
+\end{enumerate}
+
+Si hanno quindi 8 miss su 60 accessi, per una miss rate totale pari a $MR = 13.3\%$.
+
+\section{2017-01-10}
+
+\subsection{Specifiche}
+Il sistema dispone di:
+
+\begin{itemize}
+\item una porta seriale di I/O \texttt{S\_IN\_OUT} gestita in DMA;
+\item un PIC;
+\item 2 MiB di EPROM mappata agli indirizzi alti;
+\item 1 MiB di RAM mappata agli indirizzi alti;
+\item 8KiB di cache dati a 2 vie e linee da 32 byte gestita in write-around.
+\end{itemize}
+
+Un segmento dati $SD$ mappato a \texttt{0x0002 0800} contiene tre vettori \texttt{A, B, C} da 20B ciascuno.
+
+Il sistema esegue i seguenti passi:
+\begin{verbatim}
+Per sempre:
+  Ricezione di A in DMA da S_IN_OUT
+  A = NOT A
+  Ricezione di B in DMA da S_IN_OUT
+  C = A XOR B
+  Trasmissione di C in DMA su S_IN_OUT
+\end{verbatim}
+
+\subsection{Mappa della memoria}
+\begin{itemize}
+\item \texttt{S\_IN\_OUT} è mappata (per scelta progettuale) da \texttt{0x3000} a \texttt{0x3003};
+\item il PIC è mappato (per scelta progettuale) da \texttt{0x4000} a \texttt{0x4001};
+\item la EPROM è mappata (come da consegna) da \texttt{0xFFE0 0000} a \texttt{0xFFFF FFFF};
+\item la RAM è mappata (come da consegna) da \texttt{0x0} a \texttt{0x000F FFFF};
+\item il vettore A è mappato (come da consegna) da \texttt{0x0002 0800} a \texttt{0x0002 0813};
+\item il vettore B è mappato (come da consegna) da \texttt{0x0002 0814} a \texttt{0x0002 0827};
+\item il vettore C è mappato (come da consegna) da \texttt{0x0002 0828} a \texttt{ox0002 083B};
+\item i latch HL e HH che consentono al DMAC di emettere 32 bit di indirizzo sono mappati (per scelta progettuale) a \texttt{0x5000} e \texttt{0x6000}.
+\item il DMAC è mappato (per scelta progettuale) da \texttt{0x7000} a \texttt{0x700F};
+\end{itemize}
+
+\subsection{Interfacciamento UART}
+Si considerino tutti i segnali come attivi alti, per chiarezza.
+
+Il pin CS della UART è collegato a \texttt{CS = !HOLDA * CS\_S\_IN\_OUT + HOLDA * DACK0}.
+
+I pin \texttt{Ai} della UART sono collegati a \texttt{Ai = HOLDA * 0 + !HOLDA * BAi} in modo da permettere alla CPU di indirizzare i registri interni quando essa è master e al DMAC, quando esso invece è master, di leggere o scrivere un byte in ingresso o in uscita.
+
+\subsection{DMAC}
+
+Il DMAC è programmato come segue prima di ogni ricezione di \texttt{A}:
+
+\begin{enumerate}
+\item Maschera il canale 0
+\item Reset FF interni
+\item \texttt{BAR0 = 0x0800}
+\item \texttt{BCR0 = 0x0013}
+\item \texttt{MR = 01 0 0 01 00} (Single mode, autoincr, no autoinit, write, ch00)
+\item \texttt{HH = 0x00}
+\item \texttt{HL = 0x02}
+\item Smaschera il canale 0 
+\end{enumerate}
+
+Il DMAC è programmato come segue prima di ogni ricezione di \texttt{B}:
+
+\begin{enumerate}
+\item Maschera il canale 0
+\item Reset FF interni
+\item \texttt{BAR0 = 0x0814}
+\item \texttt{BCR0 = 0x0013}
+\item \texttt{MR = 01 0 0 01 00} (Single mode, autoincr, no autoinit, write, ch00)
+\item \texttt{HH = 0x00}
+\item \texttt{HL = 0x02}
+\item Smaschera il canale 0 
+\end{enumerate}
+
+Il DMAC è programmato come segue prima di ogni scrittura di \texttt{C}:
+
+\begin{enumerate}
+\item Maschera il canale 0
+\item Reset FF interni
+\item \texttt{BAR0 = 0x0828}
+\item \texttt{BCR0 = 0x0013}
+\item \texttt{MR = 01 0 0 10 00} (Single mode, autoincr, no autoinit, read, ch00)
+\item \texttt{HH = 0x00}
+\item \texttt{HL = 0x02}
+\item Smaschera il canale 0
+\end{enumerate}
+
+\subsection{Cache}
+\subsubsection{Indici}
+La cache ha dimensione 8 KiB, linee da 32B e 2 vie.
+Questo significa che vi sono $S = \frac{8K}{32 \cdot 2} = 128$ set.
+Si hanno quindi 7 bit di set ID, 5 bit di offset, e i restanti 20 bit vengono usati per i tag.
+
+Il vettore A è mappato da \texttt{0x0002 0800} a \texttt{0x0002 0813}, indirizzi che in base 2 corrispondono a 
+
+\begin{verbatim}
+   2    0    8    0    0
+0010 0000|1000000|0 0000
+		 0x20    0x40   0x00
+
+   2    0    8    1    3
+0010 0000|1000000|1 0011
+		 0x20    0x40   0x13
+
+\end{verbatim}
+
+Il vettore A occuperà quindi gli offset \texttt{0x00-0x13} del set \texttt{0x40} con tag \texttt{0x20}.
+
+Il vettore B è mappato da \texttt{0x0002 0814} a \texttt{0x0002 0827}, indirizzi che in base 2 corrispondono a
+
+\begin{verbatim}
+   2    0    8    1    4
+0010 0000|1000000|1 0100
+     0x20    0x40   0x14
+
+   2    0    8    2    7
+0010 0000|1000001|0 0111
+     0x20    0x41   0x07
+
+\end{verbatim}
+
+Il vettore B occuperà quindi gli offset \texttt{0x14-0x1F} del set \texttt{0x40} e gli offset \texttt{0x00-0x07} del set \texttt{0x41} con tag \texttt{0x20}.
+
+Il vettore C è mappato da \texttt{0x0002 0828} a \texttt{ox0002 083B}, indirizzi che in  base 2 corrispondono a
+
+\begin{verbatim}
+   2    0    8    2    8
+0010 0000|1000001|0 0100
+     0x20    0x41   0x08
+
+   2    0    8    3    B
+0010 0000|1000001|1 1100
+     0x20    0x41   0x1B
+\end{verbatim}
+
+Il vettore C occuperà quindi gli offset \texttt{0x08-0x1B} del set \texttt{0x81} con tag \texttt{0x20}.
+
+I tre vettori non presentano collisioni e possono stare contemporaneamente in cache, occupando due linee.
+
+\subsubsection{Dinamica della cache}
+\begin{enumerate}
+\item La ricezione di \texttt{A} in DMA non richiede accessi alla memoria da parte della CPU e non altera lo stato della cache.
+
+Il DMAC lavora su un byte alla volta, quindi la ricezione di \texttt{A} richiede \textbf{20 cicli di bus esterni}.
+
+\item La lettura di \texttt{A[0]} provoca \textbf{una miss in lettura}.
+
+In risposta, la CPU carica in cache \texttt{A[19..0]} e \texttt{B[11..0]}, portando la corrispondente linea di cache \textbf{dallo stato $I$ allo stato $E$} mediante \textbf{un ciclo burst di bus esterno}.
+
+La scrittura di \texttt{A[0]} porta la corrispondente linea di cache \textbf{dallo stato $E$ allo stato $M$}.
+
+\item La ricezione di \texttt{B} porta la linea di cache contenente \texttt{B[11..0]} \textbf{dallo stato $M$ allo stato $I$}, provocando inoltre \textbf{un ciclo di WB} per scrivere in memoria i nuovi valori di \texttt{A} prima di invalidare la cache.
+
+Il DMAC lavora su un byte alla volta, quindi la ricezione di \texttt{B} richiede \textbf{20 cicli di bus esterni}.
+
+\item La lettura di \texttt{A[0]} provoca \textbf{una miss in lettura}.
+
+In risposta, la CPU carica in cache \texttt{A[19..0]} e \texttt{B[11..0]}, portando la corrispondente linea di cache \textbf{dallo stato $I$ allo stato $E$} mediante \textbf{un ciclo burst di bus esterno}.
+
+La scrittura di \texttt{C[11..0]} provoca \textbf{12 miss in scrittura}.
+
+La lettura di \texttt{B[12]} provoca \textbf{una miss in lettura}.
+
+In risposta, la CPU carica in cache \texttt{B[19..12]} e \texttt{C[19..0]} mediante \textbf{un ciclo burst di bus esterno}.
+
+La scrittura di \texttt{C[12]} porta la corrispondente linea di cache \textbf{dallo stato $E$ allo stato $M$}.
+
+\item La trasmissione di \texttt{C} in DMA porta la linea di cache contenente il vettore \textbf{dallo stato $M$ allo stato $S$}.
+
+La richiesta di trasmissione provoca \textbf{un ciclo di WB} che si traduce in \textbf{un ciclo burst di bus esterno}.
+
+Il DMAC trasmette un byte alla volta, per cui la trasmissione richiede \textbf{20 cicli di bus esterni}.
+
+\end{enumerate}
+
+Si hanno 15 miss e 100 accessi alla memoria, per una miss rate complessiva pari a $MR = 15\%$.
+
+\section{2018-09-11}
+
+\subsection{Specifiche}
+Il sistema dispone di:
+
+\begin{itemize}
+\item due porte seriali di I/O \texttt{S\_1, S\_3} gestite in DMA;
+\item una porta seriale di I/O \texttt{S\_2} gestita ad interrupt;
+\item un PIC;
+\item 4 MiB di EPROM mappata agli indirizzi alti;
+\item 1 MiB di RAM mappata agli indirizzi bassi;
+\item 8 KiB di cache a 2 vie e linee da 32B, gestita in write-around.
+\end{itemize}
+
+Un segmento dati $SD$ mappato a \texttt{0x0004 0000} contiene tre vettori \texttt{A, B, C} da 24B.
+
+Il sistema esegue i seguenti passi:
+\begin{verbatim}
+Per sempre:
+  Ricezione di A da S_1 in DMA;
+  Ricezione di B da S_2 a interrupt;
+  C = A OR B;
+  Trasmissione di C su S_3 in DMA;
+\end{verbatim}
+
+\subsection{Mappa della memoria}
+\begin{itemize}
+\item \texttt{S\_1} è mappata (per scelta progettuale) da \texttt{0x5000} a \texttt{0x5007};
+\item \texttt{S\_2} è mappata (per scelta progettuale) da \texttt{0x6000} a \texttt{0x6007};
+\item \texttt{S\_3} è mappata (per scelta progettuale) da \texttt{0x7000} a \texttt{0x7007};
+\item il PIC è mappato (per scelta progettuale) da \texttt{0x8000} a \texttt{0x8001};
+\item i latch HL e HH che consentono al DMAC di emettere 32 bit di indirizzo sono mappati (per scelta progettuale) a \texttt{0x9000} e \texttt{0xA000}.
+\item il DMAC è mappato (per scelta progettuale) da \texttt{0xB000} a \texttt{0xB00F};
+\item il vettore A è mappato (come da consegna) da \texttt{0x0004 0000} a \texttt{0x0004 0017};
+\item il vettore B è mappato (come da consegna) da \texttt{0x0004 0018} a \texttt{0x0004 002F};
+\item il vettore C è mappato (come da consegna) da \texttt{0x0004 0030} a \texttt{0x0004 0047};
+\item la RAM è mappata (come da consegna) da \texttt{0x0000 0000} a \texttt{0x000F FFFF};
+\item la EPROM è mappata (come da consegna) da \texttt{0xFFC0 0000} a \texttt{0xFFFF FFFF}.
+\end{itemize}
+
+\subsection{Interfacciamento UART}
+Si considerino tutti i segnali come attivi alti, per chiarezza.
+
+Il pin CS di \texttt{S\_1} è collegato a \texttt{CS = !HOLDA * CS\_S\_1 + HOLDA * DACK0}.
+
+Il pin CS di \texttt{S\_3} è collegato a \texttt{CS = !HOLDA * CS\_S\_3 + HOLDA * DACK1}.
+
+Il pin CS di \texttt{S\_2} è collegato a \texttt{CS = CS\_S\_2}.
+
+Il pin \texttt{SRQ} di \texttt{S\_1} è collegato al pin \texttt{DRQ0} del DMAC.
+
+Il pin \texttt{SRQ} di \texttt{S\_3} è collegato al pin \texttt{DRQ1} del DMAC.
+
+Il pin \texttt{SRQ} di \texttt{S\_2} è collegato al pin \texttt{IR0} del PIC.
+
+\subsection{Interfacciamento PIC}
+Si considerino tutti i segnali, compresi i \texttt{bank enable}, come attivi alti, per chiarezza.
+
+Il pin \texttt{INT} del PIC è collegato al pin \texttt{INT} della CPU.
+
+Il pin \texttt{INTA} del PIC è collegato al pin \texttt{INTA} della CPU.
+
+Il pin \texttt{CS} del PIC è collegato a \texttt{CS\_PIC = BA15}.
+
+Il pin \texttt{SRQ} di \texttt{S\_3} è collegato al pin \texttt{IR0} del PIC.
+
+I pin \texttt{WR, RD} del PIC sono collegati ai pin \texttt{IOWR, IORD} della CPU.
+
+I pin \texttt{D[7..0]} del PIC sono collegati ai pin \texttt{IOB[7..0]} del bus di I/O.
+
+Il pin \texttt{A0} del PIC è collegato a \texttt{BA0 == BE0}.
+\subsection{DMAC}
+
+Il DMAC è programmato come segue prima delle ricezioni di \texttt{A}:
+\begin{enumerate}
+\item Maschera il canale 0
+\item Reset FF interni
+\item \texttt{BAR0 = 0x0000}
+\item \texttt{BCR0 = 0x0017}
+\item \texttt{MR = 01 0 0 01 00} (Single mode, autoincr, no autoinit, write, ch00)
+\item \texttt{HH = 0x00}
+\item \texttt{HL = 0x04}
+\item Smaschera il canale 0
+\end{enumerate}
+
+\begin{verbatim}
+\end{verbatim}
+
+Il DMAC è programmato come segue prima degli invii di \texttt{C}:
+\begin{enumerate}
+\item Maschera il canale 1
+\item Reset FF interni
+\item \texttt{BAR0 = 0x0030}
+\item \texttt{BCR0 = 0x0017}
+\item \texttt{MR = 01 0 0 10 01} (Single mode, autoincr, no autoinit, read, ch01)
+\item \texttt{HH = 0x00}
+\item \texttt{HL = 0x04}
+\item Smaschera il canale 1
+\end{enumerate}
+
+\begin{verbatim}
+\end{verbatim}
+
+\subsection{Cache}
+\subsubsection{Indici}
+La cache ha dimensione 8 KiB, linee da 32B e 2 vie.
+Questo significa che vi sono $S = \frac{8K}{32 \cdot 2} = 128$ set.
+Si hanno quindi 7 bit di set ID, 5 bit di offset, e i restanti 20 bit vengono usati per i tag.
+
+Il vettore A è mappato da \texttt{0x0004 0000} a \texttt{0x0004 0017}, indici che in base 2 valgono 
+
+\begin{verbatim}
+
+   4    0    0    0   0
+0100 0000|0000000|00000
+     0x40    0x00  0x00
+
+   4    0    0    1   7
+0100 0000|0000000|10111
+     0x40    0x00  0x17
+
+\end{verbatim}
+
+A occuperà quindi gli offset \texttt{0x00-0x17} del set \texttt{0x00} con tag \texttt{0x40}.
+
+Il vettore B è mappato da \texttt{0x0004 0018} a \texttt{0x0004 002F}, indici che in base 2 valgono 
+
+\begin{verbatim}
+   4    0    0    1   8
+0100 0000|0000000|11000
+     0x40    0x00  0x18
+
+   4    0    0    2   F
+0100 0000|0000001|01111
+     0x40    0x01  0x0F
+\end{verbatim}
+
+B occuperà quindi gli offset \texttt{0x18-0x1F} del set \texttt{0x00} e gli offset \texttt{0x00-0x0F} del set \texttt{0x01} con tag \texttt{0x040}.
+
+Il vettore C è mappato da \texttt{0x0004 0030} a \texttt{0x0004 0047}, indici che in base 2 valgono 
+
+\begin{verbatim}
+   4    0    0    3   0
+0100 0000|0000001|10000
+     0x40    0x01  0x10
+
+   4    0    0    4   7
+0100 0000|0000010|00111
+     0x40    0x02  0x07
+\end{verbatim}
+
+C occuperà quindi gli offset \texttt{0x10-0x1F} del set \texttt{0x01} e gli offset \texttt{0x00-0x07} del set \texttt{0x02} con tag \texttt{0x40}.
+
+\subsubsection{Dinamica della cache}
+\begin{enumerate}
+\item La ricezione di \texttt{A} in DMA non richiede accessi alla memoria da parte della CPU e non altera lo stato della cache.
+
+Il DMAC lavora su un byte alla volta, quindi la ricezione di A richiede \textbf{24 cicli di bus esterni}.
+
+\item La ricezione di \texttt{B} a interrupt provoca \textbf{24 miss} in scrittura e richiede \textbf{24 cicli di bus esterni}.
+
+\item La lettura di \texttt{A[0]} provoca \textbf{una miss} in lettura. 
+In risposta, la CPU carica in cache \texttt{A[23..0]} e \texttt{B[7...0]}, portando la linea di cache contenente quei vettori \textbf{dallo stato $I$ allo stato $E$} mediante \textbf{un ciclo burst di bus esterno}.
+
+La scrittura di \texttt{C[7..0]} provoca \textbf{8 miss in scrittura} e implica \textbf{8 cicli di bus esterni}.
+
+La lettura di \texttt{B[8]} provoca \textbf{una miss in lettura}.
+In risposta, la CPU carica in cache \texttt{B[23..8]} e \texttt{C[15..0]}, portando la linea di cache con
+tenente quei vettori \textbf{dallo stato $I$ allo stato $E$} mediante \textbf{un ciclo burst di bus esterno}.
+
+La scrittura di \texttt{C[8]} porta la linea di cache nella quale è contenuto \textbf{dallo stato $E$ allo stato $M$}.
+
+La scrittura di \texttt{C[23..16]} provoca \textbf{8 miss in scrittura} e implica \textbf{8 cicli di bus esterni}.
+
+\begin{itemize}
+\item Nel caso l'operazione vettoriale parta da \texttt{C[23]}, questo passo si svolge in maniera diversa.
+ La lettura di \texttt{A[23]} provoca \textbf{una miss} in lettura.
+In risposta, la CPU carica in cache \texttt{A[23..0]} e \texttt{B[7...0]}, portando la linea di cache contenente quei vettori \textbf{dallo stato $I$ allo stato $E$} mediante \textbf{un ciclo burst di bus esterno}.
+
+ La lettura di \texttt{B[23]} provoca \textbf{una miss} in lettura.
+In risposta, la CPU carica in cache \texttt{B[23..8]} e \texttt{C[15...0]}, portando la linea di cache contenente quei vettori \textbf{dallo stato $I$ allo stato $E$} mediante \textbf{un ciclo burst di bus esterno}.
+
+La scrittura di \texttt{C[23..16]} provoca \textbf{8 miss in scrittura} e implica \textbf{8 cicli di bus esterni}.
+
+La scrittura di \texttt{C[15]} porta la linea di cache in cui è contenuto \textbf{dallo stato $E$ allo stato $M$}.
+\end{itemize}
+
+\item La trasmissione di \texttt{C} in DMA porta la linea di cache contenente \texttt{B[23..8]} e \texttt{C[15..0]} \textbf{dallo stato $M$ allo stato $S$} e causa \textbf{un ciclo di WB} che implica \textbf{un ciclo burst di bus esterno}.
+
+Il DMAC lavora su un byte alla volta, quindi la trasmissione di C richiede \textbf{24 cicli di bus esterni}.
+
+
+\end{enumerate}
+
+Si hanno quindi, nel caso di indice crescente, 40 miss in scrittura e 2 miss in lettura su un totale di 96 accessi in memoria, per una miss rate pari a $MR = 43.75\%$.
+
+Nel caso di indice decrescente, invece, si hanno 32 miss in scrittura e due miss in lettura su un totale di 96 accessi in memoria, per una miss rate pari a $MR \approx 0.33\%$.
+
+\section{2018-07-18}
+
+\subsection{Specifiche}
+Il sistema dispone di:
+
+\begin{itemize}
+\item due porte seriali \texttt{S\_1, S\_2} gestite a interrupt;
+\item una porta seriale \texttt{S\_3} gestita in DMA;
+\item un PIC;
+\item 4 MiB di EPROM mappata agli indirizzi alti;
+\item 512 KiB di RAM mappata agli indirizzi bassi;
+\item 8 KiB di cache a 2 vie e linee da 32B gestita in write-around.
+\end{itemize}
+
+Un segmento dati $SD$ mappato a \texttt{0x0003 0000} contiene tre vettori $A, B, C$ da 24 byte ciascuno.
+
+Il sistema esegue i seguenti passi:
+\begin{verbatim}
+Per sempre:
+  Ricezione di A da S_1 a interrupt
+  Ricezione di B da S_2 a interrupt
+  C = A XOR B
+  Trasmissione di C su S_3 in DMA
+\end{verbatim}
+
+\subsection{Mappa della memoria}
+\begin{itemize}
+\item \texttt{S\_1} è mappata (per scelta progettuale) da \texttt{0x4000} a \texttt{0x4007};
+\item \texttt{S\_2} è mappata (per scelta progettuale) da \texttt{0x5000} a \texttt{0x5007};
+\item \texttt{S\_3} è mappata (per scelta progettuale) da \texttt{0x6000} a \texttt{0x6007};
+\item il DMAC è mappato (per scelta progettuale) da \texttt{0x7000} a \texttt{0x700F};
+\item il PIC è mappato (per scelta progettuale) da \texttt{0x8000} a \texttt{0x8001};
+\item I latch HL e HH che consentono al DMAC di emettere 32 bit di indirizzo sono mappati (per scelta progettuale) a \texttt{0x9000} e \texttt{0xA000}.
+\item il DMAC è mappato (per scelta progettuale) da \texttt{0xB000} a \texttt{0xB00F};
+\item il vettore A è mappato (come da consegna) da \texttt{0x0003 0000} a \texttt{0x0003 0017};
+\item il vettore B è mappato (come da consegna) da \texttt{0x0003 0018} a \texttt{0x0003 002F};
+\item il vettore C è mappato (come da consegna) da \texttt{0x0003 0030} a \texttt{0x0003 0047};
+\end{itemize}
+
+\subsection{Interfacciamento UART}
+Si considerino tutti i segnali come attivi alti, per chiarezza.
+
+Il pin CS di \texttt{S\_1} è collegato a \texttt{CS = CS\_S\_1}.
+
+Il pin CS di \texttt{S\_2} è collegato a \texttt{CS = CS\_S\_2}.
+
+Il pin CS di \texttt{S\_3} è collegato a \texttt{CS = !HOLDA * CS\_S\_3 + HOLDA * DACK1}.
+
+Il pin \texttt{SRQ} di \texttt{S\_3} è collegato al pin \texttt{DRQ0} del DMAC.
+
+Il pin \texttt{SRQ} di \texttt{S\_1} è collegato al pin \texttt{IR0} del PIC.
+
+Il pin \texttt{SRQ} di \texttt{S\_2} è collegato al pin \texttt{IR1} del PIC.
+
+\subsection{Interfacciamento PIC}
+Si considerino tutti i segnali, compresi i \texttt{bank enable}, come attivi alti, per chiarezza.
+
+Il pin \texttt{INT} del PIC è collegato al pin \texttt{INT} della CPU.
+
+Il pin \texttt{INTA} del PIC è collegato al pin \texttt{INTA} della CPU.
+
+Il pin \texttt{CS} del PIC è collegato a \texttt{CS\_PIC = BA15}.
+
+Il pin \texttt{SRQ} di \texttt{S\_1} è collegato al pin \texttt{IR0} del PIC.
+
+Il pin \texttt{SRQ} di \texttt{S\_2} è collegato al pin \texttt{IR1} del PIC.
+
+I pin \texttt{WR, RD} del PIC sono collegati ai pin \texttt{IOWR, IORD} della CPU.
+
+I pin \texttt{D[7..0]} del PIC sono collegati ai pin \texttt{IOB[7..0]} del bus di I/O.
+
+Il pin \texttt{A0} del PIC è collegato a \texttt{BA0 == BE0}.
+
+\subsection{DMAC}
+
+Il DMAC è programmato come segue prima degli invii di \texttt{C}:
+\begin{enumerate}
+\item Maschera il canale 0
+\item Reset FF interni
+\item \texttt{BAR0 = 0x0030}
+\item \texttt{BCR0 = 0x0017}
+\item \texttt{MR = 01 0 0 10 00} (Single mode, autoincr, no autoinit, read, ch00)
+\item \texttt{HH = 0x00}
+\item \texttt{HL = 0x03}
+\item Smaschera il canale 0
+\end{enumerate}
+
+
+\begin{verbatim}
+\end{verbatim}
+
+\subsection{Cache}
+\subsubsection{Indici}
+La cache ha dimensione 8 KiB, linee da 32B e 2 vie.
+Questo significa che vi sono $S = \frac{8K}{32 \cdot 2} = 128$ set.
+Si hanno quindi 7 bit di set ID, 5 bit di offset, e i restanti 20 bit vengono usati per i tag.
+
+Il vettore A è mappato da \texttt{0x0003 0000} a \texttt{0x0003 0017}, indici che in base 2 valgono
+
+\begin{verbatim}
+
+   3    0    0    0   0
+0011 0000|0000000|00000
+     0x30    0x00  0x00
+
+   3    0    0    1   7
+0011 0000|0000000|10111
+     0x30    0x00  0x17
+
+\end{verbatim}
+
+A occuperà quindi gli offset \texttt{0x00-0x17} del set \texttt{0x00} con tag \texttt{0x30}.
+
+Il vettore B è mappato da \texttt{0x0003 0018} a \texttt{0x0003 002F}, indici che in base 2 valgono
+
+\begin{verbatim}
+   3    0    0    1   8
+0011 0000|0000000|11000
+     0x30    0x00  0x18
+
+   3    0    0    2   F
+0011 0000|0000001|01111
+     0x30    0x01  0x0F
+\end{verbatim}
+
+B occuperà quindi gli offset \texttt{0x18-0x1F} del set \texttt{0x00} e gli offset \texttt{0x00-0x0F} del set \texttt{0x01} con tag \texttt{0x040}.
+
+Il vettore C è mappato da \texttt{0x0003 0030} a \texttt{0x0003 0047}, indici che in base 2 valgono
+
+\begin{verbatim}
+   3    0    0    3   0
+0011 0000|0000001|10000
+     0x30    0x01  0x10
+
+   3    0    0    4   7
+0011 0000|0000010|00111
+     0x30    0x02  0x07
+\end{verbatim}
+
+C occuperà quindi gli offset \texttt{0x10-0x1F} del set \texttt{0x01} e gli offset \texttt{0x00-0x07} del set \texttt{0x02} con tag \texttt{0x30}.
+
+
+\subsubsection{Dinamica della cache}
+\begin{enumerate}
+\item La ricezione di \texttt{A} a interrupt provoca \textbf{24 miss} in scrittura e richiede \textbf{24 cicli di bus esterni}.
+
+La ricezione di \texttt{B} a interrupt provoca \textbf{24 miss} in scrittura e richiede \textbf{24 cicli di bus esterni}.
+
+\item La lettura di \texttt{A[0]} provoca \textbf{una miss} in lettura.
+In risposta, la CPU carica in cache \texttt{A[23..0]} e \texttt{B[7..0]}, portando la linea di cache corrispondente \textbf{dallo stato $I$ allo stato $E$} mediante \textbf{un ciclo burst di bus esterno}.
+
+La scrittura di \texttt{C[7..0]} provoca \textbf{8 miss} in scrittura e richiede \textbf{8 cicli di bus esterni}. 
+
+La lettura di \texttt{B[8]} provoca \textbf{una miss} in lettura.
+In risposta, la CPU carica in cache \texttt{B[23..8]} e \texttt{C[15..0]}, portando la linea di cache corrispondente \textbf{dallo stato $I$ allo stato $E$} mediante \textbf{un ciclo burst di bus esterno}.
+
+La scrittura di \texttt{C[8]} porta la linea di cache corrispondente \textbf{dallo stato $E$ allo stato $M$}.
+
+La scrittura di \texttt{C[23..16]} provoca \textbf{8 miss in scrittura} e richiede \textbf{8 cicli di bus esterni}.
+
+\begin{itemize}
+\item Se il calcolo di C avviene iniziando da \texttt{C[23]}, questo passo avviene in modo diverso.
+
+La lettura di \texttt{A[23]}  provoca \textbf{una miss} in lettura.
+In risposta, la CPU carica in cache \texttt{A[23..0]} e \texttt{B[7..0]}, portando la linea di cache corrispondent
+e \textbf{dallo stato $I$ allo stato $E$} mediante \textbf{un ciclo burst di bus esterno}.
+
+La lettura di \texttt{B[23]} provoca \textbf{una miss} in lettura.
+In risposta, la CPU carica in cache \texttt{B[23..8]} e \texttt{C[15..0]}, portando la linea di cache corrispondente \textbf{dallo stato $I$ allo stato $E$} mediante \textbf{un ciclo burst di bus esterno}.
+
+La scrittura di \texttt{C[15]} porta la linea di cache corrispondente \textbf{dallo stato $E$ allo stato $M$}.
+
+La scrittura di \texttt{C[23..16]} provoca \textbf{8 miss in scrittura} e richiede \textbf{8 cicli di bus esterni}.
+
+\end{itemize}
+
+\item La trasmissione di C in DMA porta la linea di cache contenente \texttt{B[23..8], C[15..0]} \textbf{dallo stato $M$ allo stato $S$}, richiede \textbf{24 cicli di bus esterni} e implica \textbf{un ciclo di implicit WB}.
+\end{enumerate}
+
+Si hanno 64 miss in scrittura e 2 miss in lettura su 120 accessi alla memoria, per una miss rate complessiva pari a $MR = 55\%$.
+
+Nel caso in cui il calcolo di C avvenga in ordine inverso, si hanno 56 miss in scrittura e 2 miss in lettura su 120 accessi alla memoria, per una miss rate complessiva pari a $MR \approx 46.7\%$.
+
+% \section{Template}
+% 
+% \subsection{Specifiche}
+% Il sistema dispone di:
+% 
+% \begin{itemize}
+% \end{itemize}
+% 
+% Un segmento dati $SD$
+% 
+% Il sistema esegue i seguenti passi:
+% \begin{verbatim}
+% \end{verbatim}
+% 
+% \subsection{Mappa della memoria}
+% \begin{itemize}
+% \end{itemize}
+% 
+% \subsection{Interfacciamento UART}
+% Si considerino tutti i segnali come attivi alti, per chiarezza.
+% 
+% \subsection{DMAC}
+% \begin{enumerate}
+% 
+% \end{enumerate}
+% 
+% \begin{verbatim}
+% \end{verbatim}
+% 
+% \subsection{Cache}
+% \subsubsection{Indici}
+% 
+% \subsubsection{Dinamica della cache}
+% \begin{enumerate}
+% \end{enumerate}
+% 
+\textbf{Disclaimer}:  Questo documento può contenere errori e imprecisioni che potrebbero danneggiare sistemi informatici, terminare relazioni e rapporti di lavoro, liberare le vesciche dei gatti sulla moquette e causare un conflitto termonucleare globale.
+Procedere con cautela.
+
+Questo documento è rilasciato sotto licenza CC-BY-SA 4.0. \ccbysa
+
+\end{document}
