@@ -1,0 +1,226 @@
+\documentclass[answers, a4paper, 11pt]{exam}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage[italian]{babel}
+\usepackage{ccicons}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage[utf8]{inputenc}
+\usepackage[autostyle=false, style=english]{csquotes}
+\usepackage[margin=2cm]{geometry}
+\usepackage{graphicx}
+\usepackage{mathrsfs}
+\usepackage{multicol}
+\usepackage{relsize}
+\usepackage{parskip}
+\pagestyle{plain}
+\graphicspath{{./images/}}
+\MakeOuterQuote{"}
+\setlength{\columnseprule}{.4pt}
+\renewcommand{\solutiontitle}{\noindent\textbf{R:}\enspace}
+\def\dbar{{\mathchar'26\mkern-12mu d}}
+\title{Fondamenti di Intelligenza Artificiale M}
+\author{Kevin Michael Frick}
+\begin{document}
+\maketitle
+
+\begin{questions}
+\question Si dia la descrizione di ricerca iterative deepening, anche in pseudo-codice. Si discutano le sue
+proprietà (in termini di completezza, ottimalità e complessità sia spaziale sia temporale).
+	\begin{solution}
+		Per evitare che la ricerca in profondità si perda in strade infinite è possibile limitarne la profondità, ovvero impostare un limite $l$ e smettere di esplorare una volta raggiunto un nodo con profondità $l$.
+		La complessità temporale diventa allora $O(b^l)$ e quella spaziale $O(bl)$. 
+		Se, però, il valore di $l$ è scelto male l'algoritmo non potrà raggiungere una soluzione. 
+		Per questo motivo ci si serve della \emph{ricerca iterative deepening}, che consiste nel lanciare ripetutamente una ricerca in profondità con valori di $l$ che incrementano progressivamente finché non viene trovata una soluzone. 
+		La complessità spaziale è $O(bd)$ in presenza di una soluzione o $O(bm)$ in uno spazio degli stati finito senza soluzione. 
+		La ricerca iterative deepening è ottimale per problemi nei quali tutte le azioni hanno lo stesso costo ed è completa in tutti gli spazi degli stati finiti e aciclici, o nei quali il controllo dei cicli coinvolge l'intero cammino. 
+		La complessità temporale è $O(b^d)$ in presenza di una soluzone e $O(b^m)$ in sua assenza. 
+		Ogni iterazione genera un nuovo livello, ma a differenza della ricerca in ampiezza i livelli precedenti vengono ricalcolati, risparmiando memoria al costo di maggiore tempo. 
+		La ricerca in ampiezza può sembrare molto dispendiosa perché gli stati vicini alla radice dell'albero di ricerca sono rigenerati più volte. 
+		Tuttavia, in molti spazi degli stati la maggior parte dei nodi sono nei livelli più bassi, quindi questa rigenerazione non è molto rilevante. 
+		La ricerca iterative deepening è da preferire quando lo spazio degli stati non sta nella memoria e la profondità della soluzione non è nota. 
+	Lo pseudocodice per la ricerca iterative deepening è il seguente:
+\begin{verbatim}
+function iterative_deepening_search(problem) returns solution or failure
+  for depth from 0 to inf do
+    result <- depth_limited_search(problem, depth)
+    if result != cutoff then return result
+
+function depth_limited_search(problem, max_depth) returns node or failure or cutoff
+  frontier <- new stack
+  push(frontier, problem.initial_node)
+  result <- failure
+  while frontier is not empty do:
+    node <- pop(frontier)
+    if is_goal(problem, node) then return node
+    if depth(node) > max_depth then result <- cutoff
+    else if not is_cycle(node) do
+      for each child in expand(problem, node) do
+        push(frontier, child)
+  return result
+\end{verbatim}
+	\end{solution}
+\question Si discutano gli algoritmi di consistenza di una rete CSP e in particolare si descriva (in pseudocodice) l’algoritmo di arc-consistenza.
+  \begin{solution}
+    Un CSP è definito come un insieme di variabili $x_k$ e domini $D_k$ tali che $x_k \in D_k \forall k \in 1..n$ e di vincoli $c_k(x_{i1}, ..., x_{ij}) \subseteq D_{i1} \times ... \times D_{ij}$ su $j$. 
+    I vincoli solitamente sono rappresentati in termini di relazioni. 
+    Trovare una soluzione a un CSP prevede un assegnamento di tutte le $x_k$ che soddisfi tutti i vincoli $c_k$. 
+
+    Gli algoritmi di consistenza rappresentano il probleam come un grafo di vincoli. 
+    Gli archi possono essere orientati o meno a seconda del tipo di relazione: a relazioni non simmetriche corrispondono archi orientati, a relazioni simmetriche archi non orientati o doppiamente orientati. 
+    I vincoli unari sono rappresentati da archi che iniziano e terminano sullo stesso nodo. 
+    Gli algoritmi di consistenza riducono il problema eliminando dai domini delle variabili i valori che non possono comparire in una soluzione finale. 
+  La node-consistency, o consistenza di grado 1, richiede che ogni valore $x_k \in D_k$ soddisfi i vincoli unari su $x_k$. 
+    Per rendere consistente un nodo è necessario eliminare dal dominio di $x_k$ i valori che violano i vincoli. 
+    Un grafo è consistente se lo sono tutti i suoi nodi. 
+    L'arc-consistency, o consistenza di grado 2, si ottiene partendo da un grafo node-consistent. 
+    Un arco $A(i, j)$ è consistente se per ogni valore $x \in D_i$ esiste almeno un $y \in D_j$ tale che il vincolo $c(i, j)$ tra $i$ e $j$ sia soddisfatto. 
+    La rimozione di alcuni valori dal dominio di una variabile rende necessarie ulteriori verifiche che coinvolgono i vincoli contenenti la stessa variabile, quindi si rende necessario ripetere il procedimento di rimozione fino a che la rete non raggiunge uno stato di \emph{quiescenza}. 
+    Il controllo della consistenza di un arco può essere applicato come passo di propagazione dopo ogni assegnamento. 
+    In questo caso si parla di \emph{maintaining arc-consistency} (MAC). 
+    L'algoritmo completo per il controllo di consistenza si chiama AC-3. 
+    AC-3 si serve di uan coda di archi alla quale, ogni volta che il dominio di una variabile $x_i$ viene ridotto, vengono aggiunti gli archi $A(x_k, x_i)$ per ogni variabile $x_k$ collegata da un arco incidente su $x_i$. 
+    Lo pseudocodice di AC-3 è il seguente: 
+\begin{verbatim}
+function ac3(csp) returns csp
+  q <- new queue
+  for each arc in csp do:
+    push(q, csp)
+  while q is not empty do:
+    xi, xj <- pop(q)
+    if remove_inconsistent_values(xi, xj) then:
+      for each xk in expand(csp, xi) do:
+        push(q, (xk, xi))
+  return csp
+
+function remove_inconsistent_value(xi, xj) returns boolean
+  removed <- false
+  for each x in domain(xi) do:
+    if not exists y in doman(xj) s.t. (xi, xj) is satisfied then:
+      delete(domain(xi), x)
+      removed <- true
+  return removed
+\end{verbatim}
+  \end{solution}
+
+\question Si introduca il trattamento della negazione in Prolog. Si spieghi la differenza con la negazione
+classica ed i problemi che può introdurre. Si mostri poi la sua realizzazione in Prolog.
+
+\question Si introduca il concetto di arc-consistenza, si mostri un esempio di rete arc-consistente
+e si delinei in pseudocodice l'algoritmo AC3.
+
+\question Dare il significato di euristica ammissibile, e enunciare le proprietà che ne derivano per l’algoritmo
+di ricerca A* che utilizzi una tale euristica.
+	\begin{solution}
+		Un'euristica $h(x)$ è ammissibile se, essendo $d(x)$ la vera distanza di un nodo $x$ dal nodo di arrivo e $V$ l'insieme dei nodi di un grafo, si ha $h(x) \leq d(x) \forall x \in V$, ovvero l'euristica è \emph{ottimistica}. 
+		Se la ricerca A* utilizza un'euristica ammissibile allora è garantito che restituirà la soluzone ottimale. 
+	\end{solution}
+\question Descrivere l’algoritmo di Forward Checking, e applicarlo a un problema CSP di esempio.
+\question Si confrontino in maniera concisa le proprietà (complessità spaziale, temporale, ottimalità e
+completezza) delle strategie di ricerca non informate.
+
+\question Si introducano le definizioni di correttezza e completezza di un sistema assiomatico deduttivo.
+
+\question Si introduca brevemente l’idea alla base degli algoritmi di propagazione dei vincoli rispetto alla
+tecnica “Standard Backtracking”, e si delineino sinteticamente le differenze tra “Forward Checking”,
+“Partial Look Ahead” e “Full Look Ahead”.
+\question Si descriva brevemente, con un esempio a supporto, in cosa consiste l’anomalia di Sussman.
+
+\question Si introduca brevemente il concetto di negazione per fallimento usato in Prolog.
+\question Si spieghi cosa si intende per pianificazione classica e per pianificazione reattiva, illustrandone le
+differenze, i vantaggi e gli svantaggi.
+\question Si spieghi brevemente in cosa consiste la ricerca locale, vantaggi e svantaggi e si specifichi
+l’algoritmo base dell’Hill-climbing.
+
+\question Si spieghi cosa è un constraint graph per un problema di CSP e si definiscano i diversi livelli di
+consistenza da quella di I grado (node consistency) al grado k.
+
+\question Si descrivano gli algoritmi per CSP che utilizzano attivamente i vincoli nel corso della ricerca. Si
+descrivano in particolare gli algoritmi di propagazione visti (dal Forward Checking al Partial e Full
+Look Ahead), discutendone le differenze su un esempio.
+\question Si descriva l’algoritmo di ricerca a costo uniforme, mostrando un semplice esempio. Se ne discutano le
+proprietà (completezza, ottimalità, etc.)
+\begin{solution}
+	L'algoritmo di ricerca a costo uniforme, o algoritmo di Dijkstra, è un algoritmo di ricerca del cammino minimo sui grafi. 
+  Si tratta di una ricerca in ampiezza nella quale i nodi non sono inseriti in una semplice coda ma in una coda di priorità, ordinata in modo tale che venga sempre estratto il nodo con la distanza minore dal nodo di partenza. 
+  Quando dalla coda viene estratto il nodo di 
+  La ricerca a costo uniforme è completa e ottimale, perché la prima volta che verrà espanso il nodo di arrivo la sua distanza dal nodo di partenza sarà minore di o uguale a quella di qualunque altro nodo in coda. 
+  La complessità temporale della ricerca a costo uniforme è $O(b^{1 + C^*/\epsilon})$ essendo $C^*$ il costo totale della soluzione ottimale  e $\epsilon$ il minimo costo di un arco. 
+	Lo pseudocodice per la ricerca a costo uniforme è il seguente:
+	\begin{verbatim}
+function dijkstra(graph, start, goal) returns solution or failure
+  q <- new priority_queue
+  dist_from_start <- new array
+  parent <- new array
+  for each u in graph do:
+    dist_from_start(u) <- inf
+    parent(u) <- null
+  dist_from_start(start) <- 0
+  parent(start) <- start
+	push(q, start)
+	while q is not empty do:
+	  u <- pop(q)
+    if u = goal then return dist_from_start(u)
+    for each child of u do:
+      new_dist <- dist_from_start(u) + dist(u, child) 
+      if new_dist <= dist_from_start(child) then:
+        dist_from_start(child) <- new_dist
+        parent(child) <- u
+        push(q, (child, dist_from_start(child)))
+  return failure
+	\end{verbatim}
+\end{solution}
+\question Si descriva cos’è l'unificazione e il problema relativo all’assenza di occur check nel linguaggio Prolog.
+
+\question Si descrivano brevemente le tecniche di propagazione di vincoli (FC, PLA, FLA) applicabili nella fase di
+ricerca di una soluzione su una modellazione CSP.
+\question Dopo avere brevemente introdotto le tecniche di propagazione di Forward Cheking (FC) e Partial (PLA) e
+Full (FLA) look ahead se ne mostri l’esecuzione su questo esempio mostrando la riduzione dei domini delle
+restanti variabile quando viene istanziata la variabile X1 a 4 (considerare le variabili secondo l’ordine del
+loro pedice):
+\question Si introduca il sistema STRIPS per la pianificazione, si spieghi come funziona e se ne evidenzino i limiti.
+
+\question Si descrivano, in maniera concisa, le proprietà di correttezza e di completezza di un sistema automatico di
+dimostrazione.
+\question Si descriva il trattamento della negazione in Prolog, si spieghi la differenza rispetto alla negazione classica
+nonché i limiti e problemi di utilizzo in alcuni casi. Se ne mostri poi l’implementazione nel linguaggio Prolog
+stesso.
+\question Si descrivano la ricerca depth-first (in profondità) e le sue proprietà (completezza, complessità in tempo e in spazio, ottimalità).
+
+\question Dopo aver brevemente introdotto il Partial Look Ahead (PLA), se ne mostri il funzionamento su un esempio
+\question Si confrontino in termini di complessità spaziale, temporale e ottimalità gli algoritmi di ricerca non-informata depthfirst, breadth first e ad approfondimento iterativo, immaginando che il costo degli archi sia sempre uguale a 1.
+
+
+\question Descrivere la ricerca A* e definire sotto quali condizioni tale algoritmo di ricerca trova la soluzione ottima.
+\begin{solution}
+  La ricerca A* è una versione informata della ricerca a costo uniforme nella quale i nodi non sono inseriti nella coda di priorità solo sulla base della loro distanza $g(x)$ dal nodo di partenza ma considerando invece il valore $f(x) = g(x) + h(x)$ essendo $h(x)$ una funzione euristica che stimi la distanza di un nodo $x$ dal nodo di arrivo. 
+  La ricerca A* trova la soluzione ottima se l'euristica è ammissibile (v. domanda relativa). 
+  Una condizione più forte dell'ammissibilità è la coerenza, che richiede che l'euristica rispetti la disuguaglianza triangolare, i.e. $h(x) <= d(x, y) + h(y)$ essendo $d(x, y)$ la distanza reale tra i nodi $x$ e $y$. 
+  Ogni euristica coerente è ammissibile, ma non vale il viceversa. 
+\end{solution}
+
+\question 
+Si spieghi brevemente il comportamento del predicato predefinito findall
+\question 
+Si spieghi brevemente il predicato predefinito Prolog: call(X) 
+Prolog:
+\question Si spieghi brevemente il predicato predefinito Prolog: not(X) 
+
+\question Si introduca brevemente il metodo di ricerca locale di Hill-climbing, sottolineandone le caratteristiche. Se ne descriva
+poi l’algoritmo in pseudo-codice.
+
+\question Si presentino le tecniche di consistenza e si descriva l'algoritmo di arc-consistenza in pseudocodice,
+dandone poi una esemplificazione di funzionamento su un grafo (rete) a vincoli.
+
+\question Si descriva il concetto di arc-consistenza per un constraint graph possibilmente con almeno un esempio e
+l’algoritmo per ottenerla (AC-3).
+
+\end{questions}
+
+
+\textbf{Disclaimer}:  Questo documento può contenere errori e imprecisioni che potrebbero danneggiare sistemi informatici, terminare relazioni e rapporti di lavoro, liberare le vesciche dei gatti sulla moquette e causare un conflitto termonucleare globale.
+Procedere con cautela.
+Questo documento è rilasciato sotto licenza CC-BY-SA 4.0. \ccbysa
+\end{document}
+

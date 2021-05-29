@@ -11,6 +11,7 @@ Included courses are:
 - 28873 - Microeconomics 1 (A.Y. 2020-2021)
 - 72937 - Computer Architecture M (A.Y. 2020-2021)
 - 72942 - Information Security M (A.Y. 2020-2021)
+- 72938 - Foundations of Artificial Intelligence M (A.Y. 2020-2021)
 
 ---
 
@@ -27,4 +28,4 @@ I corsi inclusi sono:
 - 28873 - Microeconomics 1 (A.A. 2020-2021)
 - 72937 - Calcolatori Elettronici M (A.A. 2020-2021)
 - 72942 - Sicurezza dell'Informazione M (A.A. 2020-2021)
-
+- 72938 - Fondamenti di Intelligenza Artificiale M (A.A. 2020-2021)
