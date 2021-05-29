@@ -9,7 +9,7 @@ Included courses are:
 - 28177 - Statistical Models (A.Y. 2019-2020)
 - 28021 - Software Engineering T (A.Y. 2019-2020)
 - 28873 - Microeconomics 1 (A.Y. 2020-2021)
-- 72937 - Electronic Calculators M (A.Y. 2020-2021)
+- 72937 - Computer Architecture M (A.Y. 2020-2021)
 - 72942 - Information Security M (A.Y. 2020-2021)
 
 ---
@@ -25,6 +25,6 @@ I corsi inclusi sono:
 - 28177 - Statistical Models (A.A. 2019-2020)
 - 28021 - Ingegneria del Software T (A.A. 2019-2020)
 - 28873 - Microeconomics 1 (A.A. 2020-2021)
-- 72937 - Calcolatori Elettronici M M (A.A. 2020-2021)
+- 72937 - Calcolatori Elettronici M (A.A. 2020-2021)
 - 72942 - Sicurezza dell'Informazione M (A.A. 2020-2021)
 
