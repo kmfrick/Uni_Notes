@@ -176,13 +176,9 @@ classica ed i problemi che può introdurre. Si mostri poi la sua realizzazione i
   \end{verbatim}
   La risposta è no, perchè? Perchè scambiando i letterali, il letterale negativo viene selezionato quando è ground.
   Per questo è buona regola di programmazione verificare che i goal negativi siano sempre ground al momento della selezione.
-    \end{solution}
 
-\question Si introduca il concetto di arc-consistenza, si mostri un esempio di rete arc-consistente
-e si delinei in pseudocodice l'algoritmo AC3.
-\begin{solution}
-  Si veda domanda n.2.
-\end{solution}
+  IMPLEMENTAZIONE DEL NOT IN PROLOG(?).
+    \end{solution}
 
 \question Dare il significato di euristica ammissibile, e enunciare le proprietà che ne derivano per l’algoritmo
 di ricerca A* che utilizzi una tale euristica.
@@ -191,31 +187,40 @@ di ricerca A* che utilizzi una tale euristica.
 		Se la ricerca A* utilizza un'euristica ammissibile allora è garantito che restituirà la soluzone ottimale. 
 	\end{solution}
 \question Descrivere l’algoritmo di Forward Checking, e applicarlo a un problema CSP di esempio.
+\begin{solution}
+  Vedere domanda 15
+\end{solution}
 \question Si confrontino in maniera concisa le proprietà (complessità spaziale, temporale, ottimalità e
 completezza) delle strategie di ricerca non informate.
 
-\question Si introducano le definizioni di correttezza e completezza di un sistema assiomatico deduttivo.
+\question Si introducano le definizioni di correttezza e completezza di un sistema assiomatico deduttivo. (cancellata una domanda uguale su un sistema assiomatico di dimostrazione. Confermare che
+sistema automatico di dimostrazione = sistema assiomatico deduttivo).
 
-\question Si introduca brevemente l’idea alla base degli algoritmi di propagazione dei vincoli rispetto alla
-tecnica “Standard Backtracking”, e si delineino sinteticamente le differenze tra “Forward Checking”,
-“Partial Look Ahead” e “Full Look Ahead”.
 \question Si descriva brevemente, con un esempio a supporto, in cosa consiste l’anomalia di Sussman.
 
-\question Si introduca brevemente il concetto di negazione per fallimento usato in Prolog.
-\begin{solution}
-  Si veda domanda numero 3.
-\end{solution}
 \question Si spieghi cosa si intende per pianificazione classica e per pianificazione reattiva, illustrandone le
 differenze, i vantaggi e gli svantaggi.
 \question Si spieghi brevemente in cosa consiste la ricerca locale, vantaggi e svantaggi e si specifichi
-l’algoritmo base dell’Hill-climbing.
+l’algoritmo dell’Hill-climbing, specificandone le caratteristiche.
 
 \question Si spieghi cosa è un constraint graph per un problema di CSP e si definiscano i diversi livelli di
 consistenza da quella di I grado (node consistency) al grado k.
+\begin{solution}
+  A differenza degli algoritmi di propagazione che propagano i vincoli in seguito a istanziazioni delle variabili coinvolte nel problema, le tecniche di consistena riducono il problema originale eliminando dai domini delle variabili i valori che non possono comparire in una soluzione finale.
+  Per applicare tali tecniche bisogna rappresentare il problema come una rete di vincoli, chiamata grado di vincoli (constraint graph). I nodi del constraint graph rappresentano le variabili del CSP, mentre gli archi rappresentano i vincoli tra tali variabili.
+  Si riportano di seguito i vari livelli di consistenza esistenti:
 
-\question Si descrivano gli algoritmi per CSP che utilizzano attivamente i vincoli nel corso della ricerca. Si
-descrivano in particolare gli algoritmi di propagazione visti (dal Forward Checking al Partial e Full
-Look Ahead), discutendone le differenze su un esempio.
+  -Livello 1 - Node Consistency: la consistenza di grado 1 riguarda un solo nodo. Si dice che un nodo è consistente se per ogni valore Xi appartente a Di il vincolo unario su Xi [P(Xi)] è soddisfatto.
+
+  -Livello 2 - Arc Consistency: la consistenza di grado 2 si ottiene da un grafo node consistent e riguarda 2 nodi del grafo. In particolare, questa consistenza verifica se un arco A(i, j) che collega due nodi Xi e Xj è consistente.
+  Un arco A(i, j) è consistente se per ogni valore x appartenente a Di, esiste almeno un valore y appartenente a Dj tale che il vincolo P(i, j) tra i e j sia soddisfatto.
+
+  -Livello 3 - Path Consistency: la consistenza di gtrado 3 si ottiene partendo da un grafo arc consistente e riguarda 3 nodi del grafo. Un cammino (Xi, Xj, Xk) è path consistente se, per ogni valore x appartenente a Di, e y appartenente a Dj (che rispettano la node e la arc consistenza) esiste un valore z appartenente a Dk che soddisfa i vincoli P(i, k) e P(k, j).
+  La consistenza del vincolo unario P(k) è garantita dalla node consistency della rete.
+
+  -Livello k - K-Consistency: scelti valori per ogni (k-1)-pla di variabili consistenti con i vincoli imposti dal problema, per ogni k-esima variabile si cerca un valore che soddisfa i vincoli tra tutte le k variabili. Se tale valore esiste allore le k variabili sono consistenti. In generale, se un grafo contenente n variabili è k-consistente con k < n, allora per trovare una soluzione è necessaria una ricerca nello spazio restante.
+\end{solution}
+
 \question Si descriva l’algoritmo di ricerca a costo uniforme, mostrando un semplice esempio. Se ne discutano le
 proprietà (completezza, ottimalità, etc.)
 \begin{solution}
@@ -250,25 +255,28 @@ function dijkstra(graph, start, goal) returns solution or failure
 \end{solution}
 \question Si descriva cos’è l'unificazione e il problema relativo all’assenza di occur check nel linguaggio Prolog.
 
-\question Si descrivano brevemente le tecniche di propagazione di vincoli (FC, PLA, FLA) applicabili nella fase di
-ricerca di una soluzione su una modellazione CSP.
-\question Dopo avere brevemente introdotto le tecniche di propagazione di Forward Cheking (FC) e Partial (PLA) e
-Full (FLA) look ahead se ne mostri l’esecuzione su questo esempio mostrando la riduzione dei domini delle
-restanti variabile quando viene istanziata la variabile X1 a 4 (considerare le variabili secondo l’ordine del
-loro pedice):
+\question Si descrivano gli algoritmi per CSP che utilizzano attivamente i vincoli nel corso della ricerca. Si descrivano in particolare gli algoritmi di propagazione visti (dal Forward Checking al Partial e Full Look Ahead), discutendone le differenze su un esempio.
+\begin{solution}
+Un CSP è un Constraints Satisfaction Problem, ovvero un problema di soddisfacimento vincoli in cui l'obiettivo è trovare uno stato del problema che soddisfi determinati vincoli.
+Un CSP può essere approcciato mediante tecniche di consistenza o algoritmi di propagazione. Gli algoritmi d propagazione sono metodi di ricerca che tentano di prevenire i fallimenti attraverso il pruning (potatura) dell'albero decisionale. Essi utilizzano cioè le relazioni tra le variabili del problema, ovvero i vincoli, per ridurre lo spazio 
+di ricerca prima di arrivare al fallimento. Rispetto allo Standard Backtracking, dunque, ad ogni assegnazione di variabile, gli algoritmi di propagazione aggiornano e controllano l'insieme di valori ammissibili (domini) di casciuna variabile ancora da istanziare (variabili future).
+
+-Forward Checking: l'assegnazione di un valore ad una variabile ha ripercussioni sull'insieme dei valori disponibili per le variabili ancora libere. In questo modo i vincoli agiscono in avanti (forward) eliminando dai domini delle variabili future i valori incompatibili con la variabile appena istanziata. Se ad un certo punto della computazione il dominio associato ad una variabile risulta vuoto, il meccanismo di Forward Checking fallisce e si esegue backtracking.
+
+- (Partial e Full) Look Ahead: come avviene nel Forward Checking, ad ogni istanziazione vien econtrollata la compatibilità dei vincoli contenenti la variabile appena assegnata con le precedenti (istanziate) e le successive (libere). Ma in più si guardano anche i vincoli tra coppie di variabili libere. Viene sviluppato cioè il cosiddetto look ahead che controlla l'esistenza, nei domini associati alle variabili ancora libere, di valori compatibili con i vincoli contenenti solo variabili ancora libere.
+Quindi i domini associati a ogni variabile vengono ridotti propagando anche le relazioni tra coppie di variabili non ancora istanziate. Viene verificato che sia possibile una futura assegnazione consistente fra coppie delle variabili libere.
+Esistono due strategie per questa tecnica: Partial Look Ahead (PLA) e Full Look Ahead (FLA). Nel PLA si ha una propagazione dei vincoli tra la variabile Xh \emph{non ancora istanziata} e le variabili future (Xh+1, Xh+2,...,Xh+n). 
+Nel FLA se Vk è il valore appena assegnato alla variabile Xk, si ha una propagazione dei vincoli tra la variabile Xh, non ancora istanziata, e tutte le variabili non ancora assegnate, ossia le variabili Xk+1,...,Xh-1,Xh+1,...,Xn.
+
+Adottando queste tecniche si hanno tre gradi di libertà: la scelta nell'ordinamento delle variabili, la scelta nell'ordine di selezione del valore da attribuire alla variabile corrente e la propagazione effettuata in ciascun nodo. Le prime due scelte riguardano le euristiche sulla strategia di ricerca (Es: MRV, most-constrained principle, least constraining principle).
+
+
+\end{solution}
+
 \question Si introduca il sistema STRIPS per la pianificazione, si spieghi come funziona e se ne evidenzino i limiti.
 
-\question Si descrivano, in maniera concisa, le proprietà di correttezza e di completezza di un sistema automatico di
-dimostrazione.
-\question Si descriva il trattamento della negazione in Prolog, si spieghi la differenza rispetto alla negazione classica
-nonché i limiti e problemi di utilizzo in alcuni casi. Se ne mostri poi l’implementazione nel linguaggio Prolog
-stesso.
-\begin{solution}
-  Si veda domanda n.3
-\end{solution}
 \question Si descrivano la ricerca depth-first (in profondità) e le sue proprietà (completezza, complessità in tempo e in spazio, ottimalità).
 
-\question Dopo aver brevemente introdotto il Partial Look Ahead (PLA), se ne mostri il funzionamento su un esempio
 \question Si confrontino in termini di complessità spaziale, temporale e ottimalità gli algoritmi di ricerca non-informata depthfirst, breadth first e ad approfondimento iterativo, immaginando che il costo degli archi sia sempre uguale a 1.
 
 
@@ -285,25 +293,6 @@ Si spieghi brevemente il comportamento del predicato predefinito findall
 \question 
 Si spieghi brevemente il predicato predefinito Prolog: call(X) 
 Prolog:
-\question Si spieghi brevemente il predicato predefinito Prolog: not(X)
-\begin{solution}
-  Si veda domanda n.3
-\end{solution}
-
-\question Si introduca brevemente il metodo di ricerca locale di Hill-climbing, sottolineandone le caratteristiche. Se ne descriva
-poi l’algoritmo in pseudo-codice.
-
-\question Si presentino le tecniche di consistenza e si descriva l'algoritmo di arc-consistenza in pseudocodice,
-dandone poi una esemplificazione di funzionamento su un grafo (rete) a vincoli.
-\begin{solution}
-  Si veda domanda n.2.
-\end{solution}
-
-\question Si descriva il concetto di arc-consistenza per un constraint graph possibilmente con almeno un esempio e
-l’algoritmo per ottenerla (AC-3).
-\begin{solution}
-  Si veda domanda n.2.
-\end{solution}
 
 \end{questions}
 
