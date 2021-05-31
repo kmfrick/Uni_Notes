@@ -106,9 +106,83 @@ function remove_inconsistent_value(xi, xj) returns boolean
 
 \question Si introduca il trattamento della negazione in Prolog. Si spieghi la differenza con la negazione
 classica ed i problemi che può introdurre. Si mostri poi la sua realizzazione in Prolog.
+\begin{solution}
+  La negazione classica, che è anche quella utilizzata nelle basi di dati, è basata sulla CWA (Closed World Assumption) in cui se un atomo "ground" A non è conseguenza logica di un programma P, allora si può inferire ~A.
+  Tuttavia non esiste alcun algoritmo in grado di stabilire in un tempo finito se A non è conseguenza logica di P a causa dell'indecidibiltà (semi-decidibilità) della logica del primo ordine. Attraverso l'aggiunta di nuovi assiomi alla teoria, infatti, si può modificare l'insieme di teoremi che valeva precedentemente.
+  È proprio per questo motivo che Prolog, così come ogni altro linguaggio logico, adotta una negazione per fallimento ("Negation as Failure" - NF). Essa si limita a derivare la negazione di atomi la cui derivazione termina con fallimento finito.
+  In particolare, i sistemi Prolog si basano sulla cosiddetta risoluzione SLDNF: per dimostrare ~A, dove A è un atomo, l'interprete del linguaggio cerca di costruire una dimostrazione per A.
+  Se la dimostrazione ha successo, allora la dimostrazione di ~A fallisce. Se, invece, la dimostrazione per A fallisce finitamente si considera ~A dimostrato con successo.
+  Il problema derivante da questa impostazione è una errata interpretazione dei quantificatori nel caso di letterali non "ground".
+  Si consideri il seguente programma:
+  \begin{verbatim}
+    capitale(roma).
+    capoluogo(bologna).
+    citta(X) :- capitale(X).
+    citta(X) :- capoluogo(X).
+  \end{verbatim}
+  E si consideri, a questo punto, il goal G:
+  \begin{verbatim}
+    \exists X ~capitale(X).
+  \end{verbatim}
+  Esiste una entità che non è capitale? Sì, Bologna.
+  Con la risoluzione SLDNF si cerca una dimostrazione per:
+  \begin{verbatim}
+    F = \exists X capitale(X).
+  \end{verbatim}
+  Dopo che si nega il risultato si ottiene:
+  \begin{verbatim}
+    F" = ~(\exists X capitale(X)).
+  \end{verbatim}
+  Che corrisponde a:
+  \begin{verbatim}
+    F" = \forall X (~capitale(X))
+  \end{verbatim}
+  Quindi se esiste una X che è capitale, F" fallisce, ma la query originaria era:
+  \begin{verbatim}
+    F= \exists X ~capitale(X).
+  \end{verbatim}
+  Ovvero dimostrare che esiste X che non è capitale, che è una query ben diversa.
+  Si rifletta, inoltre, sul fatto che Prolog adotta una regola di selezione dei letterali left-most (non safe). Questo può generare problemi perchè il significato logico di tali query è diverso da quello atteso.
+  A tal proposito si consideri il seguente programma:
+  \begin{verbatim}
+    disoccupato(X) :- 
+        adulto(X), ~(occupato(X)).
+    occupato(giovanni).
+    adulto(mario).
+  \end{verbatim}
+  Si riportano due query e le relative risposte da parte del programma:
+  \begin{verbatim}
+    ?- ~(occupato(giovanni)).
+    -> yes
+    ?- ~(occupato(mario)).
+    -> yes
+  \end{verbatim}
+  Tuttavia alla seguente query si ottiene la relativa risposta:
+  \begin{verbatim}
+    ?- disoccupato(X).
+    -> yes X=mario
+  \end{verbatim}
+  A questo punto consideriamo lo stesso programma, ma con i due sottogoal nel corpo della clausola scambiati:
+  \begin{verbatim}
+    disoccupato(X) :- 
+        ~(occupato(X)), adulto(X).
+    occupato(giovanni).
+    adulto(mario).
+  \end{verbatim}
+  E la risposta alla query:
+  \begin{verbatim}
+    ?- disoccupato(X).
+    -> no
+  \end{verbatim}
+  La risposta è no, perchè? Perchè scambiando i letterali, il letterale negativo viene selezionato quando è ground.
+  Per questo è buona regola di programmazione verificare che i goal negativi siano sempre ground al momento della selezione.
+    \end{solution}
 
 \question Si introduca il concetto di arc-consistenza, si mostri un esempio di rete arc-consistente
 e si delinei in pseudocodice l'algoritmo AC3.
+\begin{solution}
+  Si veda domanda n.2.
+\end{solution}
 
 \question Dare il significato di euristica ammissibile, e enunciare le proprietà che ne derivano per l’algoritmo
 di ricerca A* che utilizzi una tale euristica.
@@ -128,6 +202,9 @@ tecnica “Standard Backtracking”, e si delineino sinteticamente le differenze
 \question Si descriva brevemente, con un esempio a supporto, in cosa consiste l’anomalia di Sussman.
 
 \question Si introduca brevemente il concetto di negazione per fallimento usato in Prolog.
+\begin{solution}
+  Si veda domanda numero 3.
+\end{solution}
 \question Si spieghi cosa si intende per pianificazione classica e per pianificazione reattiva, illustrandone le
 differenze, i vantaggi e gli svantaggi.
 \question Si spieghi brevemente in cosa consiste la ricerca locale, vantaggi e svantaggi e si specifichi
@@ -186,6 +263,9 @@ dimostrazione.
 \question Si descriva il trattamento della negazione in Prolog, si spieghi la differenza rispetto alla negazione classica
 nonché i limiti e problemi di utilizzo in alcuni casi. Se ne mostri poi l’implementazione nel linguaggio Prolog
 stesso.
+\begin{solution}
+  Si veda domanda n.3
+\end{solution}
 \question Si descrivano la ricerca depth-first (in profondità) e le sue proprietà (completezza, complessità in tempo e in spazio, ottimalità).
 
 \question Dopo aver brevemente introdotto il Partial Look Ahead (PLA), se ne mostri il funzionamento su un esempio
@@ -205,16 +285,25 @@ Si spieghi brevemente il comportamento del predicato predefinito findall
 \question 
 Si spieghi brevemente il predicato predefinito Prolog: call(X) 
 Prolog:
-\question Si spieghi brevemente il predicato predefinito Prolog: not(X) 
+\question Si spieghi brevemente il predicato predefinito Prolog: not(X)
+\begin{solution}
+  Si veda domanda n.3
+\end{solution}
 
 \question Si introduca brevemente il metodo di ricerca locale di Hill-climbing, sottolineandone le caratteristiche. Se ne descriva
 poi l’algoritmo in pseudo-codice.
 
 \question Si presentino le tecniche di consistenza e si descriva l'algoritmo di arc-consistenza in pseudocodice,
 dandone poi una esemplificazione di funzionamento su un grafo (rete) a vincoli.
+\begin{solution}
+  Si veda domanda n.2.
+\end{solution}
 
 \question Si descriva il concetto di arc-consistenza per un constraint graph possibilmente con almeno un esempio e
 l’algoritmo per ottenerla (AC-3).
+\begin{solution}
+  Si veda domanda n.2.
+\end{solution}
 
 \end{questions}
 
