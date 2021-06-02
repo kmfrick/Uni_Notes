@@ -25,6 +25,7 @@
 \author{Kevin Michael Frick}
 \begin{document}
 \maketitle
+\textbf{Titoli di testa}: Ringrazio di cuore Corinna e Giacomo per l’aiuto nella stesura di questo documento, nella preparazione di questo esame e soprattutto nella conservazione, pur stentata, della sanit`a mentale. Vi si vuole bene ragazz*.
 \begin{questions}
 \question \textbf{Meccanismi crittografici di base}
 \begin{parts}
@@ -640,7 +641,7 @@ SSL/TLS è strutturato in più protocolli: handshake, change cipherspec, alert, 
 		\item Change cipherspec si occupa di rinegoziare, se necessario, i parametri e i meccanismi della connessione. È un rpotocollo a livello applicativo.
 		\item Alert si occupa di gestire eventuali segnalazioni di allarme. È un protocollo a livello applicativo. 
 		\item Record  si occupa effettivamente di calcolare e verificare le firme e di cifrare e decifrare i dati. È un protocollo a livello di trasporto che realizza il concetto di sessione e connessione.  
-
+	\end{itemize}
 Il protocollo record realizza il concetto di sessione e connessione: il protocollo di handshake definisce una sessione, all'interno della quale vengono create più connessioni che utilizzano gli stessi parametri crittografici.
 La cifratura avviene in maniera simmetrica, mentre autenticazione e integrità sono garantite da HMAC.
 Lo stato di una sessione è definito da un ID, dal certificato X.509 del server, dai metodi di compressione, hashing e cifratura, e dal master secret che verrà usato per produrre le chiavi di sessione. 
