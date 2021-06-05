@@ -107,11 +107,11 @@ function remove_inconsistent_value(xi, xj) returns boolean
 \question Si introduca il trattamento della negazione in Prolog. Si spieghi la differenza con la negazione
 classica ed i problemi che può introdurre. Si mostri poi la sua realizzazione in Prolog.
 \begin{solution}
-  La negazione classica, che è anche quella utilizzata nelle basi di dati, è basata sulla CWA (Closed World Assumption) in cui se un atomo "ground" A non è conseguenza logica di un programma P, allora si può inferire !A.
+  La negazione classica, che è anche quella utilizzata nelle basi di dati, è basata sulla CWA (Closed World Assumption) in cui se un atomo "ground" A non è conseguenza logica di un programma P, allora si può inferire $\sim A$.
   Tuttavia non esiste alcun algoritmo in grado di stabilire in un tempo finito se A non è conseguenza logica di P a causa dell'indecidibiltà (semi-decidibilità) della logica del primo ordine. Attraverso l'aggiunta di nuovi assiomi alla teoria, infatti, si può modificare l'insieme di teoremi che valeva precedentemente.
   È proprio per questo motivo che Prolog, così come ogni altro linguaggio logico, adotta una negazione per fallimento ("Negation as Failure" - NF). Essa si limita a derivare la negazione di atomi la cui derivazione termina con fallimento finito.
-  In particolare, i sistemi Prolog si basano sulla cosiddetta risoluzione SLDNF: per dimostrare !A, dove A è un atomo, l'interprete del linguaggio cerca di costruire una dimostrazione per A.
-  Se la dimostrazione ha successo, allora la dimostrazione di !A fallisce. Se, invece, la dimostrazione per A fallisce finitamente si considera !A dimostrato con successo.
+  In particolare, i sistemi Prolog si basano sulla cosiddetta risoluzione SLDNF: per dimostrare $\sim A$, dove A è un atomo, l'interprete del linguaggio cerca di costruire una dimostrazione per A.
+  Se la dimostrazione ha successo, allora la dimostrazione di $\sim A$ fallisce. Se, invece, la dimostrazione per A fallisce finitamente si considera $\sim A$ dimostrato con successo.
   Il problema derivante da questa impostazione è una errata interpretazione dei quantificatori nel caso di letterali non "ground".
   Si consideri il seguente programma:
   \begin{verbatim}
@@ -121,40 +121,39 @@ classica ed i problemi che può introdurre. Si mostri poi la sua realizzazione i
     citta(X) :- capoluogo(X).
   \end{verbatim}
   E si consideri, a questo punto, il goal G:
-  \begin{verbatim}
-    \exists X ~capitale(X).
-  \end{verbatim}
+  \begin{equation*}
+    \exists X \sim capitale(X).
+  \end{equation*}
   Esiste una entità che non è capitale, ovvero Bologna.
   Con la risoluzione SLDNF si cerca una dimostrazione per:
-  \begin{verbatim}
+  \begin{equation*}
     F = \exists X capitale(X).
-  \end{verbatim}
+  \end{equation*}
   Dopo che si nega il risultato si ottiene:
-  \begin{verbatim}
-    F" = ~(\exists X capitale(X)).
-  \end{verbatim}
+  \begin{equation*}
+    \sim F = \sim(\exists X capitale(X)).
+  \end{equation*}
   Che corrisponde a:
-  \begin{verbatim}
-    F" = \forall X (~capitale(X))
-  \end{verbatim}
-  Quindi se esiste una X che è capitale, F'' fallisce, ma la query originaria era:
-  \begin{verbatim}
-    F= \exists X ~capitale(X).
-  \end{verbatim}
+  \begin{equation*}
+    \sim F = \forall X (\sim capitale(X))
+  \end{equation*}
+  Quindi se esiste una X che è capitale, $\sim F$ fallisce, ma la query originaria era:
+  \begin{equation*}
+    F= \exists X \sim capitale(X).
+  \end{equation*}
   Ovvero dimostrare che esiste X che non è capitale, che è una query ben diversa.
   Si rifletta, inoltre, sul fatto che Prolog adotta una regola di selezione dei letterali left-most (non safe). Questo può generare problemi perchè il significato logico di tali query è diverso da quello atteso.
   A tal proposito si consideri il seguente programma:
   \begin{verbatim}
-    disoccupato(X) :- 
-        adulto(X), ~(occupato(X)).
+    disoccupato(X) :- adulto(X), \+(occupato(X)).
     occupato(giovanni).
     adulto(mario).
   \end{verbatim}
   Si riportano due query e le relative risposte da parte del programma:
   \begin{verbatim}
-    ?- ~(occupato(giovanni)).
+    ?- \+(occupato(giovanni)).
     -> no
-    ?- ~(occupato(mario)).
+    ?- \+(occupato(mario)).
     -> yes
   \end{verbatim}
   Alla seguente query si ottiene la relativa risposta:
@@ -164,8 +163,7 @@ classica ed i problemi che può introdurre. Si mostri poi la sua realizzazione i
   \end{verbatim}
   A questo punto consideriamo lo stesso programma, ma con i due sottogoal nel corpo della clausola scambiati:
   \begin{verbatim}
-    disoccupato(X) :- 
-        ~(occupato(X)), adulto(X).
+    disoccupato(X) :- \+(occupato(X)), adulto(X).
     occupato(giovanni).
     adulto(mario).
   \end{verbatim}
@@ -201,6 +199,7 @@ false.
   \end{verbatim}
   Si noti l'utilizzo del metapredicato fail che forza il fallimento di una dimostrazione dell'interprete prolog.
     \end{solution}
+
 
 \question Dare il significato di euristica ammissibile, e enunciare le proprietà che ne derivano per l’algoritmo
 di ricerca A* che utilizzi una tale euristica.
@@ -333,7 +332,7 @@ proprietà (completezza, ottimalità, etc.)
   La ricerca a costo uniforme è completa e ottimale, perché la prima volta che verrà espanso il nodo di arrivo la sua distanza dal nodo di partenza sarà minore di o uguale a quella di qualunque altro nodo in coda. 
   La complessità temporale della ricerca a costo uniforme è $O(b^{1 + C^*/\epsilon})$ essendo $C^*$ il costo totale della soluzione ottimale  e $\epsilon$ il minimo costo di un arco. 
 	Lo pseudocodice per la ricerca a costo uniforme è il seguente:
-	\begin{verbatim}
+  \begin{verbatim}
 function dijkstra(graph, start, goal) returns solution or failure
   q <- new priority_queue
   dist_from_start <- new array
@@ -343,9 +342,9 @@ function dijkstra(graph, start, goal) returns solution or failure
     parent(u) <- null
   dist_from_start(start) <- 0
   parent(start) <- start
-	push(q, start)
-	while q is not empty do:
-	  u <- pop(q)
+  push(q, start)
+  while q is not empty do:
+    u <- pop(q)
     if u = goal then return dist_from_start(u)
     for each child of u do:
       new_dist <- dist_from_start(u) + dist(u, child) 
