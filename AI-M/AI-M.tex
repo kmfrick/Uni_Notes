@@ -194,7 +194,7 @@ false.
   \end{verbatim}
   Una possibile implementazione della negazione in prolog è la seguente: \newline
   \begin{verbatim}
-    not(A):- A, !, fail.
+    not(A):- call(A), !, fail.
     not(A).
   \end{verbatim}
   Si noti l'utilizzo del metapredicato fail che forza il fallimento di una dimostrazione dell'interprete prolog.
