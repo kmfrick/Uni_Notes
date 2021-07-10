@@ -94,7 +94,7 @@ Le tre forme sono equivalenti, poiché\\ (1) una variabile libera può essere so
 \question Assunzioni dell'algoritmo del simplesso
 \begin{solution}
 \begin{enumerate}
- \item Si considera solo la forma standard con $m < n$ (n.b. gli altri casi non hanno senso: m=n ha una sola soluzione, $m\ge n$ non ammette soluzioni). non fa perdere di generalità all'algoritmo.
+ \item Si considera solo la forma standard con $m < n$ (n.b. gli altri casi non hanno senso: m=n ha una sola soluzione, $m > n$ non ammette soluzioni) non fa perdere di generalità all'algoritmo.
  \item La matrice A contiene m colonne $A_{j}$ linearmente indipendenti, ossia la matrice A è di rango m. L'algoritmo deve verificare se ciò non è soddisfatto e trovare una soluzione ottima.
  \item La regione ammissibile non è vuota, ovvero esiste sempre una soluzione ammissibile, ed è limitata nella direzione di decrescita della funzione obiettivo, ovvero il valore della soluzione non tende a $-\infty$. L'algoritmo deve verificare se ciò non è soddisfatto e trovare una soluzione ottima.
 \end{enumerate}
@@ -105,7 +105,7 @@ Si dice base della matrice A un insieme m di colonne linearmente indipendenti. I
 \end{solution}
 \question Soluzione base
 \begin{solution}
-Si dice soluzione base corrispondente a $\mathcal{B}$ la soluzione ottenuta sfruttando gli n-m gradi di libertà del sistema Ax=b per (1) fissare a 0 il valore delle variabili fuori base, (2) determinare \emph{l'unica soluzione} del sistema quadrato $Bx_{\mathcal{B}}=b$ risultante, con $x_{\mathcal{B}}$ sottovettore di x corrispondente alle varabili base. Una SBA soddisfa sicuramente $Ax=b$.
+Si dice soluzione base corrispondente a $\mathcal{B}$ la soluzione ottenuta sfruttando gli n-m gradi di libertà del sistema Ax=b per (1) fissare a 0 il valore delle variabili fuori base, (2) determinare \emph{l'unica soluzione} del sistema quadrato $Bx_{\mathcal{B}}=b$ risultante, con $x_{\mathcal{B}}$ sottovettore di x corrispondente alle variabili base. Una SBA soddisfa sicuramente $Ax=b$.
 \end{solution}
 \question Soluzione base ammissibile (SBA)
 \begin{solution}
@@ -113,11 +113,11 @@ Una soluzione è detta SBA se, oltre a soddisfare $Ax=b$, soddisfa anche il vinc
 \end{solution}
 \question Iperpiano
 \begin{solution}
-Dati uno spazio $R^{d}$ di dimensione d, un vettore $h\ne 0$ di d elementi e uno scalare g, l'iperpiano è l'insieme di punti di $R^{d}$ che verifica l'uguaglianza $h'x = g$.\\ Un iperpiano suddivide lo spazio in due semispazi, rispettivamente definiti da $h'x \ge g$ e $h'x \le g$
+Dati uno spazio $R^{d}$ di dimensione d, un vettore $h'\ne 0$ di d elementi e uno scalare g, l'iperpiano è l'insieme di punti di $R^{d}$ che verifica l'uguaglianza $h'x = g$.\\ Un iperpiano suddivide lo spazio in due semispazi, rispettivamente definiti da $h'x \ge g$ e $h'x \le g$
 \end{solution}
 \question Proprietà dei semispazi
 \begin{solution}
-Dato che uno spazio è un insieme convesso e un semispazio è un sottoinsieme di un semispazio, il semispazio è un insieme convesso. Di conseguenza, un'intersezione di semispazi è un insieme convesso a sua volta.
+Dato che uno spazio è un insieme convesso e un semispazio è un sottoinsieme di uno spazio, il semispazio è un insieme convesso. Di conseguenza, un'intersezione di semispazi è un insieme convesso a sua volta.
 \end{solution}
 \question Politopo convesso
 \begin{solution}
