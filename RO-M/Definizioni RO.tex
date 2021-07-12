@@ -291,7 +291,13 @@ Nel simplesso primale ci si sposta da SBA a SBA, in quello duale da SB inammissi
 \end{solution}
 \question Affinità-divergenze tra il problema primale e duale
 \begin{solution}
-	%TODO
+	Il duale di un problema di minimo è un problema di massimo nel quale:
+	\begin{itemize}
+		\item i vincoli di uguaglianza ($a_i^T x = b_i$) corrispondono a variabili $\pi_i$ libere in segno, i cui costi sono i termini noti del primale
+		\item i vincoli di disuguaglianza ($a_i^T x \geq b_i$) corrispondono a variabili $\pi_i \geq 0$, i cui costi sono i termini noti del primale
+		\item le variabili non negative primali ($x_j \geq 0$) corrispondono a vincoli di disuguaglianza $\pi^T A_j \leq c_j$, i cui termini noti sono i costi del primale
+		\item le variabili  libere in segno primali corrispondono a vincoli di uguaglianza $\pi^T A_j = c_j$ i cui termini noti sono i costi del primale
+	\end{itemize}
 \end{solution}
 \question Duale e fase 1
 \begin{solution}
