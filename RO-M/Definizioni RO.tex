@@ -245,7 +245,7 @@ Si ottiene una SBA corrispondente alla base con le variabili artificiali. Poich�
 
 \section{Capitolo 5: Dualità}
 \begin{questions}
-\question Proprietà della dualità
+\question Dualità forte
 \begin{solution}
 Se un problema primale di LP ha soluzione ottima finita, allora anche il suo duale la ha e le due soluzioni sono uguali.
 \end{solution}
@@ -278,7 +278,8 @@ Solo uno tra i due sistemi $Ax=b, x\ge0$ e $y'A\le0, b'y>0$ è possibile. Il pri
 \end{solution}
 \question Complementary slackness
 \begin{solution}
-Per ogni \emph{i}, o l'\emph{i}-esima variabile duale è nulla o l'\emph{i}-esimo vincolo è risolto all'uguaglianza; per ogni \emph{j}, o il \emph{j}-esimo vincolo duale è risolto all'uguaglianza o l'\emph{i}-esima variabile primale è nulla.  
+Siano $x, \pi$ due soluzioni ammissibili per il primale e il duale.
+	Esse sono ottime se e solo se per ogni \emph{i}, o l'\emph{i}-esima variabile duale è nulla o l'\emph{i}-esimo vincolo è risolto all'uguaglianza; per ogni \emph{j}, o il \emph{j}-esimo vincolo duale è risolto all'uguaglianza o l'\emph{i}-esima variabile primale è nulla.
 \end{solution}
 \question Algoritmo del simplesso duale
 \begin{solution}
@@ -287,6 +288,10 @@ L'algoritmo del simplesso duale mantiene una soluzione ammissibile per il duale 
 \question Affinità-divergenze tra il simplesso primale e duale nel risolvere LP 
 \begin{solution}
 Nel simplesso primale ci si sposta da SBA a SBA, in quello duale da SB inammissibile a inammissibile. Nel primo caso z parte da un valore superiore all'ottimo e decresce, nel duale da uno inferiore e cresce. Nel primale si sceglie prima la variabile che entra in base, nel duale quella che la lascia; poi nel primale si sceglie la variabile che lascia la base, nel duale quella che entra. Nel primale il pivot è dato dal minore tra i valori positivi, nel duale dal maggiore tra quelli negativi.
+\end{solution}
+\question Affinità-divergenze tra il problema primale e duale
+\begin{solution}
+	%TODO
 \end{solution}
 \question Duale e fase 1
 \begin{solution}
