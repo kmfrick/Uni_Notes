@@ -21,77 +21,96 @@
 \setlength{\columnseprule}{.4pt}
 \renewcommand{\solutiontitle}{\noindent\textbf{R:}\enspace}
 \def\dbar{{\mathchar'26\mkern-12mu d}}
+\renewcommand{\thepartno}{\arabic{partno}}
 \title{Ricerca Operativa M}
 \author{Kevin Michael Frick \and Corinna Marchili}
 \begin{document}
 \maketitle
-
-\section{Capitolo 2: Programmazione matematica}
 \begin{questions}
-\question Problema di programmazione non lineare
+\setcounter{question}{1}
+
+	\question \textbf{Programmazione matematica}
+\begin{parts}
+
+\part Problema di programmazione non lineare
 \begin{solution}
 Un problema di programmazione non lineare minimizza una funzione obiettivo f(x) che rispetti i vincoli $h_j(x)=0$ e $g_i(x)\ge0$ per (j=1,...,p) e (i=1,...,q), con f,h e g su cui non si effettua alcuna assunzione. Non è risolvibile efficientemente.
 \end{solution}
-\question Intorno
+
+\part Intorno
 \begin{solution}
 Si definisce intorno una funzione che associa ad un insieme F un suo qualsiasi sottoinsieme (N: F $\mapsto$ $2^{F}$ con N funzione, $2^{F}$ insieme di tutti i possibili sottoinsiemi di F).
 \end{solution}
-\question Intorno euclideo
+
+\part Intorno euclideo
 \begin{solution}
 Si definisce intorno euclideo la funzione che associa ad ogni punto x della regione ammissibile un sottoinsieme di tutti i punti y che distano meno di $\epsilon$ da x.
 \end{solution}
-\question Intorno esatto
+
+\part Intorno esatto
 \begin{solution}
 Dato un problema (F,d) ed un intorno N, l'intorno N è detto esatto se un punto $f \in F$ è localmente ottimo rispetto ad N, allora f è globalmente ottimo.
 \end{solution}
-\question Ottimo locale
+
+\part Ottimo locale
 \begin{solution}
 Dato un problema (F,d) ed un intorno N, si dice che $f \in F$ è localmente ottimo in N se vale $d(f) \le d(y)$ per ogni y nell'intorno di f, ovvero se f è migliore di ogni punto del sottoinsieme di F associato ad f.  
 \end{solution}
-\question Combinazione convessa di due punti
+
+\part Combinazione convessa di due punti
 \begin{solution}
 Dati due punti $x,y \in R^{n}$, si dice combinazione convessa di x e y qualunque punto $w \in R^{n}$ definito da $w= \lambda x+ (1-\lambda) y$. Al variare di $\lambda$ la combinazione convessa w descrive tutti i punti del segmento.
 \end{solution}
-\question Insieme convesso
+
+\part Insieme convesso
 \begin{solution}
 Un insieme $S \subseteq R^{n}$ è un insieme convesso se il segmento che congiunge due punti qualsiasi di S appartiene interamente ad S stesso.\\
 \textcolor{red}{Proprietà}: Dati n insiemi $S_{i}$ convessi, la loro intersezione è un insieme convesso.
 \end{solution}
-\question Funzione convessa
+
+\part Funzione convessa
 \begin{solution}
 Dati un insieme $S \subseteq R^{n}$ convesso e una funzione c: $S \mapsto$ $R^{1}$, c è una funzione convessa in S se la corda che congiunge due punti qualsiasi della funzione sta al di sopra della funzione stessa.\\
 \textcolor{red}{Proprietà}: Comunque si scelga un valore soglia t per produrre una restrizione di S, questa è a sua volta un insieme convesso, ovvero l'insieme $S_{t} = \{w \in R^{n} : c(x) \le t\}$.
 \end{solution}
-\question Funzione concava
+
+\part Funzione concava
 \begin{solution}
 Una funzione c(x) definita su un insieme S convesso è detta concava se -c(x) è convessa in S (prosaicamente, una funzione convessa si protende verso il basso mentre una funzione concava si protende verso l'alto). Una funzione lineare è sia concava che convessa.
 \end{solution}
-\question Problema di programmazione convessa
+
+\part Problema di programmazione convessa
 \begin{solution}
 Se la funzione obiettivo è convessa, le funzioni $h_{j}$ sono lineari per ogni j e le funzioni $g_{i}$ sono concave per ogni i, allora il problema di programmazione è detto di programmazione convessa.\\
 La programmazione convessa gode della proprietà secondo la quale dato un problema (F,c) con F convessa e c convessa su F, l'intorno euclideo $N_{\epsilon}t = \{y \in F : \rVert x-y \rVert \le \epsilon\}$ è esatto per qualunque $\epsilon >0$.
 \end{solution}
-\end{questions}
+\end{parts}
 
-\section{Capitolo 3: Programmazione lineare}
-\begin{questions}
-\question Forma generale
+
+\question \textbf{Programmazione lineare}
+\begin{parts}
+
+\part Forma generale
 \begin{solution}
 Sia A una matrice intera di m righe ed n colonne; b un vettore intero di m elementi, c un vettore intero di n elementi. Sia $(M, \stackrel{-}{M})$ una partizione delle righe $\{1,\ldots, m\}$ di A e $(N, \stackrel{-}{N})$ una partizione delle colonne $\{1,\ldots, n\}$ di A. La forma generale prevede un vincolo di uguaglianza per i vincoli in M e di $\ge$ per i vincoli in $\stackrel{-}{M}$; le variabili in N sono non negative mentre quelle in $\stackrel{-}{N}$ sono libere.
 \end{solution}
-\question Forma canonica
+
+\part Forma canonica
 \begin{solution}
 Nella forma canonica tutti i vincoli sono espressi da disequazioni e tutte le variabili sono non negative.
 \end{solution}
-\question Forma standard
+
+\part Forma standard
 \begin{solution}
 Nella forma standard tutti i vincoli sono espressi da equazioni e tutte le variabili sono non negative.
 \end{solution}
-\question Equivalenza delle forme
+
+\part Equivalenza delle forme
 \begin{solution}
 Le tre forme sono equivalenti, poiché\\ (1) una variabile libera può essere sostituita da $x_{j}^{+} - x_{j}^{-}$, entrambe non negative;\\ (2) un vincolo di uguaglianza può essere sostituito da due vincoli di disuguaglianza con versi opposti;\\(3) un vincolo di $\ge$ è equivalente ad un vincolo di uguaglianza se si sottrae una \emph{variabile surplus} positiva al primo termine della disuguaglianza;\\(4) un vincolo di $\le$ è equivalente ad un vincolo di uguaglianza se si aggiunge una \emph{variabile slack} positiva al primo termine della disuguaglianza.\\Applicare 1, 3, 4 aumenta il numero di colonne n, applicare 2 aumenta il numero di righe m.
 \end{solution}
-\question Assunzioni dell'algoritmo del simplesso
+
+\part Assunzioni dell'algoritmo del simplesso
 \begin{solution}
 \begin{enumerate}
  \item Si considera solo la forma standard con $m < n$ (n.b. gli altri casi non hanno senso: m=n ha una sola soluzione, $m > n$ non ammette soluzioni) non fa perdere di generalità all'algoritmo.
@@ -99,35 +118,43 @@ Le tre forme sono equivalenti, poiché\\ (1) una variabile libera può essere so
  \item La regione ammissibile non è vuota, ovvero esiste sempre una soluzione ammissibile, ed è limitata nella direzione di decrescita della funzione obiettivo, ovvero il valore della soluzione non tende a $-\infty$. L'algoritmo deve verificare se ciò non è soddisfatto e trovare una soluzione ottima.
 \end{enumerate}
 \end{solution}
-\question Base
+
+\part Base
 \begin{solution}
 Si dice base della matrice A un insieme m di colonne linearmente indipendenti. Indicando con $\mathcal{B}(i), (1,\ldots, m)$ gli indici delle colonne, indichiamo una base con $\mathcal{B} = \{A_{\mathcal{B}_{1}}, \ldots, A_{\mathcal{B}_{m}}\}$. Una base individua una sottomatrice quadrata m x m $B =[A_{\mathcal{B}_{i}}]$
 \end{solution}
-\question Soluzione base
+
+\part Soluzione base
 \begin{solution}
 Si dice soluzione base corrispondente a $\mathcal{B}$ la soluzione ottenuta sfruttando gli n-m gradi di libertà del sistema Ax=b per (1) fissare a 0 il valore delle variabili fuori base, (2) determinare \emph{l'unica soluzione} del sistema quadrato $Bx_{\mathcal{B}}=b$ risultante, con $x_{\mathcal{B}}$ sottovettore di x corrispondente alle variabili base. Una SBA soddisfa sicuramente $Ax=b$.
 \end{solution}
-\question Soluzione base ammissibile (SBA)
+
+\part Soluzione base ammissibile (SBA)
 \begin{solution}
 Una soluzione è detta SBA se, oltre a soddisfare $Ax=b$, soddisfa anche il vincolo $x \ge 0$.
 \end{solution}
-\question Iperpiano
+
+\part Iperpiano
 \begin{solution}
-Dati uno spazio $R^{d}$ di dimensione d, un vettore $h'\ne 0$ di d elementi e uno scalare g, l'iperpiano è l'insieme di punti di $R^{d}$ che verifica l'uguaglianza $h'x = g$.\\ Un iperpiano suddivide lo spazio in due semispazi, rispettivamente definiti da $h'x \ge g$ e $h'x \le g$
+Dati uno spazio $R^{d}$ di dimensione d, un vettore $h^T\ne 0$ di d elementi e uno scalare g, l'iperpiano è l'insieme di punti di $R^{d}$ che verifica l'uguaglianza $h^T x = g$.\\ Un iperpiano suddivide lo spazio in due semispazi, rispettivamente definiti da $h^T x \ge g$ e $h^Tx \le g$
 \end{solution}
-\question Proprietà dei semispazi
+
+\part Proprietà dei semispazi
 \begin{solution}
 Dato che uno spazio è un insieme convesso e un semispazio è un sottoinsieme di uno spazio, il semispazio è un insieme convesso. Di conseguenza, un'intersezione di semispazi è un insieme convesso a sua volta.
 \end{solution}
-\question Politopo convesso
+
+\part Politopo convesso
 \begin{solution}
 L'intersezione di un numero finito di semispazi è detta politopo convesso. Talvolta questa intersezione deve essere limitata e non vuota. La dimensione massima di un politopo è la minima dimensione di uno spazio che lo può contenere, pertanto la dimensione di un politopo può essere inferiore a quella dello spazio in cui è rappresentato. L'insieme dei vincoli di un LP definisce un politopo.
 \end{solution}
-\question Regione ammissibile di un LP
+
+\part Regione ammissibile di un LP
 \begin{solution}
 La regione ammissibile di un LP è un politopo (perché ogni LP può essere sempre posto in forma canonica ed avere una regione ammissibile definita dall'intersezione di semispazi.)
 \end{solution}
-\question Faccia, faccetta, spigolo, vertice
+
+\part Faccia, faccetta, spigolo, vertice
 \begin{solution}
 Dati un politopo P, un iperpiano H ed un semispazio HS definito da H, sia f l'intersezione tra P e HS. Se l'intersezione f è non vuota e rappresenta un sottoinsieme dell'iperpiano H, allora f è detta \emph{faccia} di P.
 Se il politopo è di dimensione d:
@@ -137,98 +164,120 @@ Se il politopo è di dimensione d:
 \item una faccia di dimensione 0 è detta \emph{vertice}.
 \end{enumerate}
 \end{solution}
-\question Combinazione convessa di p punti
+
+\part Combinazione convessa di p punti
 \begin{solution}
 La combinazione convessa di p punti $x^{(1)}, \ldots , x^{(p)} \in R^{n}$ è il punto $w = \sum_{i=1}^p \alpha_{i} x^{(i)}$, con $\sum_{i=1}^p \alpha_{i} = 1$ e $\alpha_{i} \ge 0$.
 \end{solution}
-\question Vertici 
+
+\part Vertici 
 \begin{solution}
 Ogni punto di un politopo è combinazione convessa dei vertici, ogni combinazione convessa dei vertici è un punto del politopo. Un vertice \textbf{non} è combinazione stretta ($0< \lambda <1$) di due punti distinti del politopo.
 \end{solution}
-\question Vertici e SBA
+
+\part Vertici e SBA
 \begin{solution}
 Dato un politopo P definito dai vincoli di un LP, condizione necessaria e sufficiente perché un punto sia un vertice è che il corrispondente vettore x sia una SBA.
 \end{solution}
-\question Vertice ottimo
+
+\part Vertice ottimo
 \begin{solution}
 Dato un qualunque problema LP, esiste sempre un vertice ottimo (e, quindi, una SBA ottima). Ogni combinazione convessa di vertici ottimi è ottima.
 \end{solution}
-\question SBA degenere
+
+\part SBA degenere
 \begin{solution}
 Dal momento che una base $\mathcal{B}$ determina una soluzione base univoca, se due SBA sono diverse sono prodotte da basi diverse. Due basi diverse possono produrre la stessa SBA (SBA degenere) se, oltre agli n-m zeri delle variabili fuori base, contiene anche altre variabili a zero.\\
 \textcolor{red}{Proprietà}: se due basi $\mathcal{B}$ e $\stackrel{-}{\mathcal{B}}$ producono la stessa SBA x, allora x è degenere. 
 \end{solution}
-\end{questions}
+\end{parts}
 
-\section{Capitolo 4: Algoritmo del simplesso}
-Si vuole minimizzare la funzione obiettivo c'x, con x appartenente ad un politopo F espresso come LP in forma standard, sotto le assunzioni (\textcolor{red}{da verificare}) che A sia di rango m, F sia non vuoto e limitato nella direzione di decrescita della funzione obiettivo. Un insieme di m colonne linearmente indipendenti è detto \emph{base}, e vi corrisponde una soluzione del sistema Ax=b che si ottiene imponendo il valore 0 alle variabili corrispondenti a colonne non in base e risolvendo il sistema quadrato risultante. Se la soluzione soddisfa anche $x \ge 0$ è detta SBA, che individua un vertice del politopo. Una delle SBA è sempre una soluzione ottima.
-\begin{questions}
-\question SBA adiacenti
+
+\question \textbf{Algoritmo del simplesso}
+Si vuole minimizzare la funzione obiettivo $c^T x$, con x appartenente ad un politopo F espresso come LP in forma standard, sotto le assunzioni (\textcolor{red}{da verificare}) che A sia di rango m, F sia non vuoto e limitato nella direzione di decrescita della funzione obiettivo. Un insieme di m colonne linearmente indipendenti è detto \emph{base}, e vi corrisponde una soluzione del sistema Ax=b che si ottiene imponendo il valore 0 alle variabili corrispondenti a colonne non in base e risolvendo il sistema quadrato risultante. Se la soluzione soddisfa anche $x \ge 0$ è detta SBA, che individua un vertice del politopo. Una delle SBA è sempre una soluzione ottima.
+\begin{parts}
+
+\part SBA adiacenti
 \begin{solution}
 Due SBA distinte, corrispondenti a due basi $\mathcal{B}$ e $\stackrel{-}{\mathcal{B}}$, si dicono adiacenti se le due basi differiscono tra loro di una sola colonna, ovvero esistono $A_{j} \in \mathcal{B}$ e $A_{k} \in \stackrel{-}{\mathcal{B}}$ tali che $$\stackrel{-}{\mathcal{B}} = (B \backslash \{A_{j}\}) \cup \{A_{k}\}$$
 \end{solution}
-\question Principio dell'algoritmo del simplesso
+
+\part Principio dell'algoritmo del simplesso
 \begin{solution}
 Partendo da una SBA qualunque, iterativamente si sostituisce la SBA corrente con una SBA ad essa adiacente e di costo non maggiore, fino a trovare la SBA ottima.
 \end{solution}
-\question Spostamento da SBA a SBA (caso non degenere)
+
+\part Spostamento da SBA a SBA (caso non degenere)
 \begin{solution}
-Sia $x_{0}$ una SBA corrispondente alla base $\mathcal{B}$. La soluzione, comprensiva delle variabili fuori base, è $x_{0}' = (y_{10},y_{20},\ldots,y_{m0}, 0,\ldots, 0) \ge 0$. Poiché $Ax_{0}=b$, ne deriva $\sum_{i=1}^m y_{i0} A_{\mathcal{B}(i)}=b$.\\ Essendo le colonne in base linearmente indipendenti, le colonne fuori base si possono esprimere come combinazione lineare con dei coefficienti $y_{ij}$: $\sum_{i=1}^m y_{ij} A_{\mathcal{B}(i)}=A_{j}$.\\ Moltiplicando per $\vartheta > 0$ la seconda equazione e sottraendola dalla prima, geometricamente all'aumentare del valore di $\vartheta$ si percorrono tutte le soluzioni corrispondenti ai punti del segmento che unisce due vertici adiacenti relativi a due SBA. Di conseguenza:
+Sia $x_{0}$ una SBA corrispondente alla base $\mathcal{B}$. La soluzione, comprensiva delle variabili fuori base, è $x_{0}^T= (y_{10},y_{20},\ldots,y_{m0}, 0,\ldots, 0) \ge 0$. Poiché $Ax_{0}=b$, ne deriva $\sum_{i=1}^m y_{i0} A_{\mathcal{B}(i)}=b$.\\ Essendo le colonne in base linearmente indipendenti, le colonne fuori base si possono esprimere come combinazione lineare con dei coefficienti $y_{ij}$: $\sum_{i=1}^m y_{ij} A_{\mathcal{B}(i)}=A_{j}$.\\ Moltiplicando per $\vartheta > 0$ la seconda equazione e sottraendola dalla prima, geometricamente all'aumentare del valore di $\vartheta$ si percorrono tutte le soluzioni corrispondenti ai punti del segmento che unisce due vertici adiacenti relativi a due SBA. Di conseguenza:
 \begin{enumerate}
 \item $\vartheta = 0$: esprime la soluzione base iniziale;
 \item aumento di $\vartheta$: si trova una famiglia di nuove soluzioni ammissibili con m+1 componenti positive. Il valore di $\vartheta$ può aumentare fino a $\vartheta_{max}$, oltre il quale la differenza tra i coefficienti che si moltiplica per $A_{\mathcal{B}(i)}$ diventa negativa (e quindi non ammissibile per LP): $\vartheta_{max} = min_{i:y_{ij}>0} \frac{y_{i0}}{y_{ij}}$
 \item $\vartheta = \vartheta_{max}$: la relazione esprime una nuova SBA con m componenti positive. Nell'insieme di colonne corrispondenti è inclusa $A_{j}$ ma non la colonna il cui coefficiente è azzerato.
 \end{enumerate}
 \end{solution}
-\question Spostamento da SBA a SBA (caso degenere)
+
+\part Spostamento da SBA a SBA (caso degenere)
 \begin{solution}
 Se $x_{0}$ è degenere, contiene almeno uno zero tra le variabili in base ($y_{i'0}=0$). Se il coefficiente corrispondente $y_{i'j}>0$, allora $\vartheta_{max}=0$ e la nuova soluzione (pur comprendendo colonne in base diverse) è identica alla precedente. 
 \end{solution}
-\question Spostamento da SBA a SBA (caso illimitato)
+
+\part Spostamento da SBA a SBA (caso illimitato)
 \begin{solution}
 Nel caso in cui nessun coefficiente $y_{ij}$ fosse positivo, il valore di $\vartheta$ può crescere illimitatamente senza violare l'ammissibilità delle soluzioni. Ciò significa che il politopo è illimitato nella direzione di decrescita della funzione obiettivo, violando la terza assunzione sul simplesso, quindi il problema è risolto ed il valore della soluzione è $-\infty$.
 \end{solution}
-\question Pivoting
+
+\part Pivoting
 \begin{solution}
 Sia $\vartheta_{max} = min_{i:y_{ij}>0} \frac{y_{i0}}{y_{ij}} = \frac{y_{l0}}{y_{lj}}$. $y_{lj}$ è detto \emph{pivot}, e tramite l'operazione si definisce una nuova SBA ${\tilde{y_{i0}}}$ che assume valore $y_{i0} - \vartheta_{max}y_{ij}$ nelle righe diverse da quella del pivot, $\vartheta_{max}$ nella riga del pivot.
 \end{solution}
-\question Operazione elementare di riga
+
+\part Operazione elementare di riga
 \begin{solution}
 Le operazioni elementari di riga comprendono moltiplicare una riga per una costante non nulla e sommare un multiplo di una riga ad un'altra. La soluzione del sistema lineare non varia.
 \end{solution}
-\question Costo relativo
+
+\part Costo relativo
 \begin{solution}
 Rappresenta la variazione del costo per ciascuna unità di $x_{j}$ che entra in base. Poiché il simplesso prevede la minimizzazione del costo, è conveniente far entrare in base una colonna $A_{j}$ solo se $\stackrel{-}{c_{j}}<0$. Il costo relativo di una colonna in base deve essere nullo.
 \end{solution}
-\question Tableau: informazioni generali 
+
+\part Tableau: informazioni generali 
 \begin{solution}
 A qualsiasi passo dell'algoritmo del simplesso, il tableau riporta una matrice identità in corrispondenza delle colonne in base e contiene una rappresentazione compatta dei coefficienti di un sistema lineare equivalente a Ax=b.  
 \end{solution}
-\question Tableau: colonna 0 
+
+\part Tableau: colonna 0 
 \begin{solution}
 La colonna 0 riporta i valori delle variabili base nella SBA corrispondente. Per ogni colonna fuori base, i coefficienti $y_{ij}$ corrispondenti sono i valori nella colonna j-esima del tableau.
 \end{solution}
-\question Tableau: riga 0 
+
+\part Tableau: riga 0 
 \begin{solution}
 La riga 0 fornisce il costo relativo per le colonne fuori base, mentre nella colonna 0 fornisce l'opposto del valore $z_{0}$ della soluzione base attuale.
 \end{solution}
-\question Criterio di ottimalità
+
+\part Criterio di ottimalità
 \begin{solution}
 Se tutti i costi relativi sono non negativi, allora la soluzione attuale $x_{0}$ è ottima. Questo perché considerando la riga 0 del tableau attuale si ha che il valore z di qualunque soluzione è dato dal valore $z_{0}$ più una combinazione lineare degli attuali costi relativi. Dato che le variabili devono essere non negative, se i costi relativi delle variabili fuori base sono non negativi allora qualsiasi altra SBA può avere un valore maggiore o uguale all'attuale.
 \end{solution}
-\question Fase 2
+
+\part Fase 2
 \begin{solution}
 Nella fase 2 dell'algoritmo del simplesso manca un metodo per costruire un tableau da una base iniziale, ovvero la verifica che la matrice A sia di rango m e che la regione ammissibile sia non vuota. 
 \end{solution}
-\question Regola di Dantzig
+
+\part Regola di Dantzig
 \begin{solution}
 Per la convergenza dell'algoritmo, \textbf{entra in base} la colonna $A_{j}$ con il costo relativo più negativo - nei casi di parità, si risolve in maniera casuale. 
 \end{solution}
-\question Regola di Bland
+
+\part Regola di Bland
 \begin{solution}
 Metodo deterministico che evita la degenerazione ciclante (ma è meno efficiente di Dantzig in termini di velocità di convergenza), prevede che \textbf{entra in base} la colonna $A_{j}$ di indice minimo tra quelle con costo relativo negativo; in caso di parità \textbf{esce dalla base} la colonna $A_{j}$ di indice minimo.
 \end{solution}
-\question Fase 1
+
+\part Fase 1
 \begin{solution}
 Consente di ottenere una SBA iniziale per la fase 2. La fase 1 prevede:
 \begin{enumerate}
@@ -241,24 +290,30 @@ Si ottiene una SBA corrispondente alla base con le variabili artificiali. Poich�
 \item se $\zeta > 0$ il problema originale non ha nessuna soluzione ammissibile, e si viola l'assunzione sulla regione ammissibile non vuota;
 \end{enumerate}
 \end{solution}
-\end{questions}
+\end{parts}
 
-\section{Capitolo 5: Dualità}
-\begin{questions}
-\question Dualità forte
+
+\question \textbf{Dualità}
+\begin{parts}
+
+\part Dualità forte
 \begin{solution}
 Se un problema primale di LP ha soluzione ottima finita, allora anche il suo duale la ha e le due soluzioni sono uguali.
 \end{solution}
-\question Dualità debole
+
+\part Dualità debole
 \begin{solution}
-Il costo di ogni soluzione ammissibile del primale è maggiore o uguale al costo di ogni soluzione ammissibile del duale.\\
+Il costo di ogni soluzione ammissibile del primale è maggiore o uguale al costo di ogni soluzione ammissibile del duale.
+
 Tutte le soluzioni ammissibili e non ottime del primale sono inammissibili per il duale, tutte le soluzioni ammissibili del duale con costo inferiore all'ottimo sono inammissibili per il primale. L'unica soluzione ammissibile per entrambi i problemi è quella ottima.
 \end{solution}
-\question Duale del duale
+
+\part Duale del duale
 \begin{solution}
 Il duale del duale è il primale.
 \end{solution}
-\question Coppie possibili di soluzioni primali-duali
+
+\part Coppie possibili di soluzioni primali-duali
 \begin{solution}
 \begin{tabular}{|l|l|l|r|}
 \hline
@@ -272,24 +327,29 @@ impossibile & No & Sì & Sì\\
 \hline
 \end{tabular}
 \end{solution}
-\question Lemma di Farkas
+
+\part Lemma di Farkas
 \begin{solution}
-Solo uno tra i due sistemi $Ax=b, x\ge0$ e $y'A\le0, b'y>0$ è possibile. Il primo è possibile se e solo se il secondo è impossibile. 
+Solo uno tra i due sistemi $Ax=b, x\ge0$ e $y^T A\le0, b^T y>0$ è possibile. Il primo è possibile se e solo se il secondo è impossibile. 
 \end{solution}
-\question Complementary slackness
+
+\part Complementary slackness
 \begin{solution}
 Siano $x, \pi$ due soluzioni ammissibili per il primale e il duale.
 	Esse sono ottime se e solo se per ogni \emph{i}, o l'\emph{i}-esima variabile duale è nulla o l'\emph{i}-esimo vincolo è risolto all'uguaglianza; per ogni \emph{j}, o il \emph{j}-esimo vincolo duale è risolto all'uguaglianza o l'\emph{i}-esima variabile primale è nulla.
 \end{solution}
-\question Algoritmo del simplesso duale
+
+\part Algoritmo del simplesso duale
 \begin{solution}
 L'algoritmo del simplesso duale mantiene una soluzione ammissibile per il duale e, tramite pivoting, sposta la soluzione verso l'ammissibilità del primale. Poiché si cerca di eliminare l'inammissibilità dal tableau, si sceglie una riga con $y_{i0}<0$ e il pivot viene scelto come il valore massimo di $y_{0j}/y_{ij}$ per cui il valore di $y_{ij}<0$. La scelta del pivot garantisce il minimo aumento del valore della soluzione. Se non dovesse esistere alcun valore negativo di questo tipo il duale può crescere illimitatamente, pertanto il primale sarebbe impossibile.
 \end{solution}
-\question Affinità-divergenze tra il simplesso primale e duale nel risolvere LP 
+
+\part Affinità-divergenze tra il simplesso primale e duale nel risolvere LP 
 \begin{solution}
 Nel simplesso primale ci si sposta da SBA a SBA, in quello duale da SB inammissibile a inammissibile. Nel primo caso z parte da un valore superiore all'ottimo e decresce, nel duale da uno inferiore e cresce. Nel primale si sceglie prima la variabile che entra in base, nel duale quella che la lascia; poi nel primale si sceglie la variabile che lascia la base, nel duale quella che entra. Nel primale il pivot è dato dal minore tra i valori positivi, nel duale dal maggiore tra quelli negativi.
 \end{solution}
-\question Affinità-divergenze tra il problema primale e duale
+
+\part Affinità-divergenze tra il problema primale e duale
 \begin{solution}
 	Il duale di un problema di minimo è un problema di massimo nel quale:
 	\begin{itemize}
@@ -299,54 +359,66 @@ Nel simplesso primale ci si sposta da SBA a SBA, in quello duale da SB inammissi
 		\item le variabili  libere in segno primali corrispondono a vincoli di uguaglianza $\pi^T A_j = c_j$ i cui termini noti sono i costi del primale
 	\end{itemize}
 \end{solution}
-\question Duale e fase 1
+
+\part Duale e fase 1
 \begin{solution}
 Non si effettua una fase 1 nel simplesso duale perché in genere lo si adotta in situazioni in cui è dato il tableau ottimo di un LP primale, si aggiungono uno o più vincoli che rendono inammissibile la soluzione e si vuole la nuova soluzione ottima.
 \end{solution}
-\question Analisi di sensitività
+
+\part Analisi di sensitività
 \begin{solution}
 Esamina l'effetto di una variazione di uno dei dati di input, in particolare del termine noto di un vincolo o di un coefficiente della funzione obiettivo.
 \end{solution}
-\question Intervallo di stabilità
+
+\part Intervallo di stabilità
 \begin{solution}
 Se un dato viene modificato ma rimane all'interno dell'intervallo di stabilità, la base corrente rimane ottima. Diventa necessario ricalcolare esclusivamente il valore delle variabili alla luce dei nuovi dati.
 \end{solution}
-\question Modifica del termine noto di un vincolo
+
+\part Modifica del termine noto di un vincolo
 \begin{solution}
 Se cambia solamente un termine noto di un vincolo, tenendo conto del fatto che i termini noti si usano solo per calcolare i valori della colonna 0 mentre i costi relativi non cambiano si ha che la base ottima attuale rimane tale per tutti i valori del termine noto per cui la soluzione rimane ammissibile (ovvero, il prodotto tra l'inversa della base e il nuovo vettore dei termini noti rimane non negativo). 
 \end{solution}
-\question Modifica di un coefficiente della funzione obiettivo
+
+\part Modifica di un coefficiente della funzione obiettivo
 \begin{solution}
 I coefficienti della funzione obiettivo si adoperano esclusivamente per il calcolo della riga 0 del tableau, pertanto il valore della soluzione cambia solo se la variabile cui è associato il coefficiente è in base. Perché la SBA resti ottima si verifica che i costi relativi restino non negativi.
 \end{solution}
-\question Prezzi ombra
+
+\part Prezzi ombra
 \begin{solution}
 Il prezzo ombra di una risorsa è l'incremento della funzione obiettivo che si ottiene incrementando di una unità la quantità disponibile della risorsa stessa, purchè il valore incrementato rimanga all'interno dell'intervallo di sensitività.\\
 \textcolor{red}{Proprietà}: il valore ottimo della variabile duale $\pi_{i}$ fornisce il prezzo ombra della risorsa associata al vincolo $i$.
 \end{solution}
-\end{questions}
+\end{parts}
 
-\section{Capitolo 6: Programmazione Lineare Intera}
-\begin{questions}
-\question Programmazione lineare intera
+
+\question \textbf{Programmazione Lineare Intera}
+\begin{parts}
+
+\part Programmazione lineare intera
 \begin{solution}
 Un problema di programmazione lineare intera aggiunge come ulteriore vincolo che le variabili decisionali assumano valori interi. Geometricamente, la regione ammissibile di un ILP è costituita dai punti con coordinate intere contenute nel politopo definito dai vincoli dell'LP.
 \end{solution}
-\question Rilassamento continuo dell'ILP
+
+\part Rilassamento continuo dell'ILP
 \begin{solution}
 Problema LP corrispondente all'ILP cui è rimosso il vincolo d'interezza sulle variabili.\\
 \textcolor{red}{Proprietà} Se z(ILP) e z(LP) sono i valori delle soluzioni rispettivamente di un ILP e del suo rilassamento continuo, si ha $z(LP)\le z(ILP)$ perché la regione ammissibile dell'ILP è contenuta in quella dell'LP.
 \end{solution}
-\question Unimodularità
+
+\part Unimodularità
 \begin{solution}
 Una matrice \textbf{quadrata} intera B è unimodulare se $det(B)= \pm 1$.
 \end{solution}
-\question Totale unimodularità
+
+\part Totale unimodularità
 \begin{solution}
 Una matrice \textbf{rettangolare} intera B è totalmente unimodulare (TUM) se ogni sua sottomatrice quadrata non singolare B è UM, ovvero se $det(B) \in \{0,+1,-1\}$.\\
 \textcolor{red}{Proprietà} Se una matrice A è TUM, i vertici della regione ammissibile $\{x: Ax = b, x \ge 0\}$ (LP in forma standard) o di $\{x: Ax \le b, x \ge 0\}$ (LP in forma generale/canonica) sono interi per ogni b intero.
 \end{solution}
-\question Algoritmi per ILP
+
+\part Algoritmi per ILP
 \begin{solution}
 Per matrici non TUM si adottano due tipologie di algoritmi, talvolta combinati tra loro:
 \begin{enumerate}
@@ -354,28 +426,34 @@ Per matrici non TUM si adottano due tipologie di algoritmi, talvolta combinati t
 \item \emph{branch-and-bound}.
 \end{enumerate}
 \end{solution}
-\question \textbf{Cutting Plane}
+
+\part \textbf{Cutting Plane}
 \begin{solution}
 Algoritmo che aggiunge all'ILP una condizione lineare che non elimini alcuna soluzione ammissibile intera, ma elimini una parte della regione ammissibile contentente l'ottimo non intero del rilassamento continuo.
 \end{solution}
-\question Parte intera
+
+\part Parte intera
 \begin{solution}
 La parte intera di $y \in R^{1}$ è $\lfloor y \rfloor$ = max q intero : $q \le y$.
 \end{solution}
-\question Tagli di Gomory
+
+\part Tagli di Gomory
 \begin{solution}
 Definita la parte frazionaria di $y_{ij}$ come $f_{ij} = y_{ij} - \lfloor y_{ij} \rfloor$, con $0 \le f_{ij} \le 1$, il taglio di Gomory corrispondente alla riga i (\emph{riga generatrice}) è $\sum_{A_{j}\notin \mathcal{B}} f_{ij}x_{j} \ge f_{i0}$.\\
 \textcolor{red}{Teorema} Se si aggiunge al tableau finale di un LP un taglio di Gomory non si elimina alcun punto ammissibile e il nuovo tableau contiene una base non ammissibile per il primale, se $y_{i0}$ non è intero, ed ammissibile per il duale.
 \end{solution}
-\question Convergenza dell'algoritmo di Gomory
+
+\part Convergenza dell'algoritmo di Gomory
 \begin{solution}
 In assenza di degenerazioni l'algoritmo converge perché ad ogni iterazione si considera una base diversa dalle precedenti e di costo maggiore; in caso di degenerazioni il metodo converge se (1) si sceglie sempre la prima riga frazionaria e (2) si sceglie il pivot del simplesso duale secondo un metodo lessicografico simile alla regola di Bland.
 \end{solution}
-\question Gomory e rilassamento continuo illimitato inferiormente
+
+\part Gomory e rilassamento continuo illimitato inferiormente
 \begin{solution}
 Se la regione ammissibile è illimitata nella direzione di decrescita della funzione obiettivo generalmente conterrà anche punti interi all'infinito ed il problema intero avrà soluzione illimitata; esiste una tipologia geometrica per cui l'LP è illimitato ma l'ILP è impossibile.
 \end{solution}
-\question \textbf{Branch and bound}
+
+\part \textbf{Branch and bound}
 \begin{solution}
 Il principio seguito nella risoluzione prevede che da ogni problema $P^{K}$ si creino due nuovi problemi, a meno che 
 \begin{itemize}
@@ -384,21 +462,25 @@ Il principio seguito nella risoluzione prevede che da ogni problema $P^{K}$ si c
 \end{itemize}
 in quanto in questi due casi $P^{k}$ è risolto. 
 \end{solution}
-\question Albero decisionale binario
+
+\part Albero decisionale binario
 \begin{solution}
 Strumento adottato per rappresentare i problemi e le relative soluzioni. Accanto ad ogni nodo si indica il valore della soluzione $L_{k}$ del rilassamento continuo, accanto ad ogni ramo la condizione che produce il nodo figlio.
 \end{solution}
-\question Bounding
+
+\part Bounding
 \begin{solution}
 Il bounding rende più efficiente la computazione, dal momento che se si completasse l'albero ramificando finché nessun nodo può più generare figli la soluzione ottima sarebbe data dalla soluzione della foglia di costo minimo.\\
 Poiché tutti i coefficienti sono interi, dato il valore della soluzione del problema $P_{1}$ nessuna soluzione prodotta da $P_{1}$ o dai suoi discendenti (se scendo nell'albero, restringo la regione ammissibile) può avere un valore inferiore a $\lceil L_{k} \rceil$ (con $\lceil y \rceil$ più piccolo intero q tale che $q \ge y$).
 \end{solution}
-\question Uccisione di un nodo
+
+\part Uccisione di un nodo
 \begin{solution}
 Se per un problema $P_{k}$ si ha $\lceil L_{k} \rceil$ maggiore o uguale al valore della miglior soluzione intera trovata fino ad allora, non è conveniente risolvere il problema $P_{k}$ e di conseguenza il nodo corrispondente viene ucciso.\\
 Nel caso di problemi di massimizzazione si adopera l'upper bound, dato da $\lfloor U_{k} \rfloor$ (parte intera più grande $\le U_{k}$), e si uccide un nodo k se $\lfloor U_{k} \rfloor \le z$.
 \end{solution}
-\question Strategie di esplorazione
+
+\part Strategie di esplorazione
 \begin{solution}
 Due decisioni influenzano un algoritmo branch-and-bound:
 \begin{enumerate}
@@ -406,29 +488,35 @@ Due decisioni influenzano un algoritmo branch-and-bound:
 \item come e quando calcolare i bound relativi ai nodi.
 \end{enumerate}
 \end{solution}
-\question Depth-first
+
+\part Depth-first
 \begin{solution}
 \emph{Forward Step}: si genera un figlio dell'ultimo nodo $P_{k}$ generato finché si ottiene una soluzione intera/$L_{k}\ge z$/$P_{k}$ non ha figli ammissibili non ancora esplorati; \emph{Backtracking}: si risale al padre di $P_{k}$ e, se $L_{padre} < z$ si genera il suo figlio successivo, altrimenti si risale al padre del padre. Si termina quando si cerca di risalire al di sopra di $P_{0}$.\\
 \textcolor{red}{Vantaggi}: mantiene un piccolo numero di nodi aperti e produce una struttura semplice padre-figlio, produce rapidamente soluzioni ammissibili.
 \end{solution}
-\question Lowest-first
+
+\part Lowest-first
 \begin{solution}
 Definisce l'insieme dei nodi attivi e genera tutti i figli di quel nodo che ha lower bound più basso, eventualmente aggiornando z dopo la computazione dei nodi più facilmente risolvibili.
 \textcolor{red}{Vantaggi}: esplora sempre il nodo più "promettente", quindi ottiene una soluzione esplorando un ridotto numero di nodi; \textcolor{red}{svantaggi}: mantiene un grande numero di nodi aperti e produce una struttura complessa, non produce rapidamente soluzioni ammissibili.
 \end{solution}
-\question Depth-first rivisitata
+
+\part Depth-first rivisitata
 \begin{solution}
 Struttura depth-first, ma \emph{forward Step}: si generano tutti i figli del nodo attuale, si calcolano i loro lower bound e si esplora il figlio con il minimo lower bound; \emph{backtracking}: si riprende l'esplorazione dal nodo non esplorato con lower bound minimo fra i figli del nodo cui si è risaliti.
 \end{solution}
-\question Breadth-first
+
+\part Breadth-first
 \begin{solution}
 Genera tutti i figli del problema $P_{0}$ e tutti i figli di ogni figlio di $P_{0}$ non immediatamente risolubile. Strategia usata se interessano tutte le migliori soluzioni ammissibili del problema/tutte quelle con un certo valore massimo.
 \end{solution}
-\question Programazione lineare binaria LP01
+
+\part Programazione lineare binaria LP01
 \begin{solution}
 Le variabili dell'LP01 possono assumere solo valori binari. Se la matrice A ha una sola riga si parla di problema Knapsack 0-1 (KP01).
 \end{solution}
-\question Knapsack 0-1
+
+\part Knapsack 0-1
 \begin{solution}
 $$max \sum_{j=1}^{n} p_{j}x_{j}$$
 $$\sum_{j=1}^{n} w_{j}x_{j} \le c$$
@@ -436,58 +524,71 @@ $$x_{j} \in \{0,1\} (j=1,\ldots,n)$$
 n elementi, ciascun elemento j ha un profitto $p_{j}$ ed un peso $w_{j}$, la capacità massima dello \emph{knapsack} è c. Si ordinano gli elementi per valori decrescenti di profitto per unità di peso, si adotta un albero decisionale binario che al livello k decide se porre o meno nella soluzione l'oggetto k ed una strategia depth-first, affinché l'insieme di nodi attivi contenga al più un nodo generato da $x_{k} = 1$  e uno o più generati da $x_{k} = 0$. L'upper bound si calcola mediante il rilassamento, che consente di inserire uno dopo l'altro in soluzione gli elementi migliori, frazionando il primo che non si può inserire per intero (\emph{elemento critico}).\\
 \textcolor{red}{Proprietà} l'upper bound generato da $x_{j} = 1$ è uguale all'upper bound del nodo padre.
 \end{solution}
-\question Branch-and-cut
+
+\part Branch-and-cut
 \begin{solution}
 Ad ogni nodo dell'albero decisionale con soluzione non intera si generano tagli, cercando di trovare una soluzione intera, o quantomeno di ottenere un bound migliore. Non si usano i tagli di Gomory perché dipendono dalle condizioni imposte ai progenitori, si adottano dei \emph{global cuts} validi per tutto l'albero decisionale da memorizzare in una struttura dati apposita (\emph{pool} dei vincoli).
 \end{solution}
-\end{questions}
+\end{parts}
 
-\section{Capitolo 8: Complessità}
-\begin{questions}
-\question Teoria della complessità
+
+\question \textbf{Complessità}
+\begin{parts}
+
+\part Teoria della complessità
 \begin{solution}
 Individua la complessità di un problema, intesa come complessità del miglior algoritmo (= misura del tempo che esso richiede nel tempo peggiore) in grado di risolvere il problema in questione.
 \end{solution}
-\question Istanza di un problema
+
+\part Istanza di un problema
 \begin{solution}
 Si definisce istanza di un problema P uno specifico caso numerico del problema stesso.
 \end{solution}
-\question Problema
+
+\part Problema
 \begin{solution}
 Un problema è definito come l'insieme illimitato di tutte le sue possibili istanze.
 \end{solution}
-\question Complessità di un problema
+
+\part Complessità di un problema
 \begin{solution}
 La complessità di un problema P è la misura del tempo necessario per risolvere, nel caso peggiore, un'istanza di P. Il tempo deve essere indivuato in relazione alla dimensione dell'istanza.
 \end{solution}
-\question Dimensione di un'istanza
+
+\part Dimensione di un'istanza
 \begin{solution}
 La dimensione di un'istanza è il numero di bit necessari per codificarne l'input/il numero di valori che costituiscono l'input.
 \end{solution}
-\question Complessità KP01 (caso branch and bound)
+
+\part Complessità KP01 (caso branch and bound)
 \begin{solution}
 Il branch-and-bound risolve il problema KP01 in tempo $\textrm{O}(2^{n})$ nel caso peggiore (andamento \emph{esponenziale} nella dimensione dell'input, è un problema difficile per istanze di grandi dimensioni). 
 \end{solution}
-\question Versione riconoscimento e versione ottimizzazione di un problema
+
+\part Versione riconoscimento e versione ottimizzazione di un problema
 \begin{solution}
 La versione riconoscimento di un problema (\emph{RV}) non propone come soluzione un valore, bensì un "sì" o un "no" relativo all'esistenza di una soluzione. La versione ottimizzazione (\emph{OV}) cerca la soluzione numerica del problema. La teoria della complessità tratta i problemi in RV.\\
 \textcolor{red}{Proprietà}: dal punto di vista del trovare o meno la soluzione in tempo polinomiale, le due versioni hanno la stessa diffcoltà. Questo perché un algoritmo che risolve OV risolve implicitamente anche RV; un algoritmo che risolve RV risolve anche OV mediante una serie di esecuzioni in ricerca binaria. 
 \end{solution}
-\question Classe $\mathcal{P}$
+
+\part Classe $\mathcal{P}$
 \begin{solution}
 La classe $\mathcal{P}$ contiene i problemi in RV per i quali si conosce un algoritmo polinomiale, ovvero sono risolubili in tempo polinomiale da una macchina di Turing deterministica. 
 \end{solution}
-\question Classe $\mathcal{NP}$
+
+\part Classe $\mathcal{NP}$
 \begin{solution}
 La classe $\mathcal{NP}$ contiene i problemi in RV per i quali non si può escludere l'esistenza di un algoritmo polinomiale, ovvero sono risolubili in tempo polinomiale da una macchina di Turing non deterministica. Quest'ultima corrisponde ad un algoritmo ideale che prevede la possibilità di effettuare delle scelte, ed ogni volta effettua la scelta giusta. Un algoritmo simile risolverebbe in tempo polinomiale qualsiasi problema con albero dezisionale di altezza polinomiale. La classe $\mathcal{NP}$ comprende la classe $\mathcal{P}$.\\
 Se un problema non appartiene alla classe $\mathcal{NP}$ non c'è speranza di trovare un algoritmo polinomiale che lo risolva.
 \end{solution}
-\question Trasformazione polinomiale
+
+\part Trasformazione polinomiale
 \begin{solution}
 Un problema A di $\mathcal{NP}$ è trasformabile polinomialmente in un altro problema B di $\mathcal{NP}$ ($A \propto B$) se esiste un algoritmo polinomiale  che, per ogni istanza di A, definisce un'istanza di B che ha soluzione "sì" se e solo se l'istanza di A ha soluzione "sì".\\
 \textcolor{red}{Proprietà} Se $A \propto B$ e si conosce un algoritmo polinomiale per B, allora si ha anche un algoritmo polinomiale per A. Se $A \propto B$ e $B \propto C$, allora $A \propto C$. 
 \end{solution}
-\question Problemi $\mathcal{NP}$-completi
+
+\part Problemi $\mathcal{NP}$-completi
 \begin{solution}
 Un problema A di $\mathcal{NP}$ si dice $\mathcal{NP}$-completo se, per ogni problema di B di $\mathcal{NP}$, si ha $A \propto B$. Questo significa che se un problema è $\mathcal{NP}$-completo un eventuale algoritmo polinomiale per risolverlo potrebbe risolvere tutti i problemi di $\mathcal{NP}$.\\
 Per stabilire che un problema è $\mathcal{NP}$-completo occorre:
@@ -497,43 +598,52 @@ Per stabilire che un problema è $\mathcal{NP}$-completo occorre:
 \end{enumerate}
 Se si trovasse un algoritmo polinomiale per un solo problema $\mathcal{NP}$-completo risulterebbe $\mathcal{P} = \mathcal{NP}$ e si avrebbe un algoritmo polinomiale per tutti i problemi di $\mathcal{NP}$ (e quindi per tutti i problemi di ottimizzazione).
 \end{solution}
-\question Satisfiability problem SAT
+
+\part Satisfiability problem SAT
 \begin{solution}
 SAT è un problema $\mathcal{NP}$-completo che afferma che date n variabili booleane $x_{1}, \ldots, x_{n}$ (con $x_{i} \in {Vero, Falso}$) ed una formula booleana esiste un assegnamento di valori $x_{1}$ per cui il risultato è Vero. SAT è risolubile mediante un albero decisionale binario di altezza n.\\
 Qualunque problema $\mathcal{NP}$ può essere trasformato in tempo polinomiale in SAT.
 \end{solution}
-\question Lista dei problemi $\mathcal{NP}$-completi
+
+\part Lista dei problemi $\mathcal{NP}$-completi
 \begin{solution}
 Le RV di KP01, ILP e MILP (queste ultime due generalizzazioni di KP01) sono $\mathcal{NP}$-complete. 
 \end{solution}
-\question Complessità della programmazione lineare
+
+\part Complessità della programmazione lineare
 \begin{solution}
 Il simplesso può richiedere un tempo esponenziale nel caso peggiore. Sono state pensate delle varianti per LP quali l'algoritmo Khachiyan, basato sul metodo degli ellissoidi, o Karmarkar. Nessuno dei due è realmente più efficiente del simplesso.
 \end{solution}
-\question Programmazione dinamica
+
+\part Programmazione dinamica
 \begin{solution}
 La programmazione dinamica riconduce la soluzione di un problema complesso alla soluzione di un numero elevato di suoi sottoproblemi, utilizzando per la soluzione di un sottoproblema le soluzioni ottenute per i sottoproblemi di dimensione inferiore.
 \end{solution}
-\question Problema subset-sum SSP
+
+\part Problema subset-sum SSP
 \begin{solution}
  Si definiscono gli insiemi $M_{j} = \{ valori di tutte le soluzioni ammissibili ottenibili dai primi j elementi\}$: ciascun insieme $M_{j}$ contiene tutti i valori nell'insieme $M_{j-1}$, $M_{j}$ contiene poi anche tutti i valori che si ottengono sommando il valore intero $w_{j}$ ai valori di $M_{j-1}$, ad eccezione di quelli che superano il valore massimo assegnato $c$.
 \end{solution}
-\question Problema knapsack 0-1 DP
+
+\part Problema knapsack 0-1 DP
 \begin{solution}
-Sia S un sottoinsieme di $\{1, \ldots, j \}$. Si definisce gli insiemi $M_{j} = \{ coppie (p_{k}, w_{k}) \}$. Se $\sum_{k \in S'} w_{k} = \sum_{k \in S''} w_{k}$ e $\sum_{k \in S'} p_{k} \ge \sum_{k \in S''} p_{k}$ si dice che \emph{S' domina S''}, nel senso che qualunque soluzione ottenibile aggiungendo elementi ad S'' è non migliore di quella ottenibile aggiungendo gli stessi elementi ad S' e per questo è più conveniente memorizzare solo la coppia prodotta da S'.\\
+Sia S un sottoinsieme di $\{1, \ldots, j \}$. Si definisce gli insiemi $M_{j} = \{ coppie (p_{k}, w_{k}) \}$. Se $\sum_{k \in S'} w_{k} = \sum_{k \in S''} w_{k}$ e $\sum_{k \in S'} p_{k} \ge \sum_{k \in S''} p_{k}$ si dice che \emph{$S'$ domina $S''$}, nel senso che qualunque soluzione ottenibile aggiungendo elementi ad $S''$ è non migliore di quella ottenibile aggiungendo gli stessi elementi ad $S'$ e per questo è più conveniente memorizzare solo la coppia prodotta da $S'$.\\
 In totale la complessità di Knapsack DP è di O(nc), ovvero pseudo-polinomiale perché il numero di bit per codificare l'input di un'istanza di KP01 è $(2n+2) \lceil \log(c+1) \rceil$.
 \end{solution}
-\question Algoritmo pseudo-polinomiale
+
+\part Algoritmo pseudo-polinomiale
 \begin{solution}
 Dato un problema combinatorio A su valori interi, per ogni istanza I di A sia NUM(I) il più grande intero che compare in I e sia DIM(I) il numero di bit per codificare I. Un algoritmo per A è pseudo-polinomiale se risolve qualunque istanza I di A in un tempo limitato da una funzione polinomiale di DIM(I) e NUM(I). Questo significa che la complessità di questi algoritmi dipende non solo dal numero di valori dell'istanza, ma anche dalla loro magnitudo.\\
 \textcolor{red}{Esempio}: KP01 DP ha NUM(I)=c e $ DIM(I) = (2n+2) \lceil \log(c+1) \rceil$, quindi la complessità O(nc) è pseudo-polinomiale.
 \end{solution}
-\question Problema fortemente NP-completo
+
+\part Problema fortemente NP-completo
 \begin{solution}
 Non tutti i problemi NP-completi ammettono soluzioni polinomiali. Dato un problema combinatorio A, su valori interi, e una funzione polinomiale $p: N \mapsto N$, sia $A_{p}$ la restrizione di A alle sole istanze I per le quali $NUM(I) \le p(DIM(I))$. Il problema A si dice fortemente NP-completo se esiste un polinomio p per il quale $A_{p}$ è NP-completo.\\
 Per nessun problema fortemente NP-completo può esistere un algoritmo pseudo-polinomiale, a meno che P=NP. 
 \end{solution}
 
+\end{parts}
 \end{questions}
 
 \textbf{Disclaimer}:  Questo documento può contenere errori e imprecisioni che potrebbero danneggiare sistemi informatici, terminare relazioni e rapporti di lavoro, liberare le vesciche dei gatti sulla moquette e causare un conflitto termonucleare globale.
