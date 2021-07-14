@@ -351,7 +351,7 @@ Solo uno tra i due sistemi $Ax=b, x\ge0$ e $y^T A\le0, b^T y>0$ è possibile. Il
 \part Complementary slackness
 \begin{solution}
 Siano $x, \pi$ due soluzioni ammissibili per il primale e il duale.
-	Esse sono ottime se e solo se per ogni \emph{i}, o l'\emph{i}-esima variabile duale è nulla o l'\emph{i}-esimo vincolo è risolto all'uguaglianza; per ogni \emph{j}, o il \emph{j}-esimo vincolo duale è risolto all'uguaglianza o l'\emph{i}-esima variabile primale è nulla.
+	Esse sono ottime se e solo se per ogni \emph{i}, o l'\emph{i}-esima variabile duale è nulla o l'\emph{i}-esimo vincolo primale è risolto all'uguaglianza; per ogni \emph{j}, o il \emph{j}-esimo vincolo duale è risolto all'uguaglianza o la \emph{j}-esima variabile primale è nulla.
 \end{solution}
 
 \part Algoritmo del simplesso duale
@@ -462,7 +462,7 @@ La parte intera di $y \in R^{1}$ è $\lfloor y \rfloor = \max q \in Z : q \le y$
 
 \part Tagli di Gomory
 \begin{solution}
-Definita la parte frazionaria di $y_{ij}$ come $f_{ij} = y_{ij} - \lfloor y_{ij} \rfloor$, con $0 \le f_{ij} \le 1$, il taglio di Gomory corrispondente alla riga i (\emph{riga generatrice}) è $\sum_{A_{j}\notin \mathcal{B}} f_{ij}x_{j} \ge f_{i0}$.
+Definita la parte frazionaria di $y_{ij}$ come $f_{ij} = y_{ij} - \lfloor y_{ij} \rfloor$, con $0 \le f_{ij} \le 1$, il taglio di Gomory corrispondente alla riga i (\emph{riga generatrice}) è $\sum_{A_{j}\notin \mathcal{B}} f_{ij}x_{j} \ge f_{i0}$ (ovvero la sommatoria delle variabili fuori base, ciascuna  moltiplicata per la corrispondente parte frazionaria, ha un valore $\ge$ della corrispondente parte frazionaria del termine noto sulla stessa riga).
 
 \textcolor{red}{Teorema} Se si aggiunge al tableau finale di un LP un taglio di Gomory non si elimina alcun punto ammissibile e il nuovo tableau contiene una base non ammissibile per il primale, se $y_{i0}$ non è intero, ed ammissibile per il duale.
 \end{solution}
@@ -561,7 +561,7 @@ Ad ogni nodo dell'albero decisionale con soluzione non intera si generano tagli,
 
 \part Teoria della complessità
 \begin{solution}
-Individua la complessità di un problema, intesa come complessità del miglior algoritmo (= misura del tempo che esso richiede nel tempo peggiore) in grado di risolvere il problema in questione.
+Individua la complessità di un problema, intesa come complessità del miglior algoritmo (= misura del tempo che esso richiede nel caso peggiore) in grado di risolvere il problema in questione.
 \end{solution}
 
 \part Istanza di un problema
@@ -660,7 +660,7 @@ La programmazione dinamica riconduce la soluzione di un problema complesso alla 
 \begin{solution}
 	Dato un insieme di $n$ valori interi, il Subset Sum Problem (SSP) è definito come la ricerca del sottoinsieme la cui somma sia più alta possibile ma pari o inferiore a $c$.
 
-	Per risolverlo con la programmazione dinamica, si definisce ricorsivamente $M_0 = \emptyset, M_j = \{\textrm{valore di tutte le soluzioni ammissibili ottenibili prendendo o non prendendo ogni elemento tra i primi } j\}$.
+	Per risolverlo con la programmazione dinamica, si definisce ricorsivamente $M_0 = \emptyset$, $M_j =$ \emph{insieme dei valori di tutte le soluzioni ammissibili ottenibili prendendo o no ogni elemento tra i primi  j}.
 	Ciascun insieme $M_{j}$ contiene tutti i valori nell'insieme $M_{j-1}$, $M_{j}$ contiene poi anche tutti i valori che si ottengono sommando il valore $w_{j}$ (il $j$-esimo elemento) ai valori di $M_{j-1}$, ad eccezione di quelli che superano il valore massimo assegnato $c$.
 \end{solution}
 
