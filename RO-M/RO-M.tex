@@ -666,7 +666,7 @@ La programmazione dinamica riconduce la soluzione di un problema complesso alla 
 
 \part Problema knapsack 0-1 DP
 \begin{solution}
-Sia S un sottoinsieme di $\{1, \ldots, j \}$. Si definisce gli insiemi $M_{j} = \{ coppie (p_{k}, w_{k}) \}$. Se $\sum_{k \in S'} w_{k} = \sum_{k \in S''} w_{k}$ e $\sum_{k \in S'} p_{k} \ge \sum_{k \in S''} p_{k}$ si dice che \emph{$S'$ domina $S''$}, nel senso che qualunque soluzione ottenibile aggiungendo elementi ad $S''$ è non migliore di quella ottenibile aggiungendo gli stessi elementi ad $S'$ e per questo è più conveniente memorizzare solo la coppia prodotta da $S'$.
+Sia S un sottoinsieme di $\{1, \ldots, j \}$. Si definisce gli insiemi $M_{j} = \{ coppie (p_{k}, w_{k}) \}$. Se $\sum_{k \in S'} w_{k} \le \sum_{k \in S''} w_{k}$ e $\sum_{k \in S'} p_{k} \ge \sum_{k \in S''} p_{k}$ si dice che \emph{$S'$ domina $S''$}, nel senso che qualunque soluzione ottenibile aggiungendo elementi ad $S''$ è non migliore di quella ottenibile aggiungendo gli stessi elementi ad $S'$ e per questo è più conveniente memorizzare solo la coppia prodotta da $S'$.
 
 In totale la complessità di Knapsack DP è di O(nc), ovvero pseudo-polinomiale perché il numero di bit per codificare l'input di un'istanza di KP01 è $(2n+2) \lceil \log(c+1) \rceil$.
 \end{solution}
