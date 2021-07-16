@@ -23,7 +23,7 @@
 \def\dbar{{\mathchar'26\mkern-12mu d}}
 \renewcommand{\thepartno}{\arabic{partno}}
 \title{Ricerca Operativa M}
-\author{Kevin Michael Frick \and Corinna Marchili}
+\author{Kevin Michael Frick \and Corinna Marchili \and Sofia Montebugnoli}
 \begin{document}
 \maketitle
 \begin{questions}
@@ -284,7 +284,7 @@ Nella fase 2 dell'algoritmo del simplesso manca un metodo per costruire un table
 
 \part Regola di Dantzig
 \begin{solution}
-Per la convergenza dell'algoritmo, \textbf{entra in base} la colonna $A_{j}$ con il costo relativo più negativo - nei casi di parità, si risolve in maniera casuale.
+Per favorire la convergenza dell'algoritmo in un tempo ridotto, \textbf{entra in base} la colonna $A_{j}$ con il costo relativo più negativo - nei casi di parità, la si risolve in maniera casuale. La regola di Dantzig non garantisce la convergenza in caso di degenerazione ciclante.
 \end{solution}
 
 \part Regola di Bland
@@ -303,6 +303,7 @@ Si ottiene una SBA corrispondente alla base con le variabili artificiali. Poich�
 \begin{enumerate}
 \item se $\zeta = 0$ e le variabili artificiali sono tutte fuori base il tableau ha una base nelle variabili vere, altrimenti se una variabile artificiale rimane in base e non si può portare fuori significa che la matrice non è di rango m e si può eliminare una riga;
 \item se $\zeta > 0$ il problema originale non ha nessuna soluzione ammissibile, e si viola l'assunzione sulla regione ammissibile non vuota;
+Il caso $\zeta < 0$ non può mai verificarsi, poiché la funzione obiettivo artificiale è uguale alla somma di variabili non negative.
 \end{enumerate}
 \end{solution}
 \end{parts}
@@ -617,7 +618,7 @@ Un problema A di $\mathcal{NP}$ è trasformabile polinomialmente in un altro pro
 
 \part Problemi $\mathcal{NP}$-completi
 \begin{solution}
-Un problema A di $\mathcal{NP}$ si dice $\mathcal{NP}$-completo se, per ogni problema di B di $\mathcal{NP}$, si ha $A \propto B$. Questo significa che se un problema è $\mathcal{NP}$-completo un eventuale algoritmo polinomiale per risolverlo potrebbe risolvere tutti i problemi di $\mathcal{NP}$.
+Un problema A di $\mathcal{NP}$ si dice $\mathcal{NP}$-completo se, per ogni problema B di $\mathcal{NP}$, si ha $A \propto B$. Questo significa che se un problema è $\mathcal{NP}$-completo un eventuale algoritmo polinomiale per risolverlo potrebbe risolvere tutti i problemi di $\mathcal{NP}$.
 
 Per stabilire che un problema è $\mathcal{NP}$-completo occorre:
 \begin{enumerate}
