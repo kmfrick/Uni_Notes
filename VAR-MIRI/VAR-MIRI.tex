@@ -1,293 +1,1057 @@
-\documentclass[answers, a4paper, 11pt]{exam}
+\documentclass[a4paper]{article}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{amsthm}
 \usepackage[english]{babel}
 \usepackage{ccicons}
-\usepackage{hyperref}
-\usepackage{cleveref}
-\usepackage[utf8]{inputenc}
-\usepackage[autostyle=false, style=english]{csquotes}
 \usepackage[margin=2cm]{geometry}
 \usepackage{graphicx}
-\usepackage{mathrsfs}
-\usepackage{multicol}
-\usepackage{relsize}
-\usepackage{parskip}
-\usepackage{xcolor}
-\pagestyle{plain}
-\graphicspath{{./images/}}
-\MakeOuterQuote{"}
-\setlength{\columnseprule}{.4pt}
-\renewcommand{\solutiontitle}{\noindent\textbf{R:}\enspace}
-\def\dbar{{\mathchar'26\mkern-12mu d}}
-\renewcommand{\thepartno}{\arabic{partno}}
-\title{Virtual and Alternate Reality}
+\title{Virtual and Augmented Reality}
 \author{Kevin Michael Frick}
 \begin{document}
 \maketitle
-\begin{questions}
-	\setcounter{question}{1}
 
-	\question \textbf{VR systems}
-	\begin{parts}
-		\part Explain in which of the following cases an application can be considered as a Virtual Reality application and why:
-		\begin{itemize}
-			\item Interactive application with stereoscopic vision and tracking devices.
-			\item A game for PC with very realistic images and scenes.
-			\item A 3D animation movie with avatars created using very advanced design software.
-			\item A game for a 3D TV with a Kinect as an input device.
-		\end{itemize}
-		\begin{solution}
-			An interactive application with stereoscopic vision and tracking device, as well as a game for a three-dimensional television using a Kinect as an input device, can be considered VR applications.
-			This is because they both provide three-dimensional immersion by substituting the visual information coming from the natural world with the ones provided through stereoscopic vision, as well as a way to implicitly interact with the environment by performing natural body movements that are tracked by the Kinect or other devices.
+\section{Reality and Models}
 
-			A non-interactive three-dimensional movie or video game, however realistic, are clearly immersive experiences which however do not entirely substitute or augment the sensory information the user is receiving.
-			In the case of the game, controls have to be given explicitly by interacting with a mouse and keyboard, and there is no substitution of the visual experience as the images are displayed on a screen that is clealy separate from the natural world.
-			The case of the 3D animation movie is more complex, since the three-dimensional avatars could, in principle, effectively replace real images.
-			However, the user is wholly aware that he or she is watching a movie, which provides no interaction and is therefore not as immersive as a virtual reality should be.
-		\end{solution}
-	\end{parts}
-	\question \textbf{VR hardware}
-	\begin{parts}
-		\part Which 3D display technologies provide 3D stereoscopic images without breaking the natural accommodation/convergence relationship?
-		\begin{solution}
-			The Oculus Rift VR headset's lenses provide collimated light, therefore the eyes accommodate at infinity when wearing the headset.
-			This means that the accommodation/convergence conflict is going to take place every time the user is looking at something that is not infinitely far away.
+Models are necessary to get from question/queries to expected answers,
+the correctness of which depends on the complexity of the models
 
-			The same conflict holds in the HTC Vive VR headset, where the eyes accommodate on a screen that is very close to the eye, but then converge on points whose depth is highly variable.
+The evoluton of models has gone from physical objects, to analog and
+then digital models
 
-			Holographic (spinning mirror) displays can allow a single eye to focus on the virtual object in when the viewpoints are close enough to approximate a continuous 3D light field wavefront.
-			This way, the depth cue of the virtual objects can be captured by the accommodation process of human eye, allowing it to accommodate on the virtual object and eliminating the accommodation/convergence conflict.
+A model is a simplifiied representation of reality which reproduces, in
+lab scale, the behavior of a physical system, in order to allow to study
+and design systems which would be too difficult to experiment on
 
-			Auto-stereoscopic displays are a textbook example of a device that breaks the accommodation/convergence relationship, since a point that is positioned at a different distance from the eyes than the screen is using stereoscopy causes the eyes to converge on that point while they are accommodating on the screen, thus causing vision decoupling.
-		\end{solution}
-		\part Indicate, for the following technologies, whether they require (Y) or not (N) electric power to work.
-		\begin{itemize}
-\item Polarizing glasses
-\item Shutter glasses
-\item Anaglyph glasses
-\item Infitec glasses
-		\end{itemize}
-		\begin{solution}
-			Anaglyph, Infitec and polarizing glasses are passive stereo technologies, so they do not require electric power to work; shutter glasses, on the other hand, need to be powered to alternate between opaque and transparent states for each lens and keep in sync with the display, via an infrared or wired signal.
+A model can be acquired from an existing object, or created in order to
+allow us to see a non-existant or damaged object
 
-		\end{solution}
-		\part Considering the tracking of the Oculus Rift, describe how the acceleration data can be turned into positional data.
-		\begin{solution}
-			The Oculus Rift has an Inertial Measurement Unit (IMU) that reports angular velocity and linear acceleration.
-			In order to get position from acceleration, two numerical integration steps have to be performed as shown:
-			\begin{equation}
-				\mathbf{v} = \int \mathbf{a} dt \implies \mathbf{s} = \int \mathbf{v} dt = \int \int \mathbf{a} dt dt
-			\end{equation}
+In model acquisition, the data are object points obtained by sensors,
+which are digitalized. It's a semi-automatic process of ``photography''.
+Acquisition requires access to the object (field work) and sometimes
+gives an incomplete model which, however, is measurable w.r.t. reality
 
-			These two steps magnify the measurement error in acceleration, eventually leading to position drift.
-			In order to correct for this cumulative drift, data from a camera is used, which however has a much higher latency than the IMU (60 Hz vs 1000 Hz).
-			For this reason, a combination of the two sensor is used in order to let the IMU estimate position via integration and then correct drift when camera position data is available.
-		\end{solution}
-	\end{parts}
-	\question \textbf{Stereoscopic vision}
-	\begin{parts}
-		\part In a CAVE system, given a reference frame, how do you calculate inter-ocular distance, left-eye camera position, right-eye camera target inside that reference frame? How do you calculate the depth of a z-near clippling plane that guarantees no negative parallax?
-		\begin{solution}
-			The inter-ocular distance is simply the Euclidean distance betwen the two eyes.
-
-			The position of a point in a given reference frame is given by left-multiplying the projection matrix (from world space to the desired reference frame) and the position vector of the point in world space.
-			For example, we can assume the origin of world space to be in the middle of the cave, the Z axis pointing downwards, the X axis pointing to the right wall (looking from the top at the floor) and the Y axis looking in the opposite direction than the front wall.
-
-			The translation matrix $\mathbf{T}$ is then defined as \begin{equation}
-				\mathbf{T} = \begin{pmatrix}
-					1 & 0 & 0 & F_x \\
-					0 & 1 & 0 & F_y \\
-					0 & 0 & 1 & F_z \\
-					0 & 0 & 0 & 1
-				\end{pmatrix}
-			\end{equation}
-
-			with $(F_x, F_y, F_z)$ being the position of the origin of the reference frame in world space.
-			At this point, rotation matrices $\mathbf{R_x}, \mathbf{R_y}, \mathbf{R_z}$ that encode the rotation \emph{around} the $x, y, z$ axes, respectively.
-			These have the form
-			\begin{equation}
-				\mathbf{R_x} = \begin{pmatrix}
-					1 & 0 & 0 & 0 \\
-					0 & \cos \theta_x & -\sin \theta_x & 0 \\
-					0 & \sin \theta_x & \cos \theta_x & 0 \\
-					0 & 0 & 0 & 1
-				\end{pmatrix}
-			\end{equation}
-
-			\begin{equation}
-				\mathbf{R_y} = \begin{pmatrix}
-					\cos \theta_y & 0 & \sin \theta_y & 0 \\
-					0 & 1 & 0 & 0 \\
-					-\sin \theta_y & 0 & \cos \theta_y & 0 \\
-					0 & 0 & 0 & 1
-				\end{pmatrix}
-			\end{equation}
-
-			\begin{equation}
-				\mathbf{R_z} = \begin{pmatrix}
-					\cos \theta_z & -\sin \theta_z & 0 & 0 \\
-					\sin\theta_z & \cos \theta_z & 0 & 0 \\
-					0 & 0 & 1 & 0 \\
-					0 & 0 & 0 & 1
-				\end{pmatrix}
-			\end{equation}
-
-			Note that:
-
-			\begin{itemize}
-				\item the row and column corresponding to the axis of rotation is always the unit vector corresponding to that axis (e.g. $(1, 0, 0)$ for the $x$ axis)
-				\item the cosine is always the first to appear when reading the matrix in either row-major or column-major order
-				\item a sine and a cosine never appear in the same row or column
-				\item a cosine is never negative
-			\end{itemize}
-
-			Once the translation and rotation matrices have been calculated, the projection matrix is then defined as $\mathbf{P} = \mathbf{T R_x R_y R_z}$. Note that the translation and rotation are sensitive to order, so they should be calculated one after the other, keeping this in mind.
-
-			The target is defined by projecting the virtual camera onto the required screen.
-
-			In order to avoid negative parallax, the z-near clipping plane has to lie on the screen where the projection is being done.
-
-		\end{solution}
-
-		\part Explain why accommodation and convergence depth cues can be in disagreement in some stereoscopic displays. Draw a figure to show the potential problem.
-		\begin{solution}
-			Both accommodation and convergence are depth cues that depend on the depth of the fixation point.
-			Accommodation happens when the ciliary muscles of the eye induces deformation in the eye lens, or \emph{cristallino}, minimizing the amount of blur for the depth level of the part of the scene that we are fixating and allowing us to focus object at that level of depth.
-			Convergence, on the other hand, happens when the eyeball rotates, allowing us to place the point being fixated on at the fovea, a point of the retina which is responsible for sharp central vision.
-			In other words, accommodation is the focusing motion that happens by deforming the cristallino, while convergence is the turning inwards motion we feel when fixating on a close object.
-
-			Normally, there is a natural relationship between accommodation and convergence.
-			However, when looking at a screen, the images on the screen are located in different places.
-			As a consequence, the location of the geometric image, seen stereoscopically, lies away from the plane of the screen.
-			As shown in the following figure, the eyes accommodate on the screen, but converge on the location of the stereoscopic image, causing a conflict known as \emph{vision decoupling}.
-
-			\includegraphics[width=\textwidth]{acc-vs-conv}
-
-		\end{solution}
-		\part Imagine two users looking exactly at the same fixation point from the same position, with the only difference that one user has an iod of 6cm and the other user has iod of 7cm. Would this difference affect their retinal disparity? Why?
-		\begin{solution}
-			On the fixation point, retinal disparity is zero regardless of IOD.
-			For other points, inter-ocular distance is the very thing that determines the ratio between depth and retinal disparity.
-
-			Disparity as a function of depth, IOD and focal length is defined by
-			\begin{equation}
-				disp(d, IOD, f) = \frac{f \cdot IOD}{d}
-			\end{equation}
-
-			therefore one user would have a retinal disparity equal to approximately $1.167$ times the other user.
-		\end{solution}
-		\part Imagine a VR application for protein inspection that can be used with and without head- tracking support.
-		An experiment reveals that, when using head-tracking, people get a deeper knowledge of the spatial structure of the protein.
-		Explain, \textbf{in terms of depth cues}, why this result could be expected.
-		\begin{solution}
-	Users can use the sensory cues provided by head movement to enhance the perception of 3D motion.
-			Indeed, whole-body movements of an observer relative to a visual scene provide motion parallax cues that signal object depth.
-			When the observer moves, the retinal images of objects close to the eye are displaced more quickly—and through a larger angle—than are the retinal images of more distant objects.
-
-			Assuming that all the other depth cues that rely on position tracking - occlusion, shadowing, binocular parallax, etc. are implemented without the need for head tracking, for example via simpler body tracking and using stereo glasses, motion parallax then becomes one additional depth cue that can only be accurately calculated using head tracking.
-
-		\end{solution}
-	\end{parts}
-	\question \textbf{Haptic rendering}
-	\begin{parts}
-		\part
-	\end{parts}
-	\question \textbf{VR software development}
-	\begin{parts}
-		\part
-	\end{parts}
-	\question \textbf{AR software development}
-	\begin{parts}
-		\part Answer the following questions with TRUE or FALSE:
-		\begin{itemize}
-			\item Using AR-Toolkit the application is able to recognize any image markers.
-			\item Vuforia allows an AR application to recognize user defined targets as markers.
-			\item An AR video see-through device can achieve the same resolution of the real world than an optical see-through device.
-			\item The occlusion problem between real and virtual objects can be well supported in video see- through devices.
-			\item A typical program using AR-Toolkit draws the virtual objects before the background video.
-			\item In AR applications using hand-held displays, the stereoscopy is not the main objective.
-		\end{itemize}
-		\begin{solution}
-			NOT INCLUDED IN THE MIDTERM.
-		\end{solution}
-	\end{parts}
-	\question \textbf{3D user interfaces}
-	\begin{parts}
-		\part Indicate how selection and manipulation can be performed when using a virtual pointer.
-		Provide details about the advantages and limitations for each of those two tasks.
-		\begin{solution}
-			Virtual pointers allow users to select and manipulate objects that are beyond the immediate reach of their limbs.
-			It is a very suitable technique for selection, but manipulation is problematic since only radial movements can be made, which is bad for changing distance to the user.
-			It's also a technique that is only effective for one degree of freedom, the axis of the pointer itself.
-			Pointing should therefore be used for selection, while a virtual hand is better for manipulation.
-
-			There are six metaphors for virtual pointers: ray casting, two-handed pointing, fishing reel, aperture, flashlight and image plane.
-
-			When using ray casting, a line segment is attached to the hand and defines the pointing direction.
-			This is a very precise technique as the selection volume is a single ray, but it presents problems in selecting objects that are far away.
-			There are many variants: rays can be bent, or snap to the nearest object etc.
-			A variant of ray casting is two-handed pointing, which requires two hands to be tracked in order to allow one to define the origin and the other to specify where the ray should point to.
-
-			The fishing reel technique is similar to ray casting, but introduces an additional input device which controls the length of the virtual ray.
-
-			Another metaphor is the flashlight, in which the selection volume is a cone, just like the light in a flashlight.
-			The apex of the cone is defined by the position of the user's hand while the axis is its orientation.
-			The aperture of the cone is constant.
-			One issue that is immediately apparent with this metaphor is deciding which object to select when the cone comprises multiple objects.
-			A possible rule is to select the object that is closest to the axis of the cone, but the issue still stands when the environment is very cluttered.
-			A variant of the flashlight metaphor is using a cone whose axis points to the user's hand and whose axis is the line passing by the user's hand and eye.
-			This way, aperture can be controlled by moving the sensor closer and device twist can be used to disambiguate between objects.
-
-			The fishing reel technique is similar to ray casting, but introduces an additional input device which controls the length of the virtual ray.
+In modeling of non existent objects, the data are maps, sketches or text
+produced by an expert which are e.g.~modeled in 3D. It's a manual
+process of ``repainting''. Modeling can be applied to nonexistent
+objects, in order to e.g.~compare different historical hypotheses, and
+the model is often complete although not measurable w.r.t. reality
 
 
+\section{Virtual reality}
 
-		\end{solution}
-	\end{parts}
-	\question \textbf{Presence}
-	\begin{parts}
-		\part Of the following sentences, regarding presence in virtual environments, indicate which ones are TRUE and which ones are FALSE.
-		\begin{itemize}
-			\item Higher latency results in higher levels of presence.
-			\item Walk in place results in higher presence than using a joystick in VE.
-			\item Ray Tracing reports higher levels of presence than OpenGL illumination model.
-			\item Heart rate and galvanic skin response are objective methods to measure presence.
-		\end{itemize}
-		\begin{solution}
-			Presence is operationally defined as the successful substitution of real sensory data by computer-generated sense data.
-			A ``successful'' response is realistic, similar to a real response.
-			Here we are dealing with a low-level physiological response paving the way for higher-level cognitive and emotional responses which include verbal confirmations of ``being there''.
+``The Virtual Reality is the computer interactive simulation from the
+point of view of the participant, in which the sensory information
+he/she perceives is substituted or augmented.''
 
-			Presence can be measured with physiological measures, such as heart rate and galvanic skin response.
+A virtual reality system provides interactive simulation, implicit
+interaction and immersion. Examples of VR systems are head-mounted
+displays, VR tables, powerwalls, CAVEs.
 
-			Navigating a virtual environment using a controller breaks the correlation between proprioception and sensory data, while experimental data confirms this doesn't happen with walking-in-place if the users associate well with their virtual bodies.
+VR systems can be immersive or semi-immersive.
 
-			Lower latency also results in a higher heart reate, which correlates with higher presence.
+VR has applications in medicine, architecture, industrial engineering,
+entertainment, cultural heritage.
 
-			Finally, experiments also confirms that ray tracing leads to higher presence than the OpenG illumination model.
+Interactive visualization means reproducing a virtual world which only
+exists as a digital model. Compared with animation, which is passive and
+whose response is previously decided, interactive simulation can
+improvise and provide a real time response. Interactive simulation is
+carried out by a three-dimensional geometric representation and the use
+of realistic visualization and memory management algorithms,
+multiresolution models, visibility pre-processing and the implementation
+of ``zoom'' capacity.
+
+Implicit interaction means the system infers what the user wants from
+his or her natural movements, i.e.~gestures and head movements instead
+of interaction with a device such as a mouse. Interaction and selection
+are carried out via naturalmovements, the devices and ocmputer are
+transparent, and the user perceives direct interaction with objects
+instead of having a ``window to the model''.
+
+Immersion means disconnecting senses from the real world and connecting
+them to the virtual environment. Visual immersion means objects should
+exist independently of the visualization device and the notion of
+``presence'', feeling of being ``into the space'' should be provided
+through stereoscopic vision. Further immersion concerns acoustics,
+touch, smell, taste, and movement (i.e.~acceleration).
+
+An example usage of VR is virtual prototyping. In order to avoid having
+to make a physical prototype every timethe requirements are given to
+designers and technicians which use a CAD systems to draw a model and a
+virtual prototype, which can be evaluated by the client instead of a
+physical one.
+
+VR revolutionized the field of human-computer interaction and has
+applicatons in industry, medicine, architecture, education, art.
+
+The factors involved in interactive visualization are the levels of
+simulation (empirics, cinematics, dynamics, deformations, collisions,
+realism of e.g.~vehicles and physical systems) and interactivity.
+
+Those involved in implicit interaction are limb position recognition,
+voice recognition, gesture recognition and ability to provide virtual
+menus.
+
+Finally, immersion involves quality of stimuli, uptade frequency,
+latency, cohereng among stimuli and temporal coherence. An interactive
+application with stereoscopic vision and tracking device, as well as a
+game for a three-dimensional television using a Kinect as an input
+device, can be considered VR applications. This is because they both
+provide three-dimensional immersion by substituting the visual
+information coming from the natural world with the ones provided through
+stereoscopic vision, as well as a way to implicitly interact with the
+environment by performing natural body movements that are tracked by the
+Kinect or other devices.
+
+A non-interactive three-dimensional movie or video game, however
+realistic, are clearly immersive experiences which however do not
+entirely substitute or augment the sensory information the user is
+receiving. In the case of the game, controls have to be given explicitly
+by interacting with a mouse and keyboard, and there is no substitution
+of the visual experience as the images are displayed on a screen that is
+clealy separate from the natural world. The case of the 3D animation
+movie is more complex, since the three-dimensional avatars could, in
+principle, effectively replace real images. However, the user is wholly
+aware that he or she is watching a movie, which provides no interaction
+and is therefore not as immersive as a virtual reality should be.
 
 
+\section{Virtual reality devices}
 
-		\end{solution}
-		\part What are static haptics, and how can they enhance presence in virtual environments? Provide one example.
-		\begin{solution}
-			Passive haptics are a way of augmenting a high-fidelity visual virtual environment with low-fidelity physical objects that prevent the virtual bodies of users from passing through objects.
-			Passive haptics do not replicate such properties as texture, thermal conductivity, and mass, nor do they replicate fine geometric details of the visual objects such as handles on cabinet drawers.
-			Examples of static haptics are head-mounted displays and simple versions of physical objects.
+VR systems use specific hardware which comprises a big part of the cost
+of a VR system and strongly influences its success.
 
-			Adding physical objects will improve virtual environments because they make the objects feel to the user as if the objects are there. Humans can test the reality of an image by trying to touch the object, so if there is a real object where the users expects there to be one, presence (as measured with heart rate) is increased.
+Other than the five classical senses (sight/vision, hearing/audition,
+touch/mechanoreception, taste/gustation, smell/olfaction) there are
+other human senses that must be taken into account, such as
+equilibrioception / vestibular sense of balance and acceleration,
+proprioception / kinesthetic sense of where the various parts of the
+body are located, and oyher internals enses like thermoception, pain,
+hunger, thirst and so on.
 
-			One experiment investigated passive haptics's effects on performance of a real-world navigation task after training in a virtual environment.
- Half of the participants trained on maze navigation in a VE augmented with a styrofoam physical model, while half trained in a non-augmented VE but were given visual and audio contact cues.
- The task was to gain as much information as possible about the layout of the environment.
- Participants knew before the VE session that their training would be tested by navigating an identical real maze environment while blindfolded.
+Field of view is the amount of visual angle that can be seen
+simultaneously on a display. The human FOV is around 200 degrees
+horizontally, while a HMD can usually only display 40-110 degrees. The
+field fo regard is the mount of space surrounding the user in which
+visual images can be seen. A HMD allows for a 360 deg FOR. Both FOV and
+FOR can be measured in hor and ver diections and they impact immersion
+end stereo perception.
 
-		\end{solution}
-	\end{parts}
+Resolution can refer to the total number of pixels or to the number of
+pixels per area (dpi) or per visual angle (angular resolution). The
+human eye has a resolution of around 30 cycles/degree.
 
-\end{questions}
+The color depth is the number of different colors that can be seem. 24
+bits of color depth allow for 16M colors, 32 bits alow for 4294M. In
+theory, CRT, LCD, PDP and LED screens can have an unlimited number of
+color levels while DLP displays are limited by mirror frequency.
 
-\textbf{Disclaimer}:  This document may contain errors and inaccuracies that may damage your system, cause your partner to leave you, your boss to fire you, your cats to pee on your furniture and clothing, and global thermonuclear war. Proceed with caution. This document is released under the CC-BY-SA 4.0 license. \ccbysa
+Screen geometry depends on the number of screens (from 1 to 6), their
+shape (planar, cylindrical or hemispherical) and their location
+(L-shaped, tilted and so on).
+
+Light transfer defines how the light gets transferred onto the display
+surface, such as front/rear projection or through special optics.
+Another possibility is not having a display surface and projecting
+directly onto the retina. Light transfer dictates which 3D UI techniques
+can be used.
+
+Refresh rate depends on the device and corresponds to the number of
+times the image is refreshed per second. It corresponds to different
+concepts on CRT, LCD, DLP displays. If the refresh rate is too low, the
+image flickers.
+
+Frame rate depends on the application and corresponds to the number of
+times a complete frame is drawn on the framebuffer. Low frame rates
+correspond to non-smooth animations.
+
+
+\section{Visual display systems}
+
+Head-mounted displays (HMD) and head-coupled displays (HCD) are devices
+that do not allow for perceiving the outside world and use tracking
+sensors to display the image. HMDs use LCD screens and many of them have
+a handicap on FOV, while HCDs use CRT screens and allow for accurate
+tracking.
+
+Some examples of HMDs are the HTC Vive and the Oculus Rift. Both have a
+resolution of 2160x1200, a FOV of 110 degrees, an accelerometer and a
+gyroscope. The Rift has a 360-degrees tracking system while the Vive has
+a double laser tracking system. The area of the Oculus is 1.5x3.3 while
+that of the Vive is 4.5x4.5. A disadvantage of both systems is that
+since the pixels are relatively far away, accuracy is lacking in lateral
+view.
+
+
+\section{Projection-based displays}
+
+The Powerwall/CAD-wall was one of the first multi-channel walls. It uses
+an array of projectors.
+
+Workbench/ImmersaDesks can be used as a virtual tabletop, while
+holobencehs such as Barco Consul have an L-shaped configuration to le
+the virtual object ``protrude'' from the screen.
+
+Curved screens and reality rooms are used in a mono configuration for
+various driving, flight and navigation simulators. A stereo
+configuration is less common due to multiple handicaps.
+
+Domes and spherical displays are most often found in aircraft simulation
+and planetariums. It's a challenging configuration due to the
+requirement for multi-sided blending and it is not suitable for stereo
+since it either provides no added value or causes various parallax
+issues.
+
+CAVE systems usually have anywhere between 3 to 6 walls, 4 being the
+most common.
+
+Projection-based displays are more ergonomic, since the user does not
+have to wear the display on their head, do not isolate from the real
+world and do not hinder interaction with other user. Moreover, there is
+usually better peripheral vision, user can see their own body, avoiding
+HMD-induced disorientation, and there is no head rotation instability
+which causes ``flight simulator sickness''.
+
+Volumetric displays are able to address individual points, called
+voxels, inside a given volume, using a very fast projector pointed at a
+spinning screen. The resolution and the color depth is limited, opacity
+is lacking, the resulting image is small and, of course, they are not
+suitable for direct manipulation. However, there is no
+accommodation/convergence conflict.
+
+When a single display contains stereo images images, separation is
+needed. Separation means providing each eye with its needed image and
+rejecting the other, and can be carried out through glasses or
+autostereocopic displays.
+
+Autostereoscopic displays require no special glasses to achieve stereo
+vision, and work through parallax separation. The image is split into
+odd and even columns and optics ensure each eye only sees one group.
+However, the user has to stay in a certain place and not move; if they
+do, the image is displayed wrong as shown in the following image. For
+this reason, they are a good fit for TV or handheld game consoles.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.75\textwidth]{autostereoscopic-issues}
+\end{figure}
+
+Autostereoscopic displays can be implemented with a parallax barrier or
+a lenticular array, as shown.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.75\textwidth]{autostereoscopic-impl}
+\end{figure}
+
+Anaglyph glasses are based on complementary colors, e.g.~R-GB, G-RB,
+B-RG. Each lens blocks two colors and leaves one. They are cheap, but
+have obvious color issues. Infitec glasses, used for Dolby 3D digital
+cinema, are an improved version of anaglyph glasses which ensure each
+eye gets red, green and blue light. Polarizing glasses are based on two
+perpendicular linear polarization filters in the projectors and glasses.
+They are cheap, but sensible to head tilt. Circular polarizing classes
+build on the same idea, but are almost insensitive to head tilt. Shutter
+glasses block light from one eye or the other in sync with the video
+signal. At any given time, one lens is transparent and another is
+opaque. They require a display running at \textgreater100Hz and
+synchronization with the display, e.g.~via IR or wired signals. A
+dedicate sync signal can be used for stereo-ready cards, or a
+pass-through signal on the VGA connector for non-stereo-ready cards.
+
+
+\section{Input devices}
+
+Input devices, or sensors, capture the user's actions (e.g.~head
+movements) and send them to the computer which is in charge of the
+interactive simulation. Input devices are considered VR devices when
+they use the paradigm of the implicit interaction or they give 3D input
+to the system.
+
+Tracking input systems are sensors which capture the
+position/orientation of a real object. If they only capture position
+they have 3 degrees of freedom, if they only capture orientation they
+have 2 or 3, and if they capture both they have 6.
+
+Applications of head- and eye-tracking are displaying different images
+based on eye position and implementing navigation based on head
+movements.
+
+Hand- and device-tracking, on the other hand, allow for direct
+manipulation of objects with multiple metaphors, hand-based navigation
+together with gloves, and communication with other users using sign
+language.
+
+Finally, face- and body- tracking allow for interaction based on the
+avatar, e.g.~in games, and to capture complex movements offline, which
+is useful e.g.~in sports.
+
+Position can be calculated absolutely, in known units w.r.t. a fixed
+coordinate systems, or relatively, as a displacement w.r.t. an initial
+or previous position. This requires calibration (the initial position
+must be known) and is inexact as error tends to accumulate. When
+calculating orientation, two reference frames are defined. The global RF
+is fixed on e.g.~the emitter, while the global RF is dynamic and moves
+with the object. The rotation (GT matrix) which transform the global RF
+to the local RF can be represented using direction cosines, Euler
+angles, angle-axis representation, spherical/polar coordinates or
+quaternions.
+
+
+\section{Technologies for motion
+capture}
+
+MoCap is the sampling and recording of the motion of things as 3D data.
+The first example are Muybridge's sequential photos using multiple
+cameras and Marey's single camera and motion capture suit.
+
+MoCap systems can be optical or non-optical.
+
+Magnetic trackers are based on the attenuation of orthogonal magnetic
+fields. Each system includes an emitter, which generates the magnetic
+field, receptors which detect it and a control unit. The emitter is
+fixed, defining the global RF, and has three orthogonal coils through
+which electric current flows, rotating. Each coil produces a magnetic
+field which is perpendicular to the others. The sensors are fixed to the
+object that has to be followed and have three coils, but the measurement
+is the induced electric current by the magnetic field wich surrounds the
+sensor. Usually, the sensors are tied to the control unit by a cable.
+The control unit gives power to the emitter, reads data from the sensor
+and solves an underdetermined equation systems in 6 (DoF) variables and
+9 (3 sensors * 3 fields) equations which results in a hemisphere
+equation. The data is then sent e.g.~via RS-232. Magnetic trackers do
+not require LoS, are very precise, and use multiple small sensors.
+However, their area of action is limited (2-10 m), they are sensitive to
+ferromagnetic surfaces or other magnetic fields, and are wired.
+
+Optical trackers are based on image processing and can be based on
+stereo cameras, laser, or other techniques of image processing such as
+silhouette tracking. When using stereo cameras, markers are usually
+required, such as color points (passive markers) or LEDs (active
+markers). Optical trackers can register a large amount of points and are
+relatively cheap, but have limits in LOS and FOV (given by the camera
+FOV), cause overhead or need a dedicated processor, and have variable
+latency time. Optitrack is a particular optical tracker which uses lots
+of cameras and IR beamers on the perimeter of the tracking areas, as
+well as small reflective balls as markers. The software will look for
+these balls and will extract the 3D position and rotation of objects
+from the camera frames. The tracked objects can be passive because the
+cameras have built-in IR lights, it's very accurate and can cover spaces
+of any size and shape, but it's very expensive, as much as 50k\$ for a
+modest setup.
+
+Acoustic trackers are based on the measure of propagation time (time of
+flight) of acoustic signals, usually ultrasounds, generated by
+loudspeakers and recorded by microphones, one of which is fixed while
+the other is mobile. When there is a mobile emitter and three fixed
+receptors, position can be calculated with 3 DoF as an intersection of
+three spheres. When there are three emitters and three receptors, both
+position and orientation can be calculated. Acoustic trackers are very
+cheap, but have LoS issues, latency proportional to the distance, low
+precision and are sensitive to ambient noise, echo etc. which can
+distort the signal.
+
+Mechanical trackers are articulated structures with potentiometers
+attached to the joints, each of which measures the angle of rotation
+w.r.t. a fixed base point. The position and orientation of the free
+parts are a concatenation of translations and rotations. Mechanical
+trackers are very fast and precise, having almost no latency, and are
+electronically very simple, but they require to fix the object to the
+free part of the structure, limit the freedom of movement and their cost
+varies depending on the mechanical structure itself.
+
+Inertial trackers are based on small devices which measure the
+acceleration they are experiencing through accelerometers and
+gyroscopes, then integrate twice to obtain position. They have an
+unlimited area of action, do not require cables and are not tied to a
+fixed reference frame, but the position is relative, the errors
+accumulate and the absolute position is not exact. Moreover they are
+sensitive to movement speed.
+
+Data gloves allow to detect the position of the user's finger, expressed
+as flexion angles for each finger (3 per finger, 2 for the thumb). They
+are usually combined with trackers. They allow direct manipulation of
+objects, intuitive interaction e.g.~with menus, and sign-based
+interaction. Data gloves can be made using optical fiber, by measuring
+the attenuation of light which goes through one of two circuits per
+finger of optical fiber that has gone through a soecific treatment. The
+attenuation of light, i.e.~the difference between emitted and received
+light, depends on finger curvature. Optical fiber gloves are very
+precise, fast and ergonomic, but they require constant calibration and
+the curvature of the fiber does not always correspond to that of the
+finger because of friction. Mechanical gloves exist that use
+potentiometers, similarly to mechanical trackers, or measure the
+elongation of a telescopic tube. Such gloves are exact, precise, fast
+and allow for force feedback, but are expensive and non-ergonomic.
+Resistance gloves use resistive ink, a special covering whose electrical
+resistance is a function of elongation, which is very cheap but not
+precise. Mattel's PowerGlove uses this technology. Optical gloves,
+finally, are based on LEDs or passive markers captured by cameras. They
+have no cables and are very ergonomic, but have LoS issues, high latency
+and lack of accuracy.
+
+The Kinect is a low-cost controller made for the Xbox 360 that offers
+full-body tracking as well as face and voice recognition. Its main
+components are a color CMOS camera, an IR projector and camera that are
+used to measure depth, four microphones, a motor and an accelerometer
+for tilt control. The color camera offers 480p@30fps output while the IR
+camera has a 1024p sensor but also only offer 480p@30fps output. The
+operation range is between 0.4m and 3.5m, the FOV is (58H, 45V, 70D),
+the spatial and depth resolutons at 2m distance are 3mm and 1cm,
+respectively. The IR emitter projects an irregular pattern of IR dots at
+varying intensities, and the IR camera reconstructs a depth image by
+recognizing the distortion of this pattern.
+
+Examples of other input devices are car simulators, flight simulators,
+locomotion interfaces such as omni-directional treadmills whose surface
+can move in any direction.
+
+The most modern approaches are all-in-one solutions such as the Vive
+Focus Plus, which inegrates a viewer with a resolution of 2880x1600 and
+a FOV of 110 degrees with a Snapdragon CPU, 32GB ROM and 4GB RAM, with a
+tracking system that does SLAM directly on the HMD via an accelerometer,
+a gyroscope and computer vision algorithms. Moreover, there are two
+controllers which have 6 DoF and offer sensor fusion with IMU sensors.
+
+The motion capture pipeline is:
+
+\begin{enumerate}
+
+
+\item
+  Studio setup
+\item
+  Calibration of capture area
+\item
+  Movement capture
+\item
+  Data cleanup
+\item
+  Data post-processing
+\end{enumerate}
+
+
+\section{Markerless mocap}
+
+Markerless motion capture algorithms analyze input images, identify
+human forms and track the optical flow of the scene. Depth-based mocap
+uses a combination of color cameras and depth sensors to capture the
+silhouette of the subject from multiple angles and reconstruct the
+object's volumetric mesh from thepoint clouds, then fit a skeleton into
+the 3D model to estimate motion. Vision-based mocap, on the other hand,
+uses a single or multiple RGB cameras and deep learning, using large
+amounts of training motion data. These examples have been generated
+using computer graphics, and the algorithms learn a random forest that
+maps depth images to body parts, transformin it into a skeleton. In
+order to improve the skeletons we can use temporal information given by
+a tracking algorithm and reject ``bad'' skeletons in favor of ``good''
+ones using some ground truth database.
+
+Mocap is faster, cheaper and scales better than frame-by-frame animation
+but software and hardware are expensive, capture systems may impose
+requirements on the space, and artifacts can occur if the animated model
+differs in proportions from the captured model.
+
+The HTC Vive operates following the \emph{inside-out principle}. There
+are no external cameras. Two laser emitters are used instead, called
+Lighthouses, which alternate in sending hor and ver IR laser sweeps
+spanning 120 deg in each direction. The Vive's headset and controllers
+are photodiodes and can indicate when the laser hits them. The time
+difference in the hits allows for recovering the position and
+orientation of the headset, which are used to integrate the primary
+measures (which come from IMU sensors) and correct for error that is
+built up over time.
+
+
+\section{Postprocessing in mocap}
+
+Mocap data applied without post-processing introduces artifacts such as
+floor intersections, footskating, joint orientation discontinuities.
+Retargeting, or ``computer puppetry'', which is re-using motion data
+adapting animated motions between characters, suffers from the issue of
+differing heights. The aim is preserving the essence of motion, but the
+problem is whether angles or end-effector positions should be preserved.
+
+The issue of motion retargeting is a constrained optimization problem
+where a functon \(g()\) of the motion \(m(t)\) has to be optimized while
+satisfying a set of constraints, \(f(p) = 0\), in order to adapt to the
+target character. This optimization problem, however, is too costly to
+solve directly, therefore an importance-based approach is applied that
+uses a heuristic to evaluate importance of joint angles or end-effector
+positions. The problem of computing the angles from end-effector
+positions, in order to find the constraints that have to be imposed, is
+called inverse kinematics and consists in using the kinematics equations
+of an articulated rigid body yo determine the joint parameters that
+provide a desired position of the end effector.
+
+Motion planning is the specification of the list of movements that a
+humanoid has to carry out in order to achieve a task. Inverse kinematics
+are useful because new motions can be synthesized from a small set of
+pre-recorded animations. This can be combined with physics-based
+simulation to create complex motions.
+
+The goal of inverse kinematics is computing the vector of joint DoFs
+that will cause the end effector to reach a desired goal state. Several
+solutions (or none) may exist, and the computation is expensive. Capture
+data is voluminous, and capturing all possible motion is implausible.
+Data is therefore organized, represented and combined with itself and
+with physics simulation in order to dynamically generate new motion.
+
+
+\section{Stereoscopy}
+
+Stereoscopic vision is one of the most important depth cues, plays a key
+role in all VR applications and influences both software and hardware.
+
+Human retinas only planar images, but the human vision system can
+recover depth information by combining various depth cues. While in the
+real world, all depth cues agree, some may disagree in VR. Poor
+stereoscopy leads to poor depth information and eye strain, which can
+even cause motion sickness if the stimuli are excessively conflicting.
+
+Monocular depth cues only depend on one image, and are:
+
+\begin{itemize}
+
+\item
+  Shading, which largely depends on surdace orientation and thus
+  provides depth information
+\item
+  Shadows cast by objects
+\item
+  Retinal image size
+\item
+  Linear perspective, that is distant objects appearing smaller and
+  parallel likes appearing to meet at a vanishing point at the horizon.
+  Depth can be compressed by increasing focal length or decreasing FOV
+\item
+  Texture gradient, i.e.~the further apart is an object, the higher the
+  spatial frequency in its texture
+\item
+  Atmospheric perspective, i.e.~light scattering by the atmosphere (fog)
+  that makes farther objects look hazier
+\item
+  Motion parallax, that is the fact that when the observer moves, the
+  retinal images of objects close to the eye are displaced more quickly
+  - and through a larger angle - than are the retinal images of more
+  distant objects
+\item
+  Occlusion/interposition, which is the most important monocular depth
+  cue. Objects that block other objects appear to be closer
+\item
+  Accommodation, i.e.~deformation of the eye lens (cristallino) which
+  allows to focus objects at some distance. The larger the pupil
+  size/camera hole, the closer is the focused part of a scene
+\end{itemize}
+
+Binocular depth cues depend on the ability of humans to see two images
+from the two eyes, and are:
+
+\begin{itemize}
+\item
+  Convergence which happens when the eyeball rotates, allowing us to
+  place the point being fixated on at the fovea, a point of the retina
+  which is responsible for sharp central vision. In other words,
+  accommodation is the focusing motion that happens by deforming the
+  cristallino, while convergence is the turning inwards motion we feel
+  when fixating on a close object. Normally, there is a natural
+  relationship between accommodation and convergence. However, when
+  looking at a screen, the images on the screen are located in different
+  places. As a consequence, the location of the geometric image, seen
+  stereoscopically, lies away from the plane of the screen. As shown in
+  the following figure, the eyes accommodate on the screen, but converge
+  on the location of the stereoscopic image, causing a conflict known as
+  vision decoupling. The Oculus Rift VR headset's lenses provide
+  collimated light, therefore the eyes accommodate at infinity when
+  wearing the headset. This means that the accommodation/convergence
+  conflict is going to take place every time the user is looking at
+  something that is not infinitely far away. The same conflict holds in
+  the HTC Vive VR headset, where the eyes accommodate on a screen that
+  is very close to the eye, but then converge on points whose depth is
+  highly variable. Holographic (spinning mirror) displays can allow a
+  single eye to focus on the virtual object in when the viewpoints are
+  close enough to approximate a continuous 3D light field wavefront.
+  This way, the depth cue of the virtual objects can be captured by the
+  accommodation process of human eye, allowing it to accommodate on the
+  virtual object and eliminating the accommodation/convergence conflict.
+  Auto-stereoscopic displays are a textbook example of a device that
+  breaks the accommodation/convergence relationship, since a point that
+  is positioned at a different distance from the eyes than the screen is
+  using stereoscopy causes the eyes to converge on that point while they
+  are accommodating on the screen, thus causing vision decoupling.
+\item
+  Retinal disparity, the difference in left and right images of an
+  object due to the horizontal separation between the two eyes. The
+  ability to combine two images with disparity into a single image with
+  depth is called fusion and the resulting sense is called stereopsis.
+  The two eyes define a horopter, a surface that for a given convergence
+  has no retinal disparity. Points closer to the eyes than the horopter
+  have crossed (negative) disparity, while points farther have uncrossed
+  (positive) disparity. The area around the horopter where binocular
+  fusion is possible is called panum, and outside of it fusion fails,
+  resulting in double images. Near the fovea, the maximum binocular
+  disparity resulting in fusion corresponds to 1/6 of degree of visual
+  angle. Every scene point has its own retinal disparity, and if we
+  change the fixation point, we change disparity
+\end{itemize}
+    \begin{figure}
+      \centering
+  \includegraphics[width=0.75\textwidth]{acc-vs-conv}
+    \end{figure}
+
+
+\section{Stereo camera computation}
+
+The parameter needed are extrinsic, i.e.~eye, target and up vector
+position, and intrinsic to the camera, i.e.~the view frustum geometry.
+Stereo rendering is reequire don tiled, multi-screen and head-tracked
+displays.
+
+In projection-based systems such as CAVEs and Stereowalls the tracking
+data are the L/R eye positions, which can be tracked with two 3DoF
+position tracker or one 6DoF data, and the display system data is screen
+geometry. One important parameter for projection-based systems is
+parallax. Parallax is related to, but distinct from, retinal disparity,
+and consists in the distance between left and right points as measured
+on the screen. Unlike disparity, parallax does not depend on eye
+convergence. An object has zero parallax wen the corresponding left and
+right points overlap, and when looking at it, the eyes converge on the
+screen plane, where the object appears to be. If the left point is to
+the left of the right point (positive disance), the eyes converge behind
+the screen, where the object appears to be. If stereo cameras are
+computed correctly, parallax is less than or equal to IOD. Negative
+distance corresponds to negative parallax and the object appears to be
+in front of the screen plane, where the eyes converge. Studies recommend
+that negative parallax should not exceed 1.5 degrees, or the object will
+be too close.
+
+Fish-tank VR is a low-cost VR system which uses various technologies to
+guess the user's location. One possibility is using a head-mounted
+display that follows the head movements, so the screens are fixed w.r.t.
+the eyes. The parameters are head orientation, position and the HMD
+frustum shape and distortion.
+
+When a single framebuffer has to hold both the left and right images, a
+stereo pair has to be encoded in the color buffer. This does not happen
+when there are e.g.~two different computers generating each image.
+Framebuffers for stereo can be color-based, frame-based, or line- or
+column-based.
+
+Color-based framebuffers implement anaglyph stereo via a color mask on
+each buffer.
+
+Side-by-side frame-based framebuffers split the screen in two and render
+the left and right image on the respective sides. Quad-buffered
+frame-based framebuffers, on the other hand, are used in active stere to
+provide both images during the time the application takes to draw the
+next frames, which are then swapped simultaneously between the front and
+back buffers. This is only supported by stereo-ready graphics cards and
+is a common format when a single monitor or projector is used.
+
+Line- or column-interleaved framebuffers use even and odd line or
+columns to encode the left and right images, but in doing this, they
+halve vertical or horizontal resolution.
+
+Display generators, finally, convert the content of the front color
+buffers into a video signal. Stereo-ready cards have one video signal
+and encode left and right images sequentially; dual-head PCs have two
+independent video signals, and there are also quad-head PCs.
+
+
+\section{Oculus Rift}
+
+The hardware for the Oculus DK2 is composed of a headset and an IR USB
+camera for position tracking. The headset contains head tracker hardware
+(IMU), a latency tester, infrared lights, a 1080p display (960 hor px
+per eye) and lenses. The IMU has 6 DoF, 3 for angular velocity and 3 for
+linear acceleration; the IR camera also has 6 DoF, 3 for position and 3
+for orientation.
+
+The Oculus Rift has an Inertial Measurement Unit (IMU) that reports
+angular velocity and linear acceleration. In order to get position from
+acceleration, two numerical integration steps have to be performed as
+shown: \[
+\mathbf{v} = \int \mathbf{a} dt \implies \mathbf{s} = \int \mathbf{v} dt = \int \int \mathbf{a} dt dt
+\]
+
+These two steps magnify the measurement error in acceleration,
+eventually leading to position drift. In order to correct for this
+cumulative drift, data from a camera is used, which however has a much
+higher latency than the IMU (60 Hz vs 1000 Hz). For this reason, a
+combination of the two sensor is used in order to let the IMU estimate
+position via integration and then correct drift when camera position
+data is available.
+
+Drift correction is carried out for positon via the tracking camera,
+while for rotation, pitch and roll are based on the accelerometer
+measuring gravity and yaw on the tracking camera.
+
+Latency is a major issue in VR, with acceptable values being under 20 ms
+A sharp turn of 250 deg/s will cause 5 degrees of error with 20ms
+latency, which will cause motion sickness.
+
+The FOV for the Rift is around 100 deg hor, 90 deg ver, but the lenses
+expand the images so that the perceived FOV is larger. Eyes are not
+centered behind each half of the panel. The Oculus lenses provide
+collimated light, so the eyes accommodate at infinity. This is good for
+presbyopic people and eyes remain in a relaxed focus space. For a given
+point on the display, the angle of light hitting the eye is changed, so
+if the HMD is moved w.r.t. the head, in any direction, the part of the
+image directly in front doesn't change.
+
+The lenses provide some pincushion distortion, so barrel distortion is
+applied in preprocessing in order to provide straight images. This,
+however, also means that more data is presented on the left for the left
+eye and on the right for the right eye.
+
+The projection matrices are updated inside a per-eye loop since each eye
+can have a different one. There is a recommended eye order related to
+the reresh rate and direction.
+
+The headset runs at 75Hz, providing a 13.3ms latency, and rendering
+should be locked to that refresh rate. In VR, short-term frame rate
+drops are disastrous. Moreover, the rendering cost is higher because the
+entire scene has to be rendered twice, distortion requires more pixels
+than eventually displayed, and distortion itself adds some overhead.
+
+Some solutions to aid performance are dynamic framebuffer scaling, which
+means rendering to a smaller texture until FPS are high enough, and
+timewarp, that is using data from previously rendered frames if the new
+one isn't ready at display refresh time, shifting the image to
+compensate for the difference between predicted and actual head pose.
+
+Motion sickness is caused by conflicting sensory signals, such as
+mismatches between visual and inertial (inner ear) sensations of motion.
+The golden rule for VR is that the user is in control of the camera and
+that head tracking must exactly match what the user is doing. When
+changing the camera position, the user must be in control of the change.
+Default settings such as FOV or scale should not be changed, because
+even when ``still'', the eyes are moving a little to compensate for
+small head movements (``vestibulo-ocular reflex''). If the rendered and
+perceived FOV are mismatched, those small head movements will no longer
+correspond with eye movements and stationary objects will gain motion,
+leading to severe motion sickness.
+
+
+\section{Projection matrix
+computation}
+
+The position of a point in a given reference frame is given by
+left-multiplying the projection matrix (from world space to the desired
+reference frame) and the position vector of the point in world space.
+For example, we can assume the origin of world space to be in the middle
+of the cave, the Z axis pointing downwards, the X axis pointing to the
+right wall (looking from the top at the floor) and the Y axis looking in
+the opposite direction than the front wall.
+
+The translation matrix \(\mathbf{T}\) is then defined as \[
+\mathbf{T} = \begin{pmatrix}
+1 & 0 & 0 & F_x \\
+0 & 1 & 0 & F_y \\
+0 & 0 & 1 & F_z \\
+0 & 0 & 0 & 1
+\end{pmatrix}
+\] with \((F_x, F_y, F_z)\) being the position of the origin of the
+reference frame in world space. At this point, rotation matrices
+\(\mathbf{R_x}, \mathbf{R_y}, \mathbf{R_z}\) that encode the rotation
+\emph{around} the \(x, y, z\) axes, respectively. These have the form \[
+\mathbf{R_x} = \begin{pmatrix}
+1 & 0 & 0 & 0 \\
+0 & \cos \theta_x & -\sin \theta_x & 0 \\
+0 & \sin \theta_x & \cos \theta_x & 0 \\
+0 & 0 & 0 & 1
+\end{pmatrix}
+\]
+
+\[
+\mathbf{R_y} = \begin{pmatrix}
+\cos \theta_y & 0 & \sin \theta_y & 0 \\
+0 & 1 & 0 & 0 \\
+-\sin \theta_y & 0 & \cos \theta_y & 0 \\
+0 & 0 & 0 & 1
+\end{pmatrix}
+\]
+
+\[
+\mathbf{R_z} = \begin{pmatrix}
+\cos \theta_z & -\sin \theta_z & 0 & 0 \\
+\sin\theta_z & \cos \theta_z & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1
+\end{pmatrix}
+\]
+
+Note that:
+
+\begin{itemize}
+
+\item
+  the row and column corresponding to the axis of rotation is always the
+  unit vector corresponding to that axis (e.g.~\((1, 0, 0)\) for the
+  \(x\) axis)
+\item
+  the cosine is always the first to appear when reading the matrix in
+  either row-major or column-major order
+\item
+  a sine and a cosine never appear in the same row or column
+\item
+  a cosine is never negative
+\end{itemize}
+
+Once the translation and rotation matrices have been calculated, the
+projection matrix is then defined as
+\(\mathbf{P} = \mathbf{T R_x R_y R_z}\). Note that the translation and
+rotation are sensitive to order, so they should be calculated one after
+the other, keeping this in mind.
+
+The target is defined by projecting the virtual camera onto the required
+screen.
+
+In order to avoid negative parallax, the z-near clipping plane has to
+lie on the screen where the projection is being done.
+
+
+\section{Avatars}
+
+Even in virtual reality, people tend to follow others. Under stress,
+most people won't decide on their own, while with low stress levels they
+are more likely to explore the environment. Therefore, expressive
+avatars are needed.
+
+The evaluation of the impact of animations in the perception of a
+simulated crowd are both quantitative (velocity, density, flow rates,
+personal distances) and qualitative (perceptual evaluation of points,
+humanoids, immersion etc.)
+
+The effect of shape, materia, rendering style, lightness and brightness
+affect the perception of facial emotion. The sense of ``presence'' is
+also based on gaze, gait and gestures of avatars.
+
+Experiments show that animation variety increases realism for humanoids
+but not for bots. When using only locomotion, bots' trajectories were
+rated as more realistic than those of humanoids. Appearance alone does
+not impact realism significantly.
+
+Minimum requirements for avatars are that height should be adjusted to
+the user, animations should be natural looking, and arm movements should
+match what is being input through the controller. When two people are
+sharing physical space, they communicate and avoid collision through eye
+contact or head movement, while in VR they resort to hand gestures and
+verbal confirmations.
+
+Self-location refers to the sensation of being inside a virtual body. It
+is important that in an interactive virtual environment (IVE) the
+position of the user's real and virtual bodies match. Agency refers to
+the sensation of having control over the virtual body. Discrepancies
+between what the user sees and what they want to do decreases agency.
+Ownership refers to the identification of a virtual body as one's body.
+Ownership is related to how ``human'' the virtual body looks, and to
+sensory information like visual, tactile and proprioceptive input.
+
+The uncanny valley is the phenomenon where things that look somewhat
+human, but are clearly not - such as C-3PO in Star Wars - produce an
+accepting reaction, while things that are very nearly human, but just a
+little strange - such as a child's doll, a ventriloquist's dummy ora a
+clown, - produce a negative response. The most common criticisms of
+characters that fall into the uncanny valley are hollow, lifeless eyes,
+waxy skin, poor facial and lip animations. In order to avoid the uncanny
+valley, characters can be either be made empathetic but unrealistic, or
+extremely photorealistic through sculpting, texturing and performance
+capture.
+
+
+\section{Human-computer interaction and user
+interfaces}
+
+HCI is the process of communication between users and computers. UIs are
+the medium through which the communication takes place, translating user
+inputs into a representation the computer can understand and the other
+way around. 3D interaction is when the user's tasks are performed in a
+3D context; a 3D UI involves 3D interaction. Affordances and constraints
+are what users can and can't do using a technique.
+
+Components of a UI are input and output devices, interaction techniques,
+widgets and metaphors. 3D UIs can be more intuitive, can be used to
+interact using natural skills, and are more direct, i.e.~there is less
+cognitive distance between user action and feedback.
+
+User tasks in a virtual environment can be classified as
+selection/manipulation, navigation, application control and symbolic
+input.
+
+Selection means identifying an object from a set, while manipulation
+means positioning, rotating, scaling and deforming objects. The key
+issues in these two tasks are mapping the user action into the desired
+results and giving appropriate deedback.
+
+The number of control dimensions is the number of DoFs of the input
+device, while the integration of control dimension is the number of
+\emph{simultaneous} DoFs. Ideally there are \textgreater=6 DoFs, fully
+integrated.
+
+Isomorphic control is when the device measures the position of the
+user's limbs, which is preferable for manipulation, while isometric
+control is when the device measures the force applied by the user, which
+is preferable for controlling rate. Isomorphic manipulation is more
+natural and intuitive, but non-isomorphic manipulation overcomes
+hardware and human limitations.
+
+There exist hand-attached controllers, such as virtual gloves, and
+hand-held controllers, such as VR controllers. In general, larger
+muscles are used for slower movements.
+
+Physical props can be used for selection and manipulation. In this
+context, replicating the shape of the virtual object gives no benefit
+for manipulation.
+
+Exocentric metaphors include the world-in-miniature metaphor, in which
+the user is provided with a handheld miniature of the scene. WIM
+requires careful use of occlusion management.
+
+Egocentric metaphores include virtual hand and virtual pointers. When
+using a virtual hand, the user selects and manipulates objects directly
+with their hands. Typically, a 3D cursor is displayed and the user
+intersects it with the target and uses a trigger technique for
+selection, while manipulation is performed through natural hand
+movements when the object is attached to the virtual hand.
+
+The main problem is that only objects that the user can reach can be
+selected/manipulated, so users are required to travel.
+
+Virtual pointers allow users to select and manipulate objects that are
+beyond the immediate reach of their limbs. It is a very suitable
+technique for selection, but manipulation is problematic since only
+radial movements can be made, which is bad for changing distance to the
+user. It's also a technique that is only effective for one degree of
+freedom, the axis of the pointer itself. Pointing should therefore be
+used for selection, while a virtual hand is better for manipulation.
+
+There are six metaphors for virtual pointers: ray casting, two-handed
+pointing, fishing reel, aperture, flashlight and image plane.
+
+When using ray casting, a line segment is attached to the hand and
+defines the pointing direction. This is a very precise technique as the
+selection volume is a single ray, but it presents problems in selecting
+objects that are far away. There are many variants: rays can be bent, or
+snap to the nearest object etc. A variant of ray casting is two-handed
+pointing, which requires two hands to be tracked in order to allow one
+to define the origin and the other to specify where the ray should point
+to.
+
+The fishing reel technique is similar to ray casting, but introduces an
+additional input device which controls the length of the virtual ray.
+
+Another metaphor is the flashlight, in which the selection volume is a
+cone, just like the light in a flashlight. The apex of the cone is
+defined by the position of the user's hand while the axis is its
+orientation. The aperture of the cone is constant. One issue that is
+immediately apparent with this metaphor is deciding which object to
+select when the cone comprises multiple objects. A possible rule is to
+select the object that is closest to the axis of the cone, but the issue
+still stands when the environment is very cluttered. A variant of the
+flashlight metaphor is using a cone whose axis points to the user's hand
+and whose axis is the line passing by the user's hand and eye. This way,
+aperture can be controlled by moving the sensor closer and device twist
+can be used to disambiguate between objects.
+
+The fishing reel technique is similar to ray casting, but introduces an
+additional input device which controls the length of the virtual ray.
+
+Clutching occurs when a manipulation cannot be achieved in a single
+motion, so the object must be released and grasped again.
+
+Each manipulation task has several variables that affect which is the
+most suitable technique. General variables are application goals,
+physical and psychological conditions of the users.
+
+
+\section{Presence}
+
+Task performance is an important measure of the effectiveness of a
+virtual environment, both within the VE and when transferred outside it.
+Another measure of the equality of a VE is presence.
+
+Presence is operationally defined as the successful substitution of real
+sensory data by computer-generated sense data. A ``successful'' response
+is realistic, similar to a real response. Here we are dealing with a
+low-level physiological response paving the way for higher-level
+cognitive and emotional responses which include verbal confirmations of
+``being there''.
+
+Factors that influence presence are display parameters, sound, haptics,
+virtual body representation and body engagement.
+
+Presence can be measured with physiological measures, such as heart rate
+and galvanic skin response, as well as with behavioral responses.
+Subjective methods such as questionnaires are also possible.
+
+Navigating a virtual environment using a controller breaks the
+correlation between proprioception and sensory data, while experimental
+data confirms this doesn't happen with walking-in-place if the users
+associate well with their virtual bodies.
+
+Lower latency also results in a higher heart reate, which correlates
+with higher presence.
+
+Visual realism doesn't generally correlate with reported presence.
+However, ray tracing makes it possible to have shadows and reflections
+inside a virtual environemnt, at the cost of long rendering time. Real
+time ray tracing offes the chance to investigate the impact of dynamic
+changes on presence. Experiments confirm that ray tracing leads to
+higher presence than the OpenGL illumination model on the ``pit room''
+experiment.
+
+Reported presence is significantly positively correlated with prior VR
+experience, but negatively correlated with programming experience and
+age.
+
+Presence is used in psychotherapy. Cognitive-behavioral therapy aims to
+restructure patients' beliefs through exposure to feared or traumatic
+events. The patient must experience the anxiety or fear, but not too
+much. VR can help, because the patients know that it's not real but
+respond as if it were. In another experiment concerning fear of public
+speaking, people reacted to virtual audiences with appropriate affect,
+so it is possible to use VR for treatment. Of course, when other people
+in the VE are real humans, a visual representation of them is needed, to
+know what they are looking/pointing at. Finally, presence in immersive
+virtual environments can be used as a validation method for virtual
+crowds, to study human behavior under panic or stressful situations that
+cannot be evaluated in the real world, and to improve current crowd
+simulation models.
+
+Moreover, people wo are in pain from severe burns show alleviated pain
+when their consciousness is ``transported to another place''.
+
+Passive haptics are a way of augmenting a high-fidelity visual virtual
+environment with low-fidelity physical objects that prevent the virtual
+bodies of users from passing through objects. Passive haptics do not
+replicate such properties as texture, thermal conductivity, and mass,
+nor do they replicate fine geometric details of the visual objects such
+as handles on cabinet drawers. Examples of static haptics are
+head-mounted displays and simple versions of physical objects.
+
+Adding physical objects will improve virtual environments because they
+make the objects feel to the user as if the objects are there. Humans
+can test the reality of an image by trying to touch the object, so if
+there is a real object where the users expects there to be one, presence
+(as measured with heart rate) is increased.
+
+One experiment investigated passive haptics's effects on performance of
+a real-world navigation task after training in a virtual environment.
+Half of the participants trained on maze navigation in a VE augmented
+with a styrofoam physical model, while half trained in a non-augmented
+VE but were given visual and audio contact cues. The task was to gain as
+much information as possible about the layout of the environment.
+Participants knew before the VE session that their training would be
+tested by navigating an identical real maze environment while
+blindfolded.
+
+
+\section{Disclaimer}
+
+This document may contain errors and inaccuracies that may damage your
+system, cause your partner to leave you, your boss to fire you, your
+cats to pee on your furniture and clothing, and global thermonuclear
+war. Proceed with caution. This document is released under the CC-BY-SA
+4.0 license. \ccbysa
 \end{document}
