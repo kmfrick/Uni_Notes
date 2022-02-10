@@ -1,0 +1,1250 @@
+\documentclass[answers, a4paper, 11pt]{exam}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage[italian]{babel}
+\usepackage{parskip}
+\usepackage{ccicons}
+\usepackage{hyperref} % Has to be loaded before cleveref
+\usepackage{cleveref}
+\usepackage[utf8]{inputenc} % Has to be loaded before csquotes
+\usepackage[autostyle=false, style=english]{csquotes}
+\usepackage[margin=2cm]{geometry}
+\usepackage{graphicx}
+\usepackage{mathrsfs}
+\usepackage{multicol}
+\usepackage{relsize}
+
+\pagestyle{plain} 
+\graphicspath{{./images/}}
+
+\setlength{\columnseprule}{.4pt}
+\renewcommand{\solutiontitle}{\noindent\textbf{R:}\enspace}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+
+\title{Gestione dell'Innovazione e dei Progetti M}
+\author{Kevin Michael Frick}
+\begin{document}
+\maketitle
+
+\section{Forme di innovazione}
+
+\textbf{Definizione di innovazione}: implementazione di un prodotto (bene o servizio) nuovo o significativamente migliorato, un nuovo metodo di marketing, o un nuovo metodo di organizzazione nelle pratiche di business, nel posto di lavoro o nelle pubbliche relazioni.
+(OECD, Oslo Manual, 3a ed.)
+
+L'innovazione:
+\begin{itemize}
+    \item crea nuovo valore per servire meglio i clienti e combina le dimensioni di invenzione e sfruttamento commerciale
+    \item crea valore per il cliente e quindi per l'impresa, cambiando in modo creativo una o più dimensioni di business
+    \item ha molte sfaccettature
+    \item è sistemica
+    \item determina la nascita di nuovi settori e mercati
+    \item modifica la struttura di settori esistenti
+    \item è fonte del vantaggio competitivo
+    \item modifica la base di risorse e competenze distintive dell'impresa
+\end{itemize}
+
+L'innovazione può essere descritta da un modello lineare che segue quattro fasi:
+
+\begin{enumerate}
+    \item ricerca di base (risultato: scoperta)
+    \item ricerca applicata (risultato: invenzione/tecnologia/dimostratore)
+    \item sviluppo pre-competitivo (risultato: invenzione/prototipo)
+    \item sviluppo post-competitivo (risultato: prodotto/innovazione)
+    \item diffusione
+\end{enumerate}
+
+Lungo queste quattro fasi il rischio è calante, e il ruolo dell'accademia lascia sempre più spazio ai privati.
+
+L'innovazione può essere:
+\begin{itemize}
+    \item di prodotto/processo (Abernathy, Utterback)
+    \begin{itemize}
+        \item prodotto: incorporata nei beni/servizi realizzati da un'impresa
+        \item processo: impresa che svolge le sue attività in modo più efficiente/efficace
+        \item un'innovazione può essere di prodotto per un'azienda e di processo per un'altra
+        \item l'innovazione di prodotto decresce esponenzialmente durante lo sviluppo di un settore
+        \item una volta che un prodotto è stato sviluppato, si inizia a produrlo meglio: l'innovazione di processo cresce durante la fase fluida, poi rimane stabile e ha il suo picco durante la fase transitoria, per poi descrescere nella fase specifica
+    \end{itemize}
+    \item radicale/incrementale (Tushman, Anderson)
+    \begin{itemize}
+        \item classificate in base all'intensità e al grado di ampiezza dell'innovazione
+        \item dipende dalla distanza dal prodotto/processo preesistente
+        \item continuum che prevede diversi gradi di novità
+        \item il carattere radicale di un'innovazione è relativo, cambia nel tempo secondo la prospettiva di ricevimento
+        \item innovazione di prodotto/processo e radicale/incrementale sono collegate
+        \begin{itemize}
+            \item innovazione incrementale di prodotto
+            \item innovazione incrementale di processo
+            \item innovazione radicale di prodotto
+            \item innovazione radicale di prodotto e processo, ``discontinuità assoluta con il passato'' 
+        \end{itemize}
+    \end{itemize}
+    \item competence destroying/enhancing (Tushman, Anderson)
+    \begin{itemize}
+        \item enhancing consiste in un'evoluzione delle conoscenze preesistenti
+        \item destroying non scaturisce dalle conoscenze preesistenti e le può rendere inadeguate
+        \item anche questo carattere è relativo alla prospettiva dell'impresa e alla sua base di conoscenze
+    \end{itemize}
+    \item architetturale/modulare (Henderson, Clark)
+    \begin{itemize}
+        \item architetturale: cambiamento della struttura del sistema, del modo in cui i componenti interagiscono
+        \item modulare/di componente: prevede cambiamenti di uno o più componenti del sistema, ma non alla configurazione generale
+    \end{itemize}
+    \item disruptive/sustaining (Christensen)
+    \item di significato/funzione (Verganti)
+    
+\end{itemize}
+
+\section{Modelli dell'innovazione}
+
+L'innovazione è descritta da Schumpeter come ``forza di distruzione creatrice'' nel suo libro ``Capitalismo, socialismo e democrazia''.
+
+L'innovazione è descritta ad esempio con il modello della curva ad S, che può espresso in maniera quantitativa, ad esempio, nella formulazione di Fisher-Pry, definito a partire dalla funzione logistica:
+
+\begin{equation}
+    f = \frac{1}{1 + b e^{-ct}}
+\end{equation}
+
+Dove $c$ è il coefficiente di interazione tra acquirenti attuali e potenziali (valori alti di $c$ significano una curva più verticale) e $b = e^{ct_0}$ modifica la posizione della curva, con $t_0$ tempo in cui la diffusione sarà completa al 50\%.
+
+Il modello di Fisher-Pry assume che:
+\begin{itemize}
+    \item il progresso di una nuova tecnologia la rende competitiva rispetto a una esistente
+    \item se una sostituzione è iniziata, si completerà
+    \item il tasso di sostituzione di una nuova tecnologia è proporzionale all'ammontare di quella vecchia ancora da sostituire
+\end{itemize}
+
+Il modello della curva a S può essere utilizzato per rappresentare:
+\begin{itemize}
+\item la diffusione di una innovazione in funzione del tempo
+\item il miglioramento delle performance in funzione dell'impegno profuso
+\item i cinque segmenti di clientela: innovators, early adopters, early majority, late majority e laggards
+\end{itemize}
+
+La derivata di una curva a S è una campana, e questa rappresentazione viene utilizzata altrettanto spesso. Entrambe le rappresentazioni offrono una spiegazione immediata del modello. 
+
+\begin{itemize}
+\item nel caso della diffusione, una innovazione si diffonde molto lentamente nelle fasi iniziali di sviluppo, in quanto il mercato è ancora incerto sull'acquisto. Superata questa fase iniziale, si ha un incremento della diffusione per unità di tempo (parte più inclinata della curva logistica , o picco della campana), che si stempera una volta che la tecnologia ha già ottenuto larga diffusione (coda destra della campana, o parte finale, molto "piatta", della curva logistica). Le curve a S possono essere utilizzate anche per modellizzare le dinamiche di sostituzione di una nuova tecnologia \emph{disruptive} rispetto a una esistente.
+\item nel caso delle performance, chiaramente quando una sola impresa sta impiegando risorse nello sviluppo di una innovazione è necessario investire molto sforzo per ottenere miglioramenti marginali (\textbf{fase di fermento}, caratterizzata da innovazione radicale). In seguito, una volta che l'innovazione è più matura e i principi tecnologici alla base del suo funzionamento sono più chiari, diventa più semplice e veloce sviluppare continui miglioramenti (\textbf{fase di sviluppo}, caratterizzata da innovazione incrementale) Alla fine, quando lo sviluppo tecnologico ha per la maggior parte fatto il suo corso, sforzi anche molto intensi portano a miglioramenti sempre più trascurabili, e spesso è proprio in questo momento che un'altra innovazione prende il posto della precedente (\textbf{fase di maturità} e poi \textbf{distruzione}, caratterizzata da innovazione radicale).
+\item nel caso dei segmenti di clientela, la funzione che ne esprime la distribuzione è una gaussiana, mentre la funzione di distribuzione cumulativa ha una forma a S. Questa interpretazione, pur avendo la stessa forma grafica, non aderisce al modello di Fisher-Pry (la derivata della funzione logistica non è la funzione di densità di una gaussiana), ma è comunque spesso accostata alle altre per ragioni di utilità pratica.
+\end{itemize}
+
+
+I gruppi di clientela sono i seguenti.
+
+\begin{itemize}
+    \item Il primo gruppo di utilizzatori che adotta una tecnologia sono le innovators, una piccola parte (<5\%, coda della gaussiana) del mercato che compra prodotti nuovi anche senza l'intervento dell'azienda.
+
+\item Il secondo gruppo sono le early adopters, che è inserita nel gruppo sociale con una reputazione di "leader" e compone una parte maggiore del mercato (circa 14\%).
+
+\item Il terzo gruppo è composto dalla early majority, che compone circa il 34\% del mercato ed è contenta di adottare un'innovazione dopo che un gruppo sufficientemente nutrito di clienti ne conferma la validità. Quest'ultima è la fetta di clienti a cui le imprese puntano maggiormente.
+\begin{itemize}
+\item Il distacco tra early adopters e early majority è detto ``Chasm"'' o "Abisso di Moore". Per superarlo è necessario avere una chiara value proposition e una strategia di marketing verticale, ovvero puntare a una fetta di clienti iniziale (``testa di ponte'') fortemente fidelizzabile che formi la base per la successiva diffusione della tecnologia grazie a processi di imitazione.
+\end{itemize}
+\item Il quarto gruppo è costituito dalla late majority, anch'essa componente circa il 34\% del mercato, che adotta un'innovazione quando essa è sufficientemente matura da non avere dubbi circa la sua utilità.
+
+\item Il quinto gruppo è detto ``laggards'' e adotta una tecnologia solo quando non è possibile farne a meno, oppure si rifiuta totalmente di adottarla.
+\end{itemize}
+
+Il modello della curva a S ha però dei limiti:
+\begin{itemize}
+    \item i limiti effettivi di una teconologia non sono noti a priori
+    \item cambiamenti inattesi (innovazioni!) nel mercato possono alterare il circlo di vita di una tecnologia
+    \item se si aderisce alla curva ``fino in fondo'' si rischia di passare troppo presto (o tardi) a una nuova tecnologia
+\end{itemize}
+
+Anderson e Tushman propongono un modello alternativo alle curve a S per le dinamiche di sostituzione tecnologica, notando che i cambiamenti provocati dalle discontinuità tecnologiche procedono ciclicamente. 
+Secondo loro, ogni discontinuità tecnologica innesca, nell'ordine:
+\begin{enumerate}
+    \item un'era di fermento in cui tutte le imprese iniziano a gestire autonomamente cercando di vincere la corsa verso lo sviluppo del design dominante/standardizzazione
+    \item l'affermazione di un disegno dominante
+    \item un'era incrementale in cui tutte le imprese concorrono nel miglioramento della tecnologia dominante
+\end{enumerate}
+
+Ci sono alcuni elementi comuni nelle rappresentazioni del ciclo tecnologico:
+\begin{enumerate}
+    \item entrata di nuove imprese (discontinuità tecnologica) nella fase iniziale
+    \item competizione tra opzioni nella fase di fermento
+    \item concentrazione e ``shake-out'' (fallimento delle imprese a causa della concorrenza) nella fase di maturità 
+    \item affermazione del dominant design come spartiacque 
+    \item effetto di innovazioni radicali sulla struttura del settore (fallimento dell'incumbent)
+\end{enumerate}
+
+I rischi principali del fallimento degli incumbent:
+\begin{itemize}
+    \item myopia (e limiti cognitivi)
+    \item avoidance of pain (evitare di cannibalizzare il design tradizionale)
+    \item inertia (organizzativa, e mancanza di competenze)
+    \item fit (che impedisce di adattarsi)
+\end{itemize}
+
+Per non sopperire di fronte alle discontinuità tecnologice, gli incumbent possono:
+\begin{itemize}
+    \item disporre di sensori sullo sviluppo della nuova tecnologia (exploration/exploitation)
+    \item mantenere opzioni aperte con risorse proprie
+    \begin{itemize}
+        \item ampliamento unità esistenti o creazione di nuove (crescita interna)
+        \item fusione, incorporazione, acquisizione (crescita esterna)
+    \end{itemize}
+    \item mantenere opzioni aperte in forme collaborative
+    \begin{itemize}
+        \item joint ventures, consorzi, cooperative, partecipazioni, acquisizioni educative (accordi equity)
+        \item collaborazione sistematica/plurifunzionale o occasionale/monofunzionale
+        \item franchising
+        \item management contract
+        \item associazione a catene
+        \item accordi collusivi
+    \end{itemize}
+    \item favorire autonomia e imprenditorialità (organizzazione duale)
+    \item fare leva sulle risorse complementari per colmare un ritardo tecnologico
+\end{itemize}
+
+Il grado di maturità di una tecnologia si può misurare con il Technology Readiness Level (TRL), che è stata adottata da diversi programmi di finanziamento Horizon 2020 della Commissione Europea. Si articola su 9 livelli:
+\begin{enumerate}
+    \item principi fondamentali (ricerca di base)
+    \item concept tecnologico
+    \item proof of concept sperimentale
+    \item validazione in laboratorio
+    \item validazione industriale
+    \item dimostrazione industriale
+    \item dimostrazione prototipo in ambiente reale
+    \item definizione e qualificazione completa
+    \item dimostrazione completa in ambiente reale
+\end{enumerate}
+
+Vi è una caratterizzazione in tre gruppi di livelli:
+\begin{itemize}
+    \item livelli 1-3: ruolo preponderante dell'accademia, sviluppo di conoscenze
+    \item livelli 4-7: ruolo collaborativo di accademia e industria, sviluppo di tecnologia
+    \item livelli 7-9: ruolo preponderante dell'industria, sviluppo di business
+\end{itemize}
+
+\section{Proprietà intellettuale}
+
+Vantaggi delle imprese first mover:
+
+\begin{itemize}
+    \item sostenibilità del primato tecnologico: inizialmente i concorrenti non possono duplicare la tecnologia
+    \item la rapidità dello sviluppo dell'innovazione avvantaggia un'impresa sulle concorrenti
+    \item la reputazione creata
+    \item la scelta del canale
+    \item la curva di apprendimento esclusivo
+    \item accesso alle (possibilmente scarse) risorse dei fornitori
+    \item inizialmente unico produttore, quindi maggiori profitti
+\end{itemize}
+
+Costi e rischi delle imprese first mover:
+
+\begin{itemize}
+    \item istruzione dei clienti
+    \item sviluppo delle infrastrutture
+    \item sviluppo degli input e dei prodotti complementari
+    \item approvazione delle autorità competenti
+    \item incertezza della domanda
+    \item cambiamenti nei bisogni dei clienti
+    \item investimenti iniziali specifici
+    \item discontinuità tecnologiche
+    \item imitazioni a basso costo
+\end{itemize}
+
+Il successo dell'innovazione dipende dal suo regime di appropriabilità. Si ha un regime di appropriabilità forte quando l'innovatore può beneficiare in via esclusiva dei ritorni economici del nuovo prodotto o processo. Il regime di appropriabilità è determinato da:
+
+\begin{itemize}
+    \item strumenti legali di protezione della tecnologia, che però non sono sufficienti per la completa appropriazione e non garantiscono il passaggio dalla fase di invenzione a quella di sfruttamento commerciale
+    \item tipologia di innovazione (prodotto o processo). Le innovazioni di prodotto sono più facilmente imitabili di quelle di processo, si ha quindi una diversa efficacia della protezione brevettuale.
+    \item natura della conoscenza (tacita o esplicita). La conoscenza tacita non può essere codificata, e quindi trasferita tramite brevetti, e non è possibile replicare le caratteristiche del processo al di fuori del contesto specifico nel quale sono state sviluppate
+    \item caratteristiche della tecnologia. Le tecnologie discrete possono essere acquisite con pochi brevetti relativi agli elementi essenziali (e.g. farmaci) mentre quelle sistemiche necessitano di un portafoglio di brevetti irrealistico, che controlli tutti i componenti (e.g. elettronici) della tecnologia sviluppata
+    \item risorse complementari, la cui redditività cresce con la disponibilità del suo complemento (e viceversa) con il quale condivide il know-how necessario (Teece 1986). I fornitori di prodotti complementari (complementors) possono appropriarsi di una consistente parte del valore creato, e il loro potere dipende da:
+    \begin{itemize}
+        \item concentrazione
+        \item costi di riconversione
+        \item facilità di unbundling (scomposizione)
+        \item minacce di integrazione
+        \item tasso di crescita complessivo del settore
+    \end{itemize}
+    \item standard tecnologici
+\end{itemize}
+
+La proprietà intellettuale comprende i diritti d'autore e connessi e la proprietà industriale.
+La proprietà industriale comprende marchi, indicazioni geografici, denominazioni di origine, invenzioni, utilità, informazioni aziendali ecc. 
+I risultati delle attività di ricerca e sviluppo hanno le caratteristiche di un bene pubblico: non rivalità (i costi di riproduzione di un'informazione sono quasi nulli) e non escludibilità (l'innovatore non può appropriarsi esclusivamente dei benefici economici).
+Inoltre, l'innovazione è caratterizzata da:
+
+\begin{itemize}
+    \item indivisibilità (alti costi fissi)
+    \item incertezza
+    \item risultati di lungo termine
+    \item guadagni sociali molto maggiori di quelli privati
+    \item rischi di fallimento del mercato
+\end{itemize}
+
+In questo contesto, i titoli di proprietà intellettuale incentivano la ricerca e sviluppo, e sono:
+
+\begin{itemize}
+    \item Un \textbf{brevetto} protegge le invenzioni, ovvero le soluzioni originali che superano un problema tecnico, e ha i requisiti di novità, attività inventiva e applicabilità industriale. La novità è semplice da interpretare, mentre l'attività inventiva no. I software non sono brevettabili in Europa, ma in pratica sono stati concessi brevetti per invenzioni che abbiano un ``effetto tecnico'' (e.g. controllare un robot). I brevetti sono temperati da una durata limitata nel tempo e nello spazio e da una sufficiente descrizione dell'invenzione. 
+    I brevetti:
+    \begin{itemize}
+        \item incentivano lo sviluppo di invenzioni
+        \item facilitano la diffusione delle invenzioni
+        \item facilitano la commercializzazione delle invenzioni
+        \item facilitano il controllo e il coordinamento della ricerca
+    \end{itemize}
+    Il \emph{diritto di priorità} permette di reclamare il diritto al brevetto di un'invenzione in uno Stato diverso da quello in cui è stato inizialmente presentato, se un'altra persona brevetta lo stesso oggetto dopo il deposito del brevetto iniziale. Per decidere lo Stato in cui depositare il brevetto, si considerano:
+    \begin{itemize}
+        \item fattori commerciali e concorrenziali
+        \item costo di tutelare il brevetto
+        \item accordi internazionali, e.g. brevetto europeo o domanda internazionale (PCT)
+    \end{itemize}
+    I costi di brevettazione si dividono in:
+    \begin{itemize}
+        \item di deposito
+        \item di esame e concessione
+        \item di mantenimento
+    \end{itemize}
+    Prima di brevettare:
+    \begin{itemize}
+        \item non si possono presentare pubblicazioni che riguardino l'invenzione
+        \item non si può commercializzare l'invenzione
+        \item non si può presentare l'invenzione, a meno di non far firmare un NDA
+    \end{itemize}
+    
+    \item un \textbf{marchio} protegge parole o simboli, e ha i requisiti di originalità, liceità, veridicità e capacità distintiva. L'intensità è variabile a seconda che si tratti di un marchio forte o debole. In ogni caso, i marchi si esplicano solo nelle classi merceologiche (secondo la classificazione di Nizza) per cui è stata effettuata la registrazione.
+    Le criticità tipiche del marchio sono la decadenza per non uso e la perdita della capacità distintiva (volgarizzazione).
+    \item il \textbf{copyright} protegge un lavoro originale artistico o letterario, un software o un'opera di ingegneria. Non è richiesto alcun deposito (eccetto in Italia per le opere di ingegneria)
+    \item la protezione di \textbf{disegni o modelli} protegge le parti visibili di un prodotto e hanno i requisiti di originalità e novità. Se la forma è determinata solo dalla funzione tencica, o non è visibile dal normale utilizzo, non è proteggibile.
+    \item Piuttosto che rivelare informazioni dettagliare su un prodotto o un processo proprietario in cambio di un brevetto, inventori e imprese spesso sceglieranno di proteggere la propria proprietà intellettuale tenendola come \textbf{trade secret}. 
+    Quest'ultimo \emph{non è uno strumento legale}, gli altri 4 sì.
+    Uno dei rischi del trade secret è che un'altra azienda metta in commercio la stessa invenzione, questa volta brevettandola, impedendo quindi all'azienda con trade secret di trarre profitto dall'invenzione.
+\end{itemize}
+
+Quando la tecnologia non è di importanza strategica, l'impresa può concentrarsi sullo sviluppo di tecnologia e sfruttare le risorse complementari di terze parti (\emph{licensing-out}).
+In questi casi, i tempi e i costi di sviluppo si riducono (perché le risorse complementari sono già esistenti) e si può rapidamente entrare in mercati stranieri e generare rapidamente profitti e cash flow. 
+Le licenze possono essere:
+
+\begin{itemize}
+    \item esclusive (solo chi riceve la licenza può sviluppare il prodotto)
+    \item sole license (chi riceve e chi dà la licenza possono sviluppare il prodotto)
+    \item non esclusive
+\end{itemize}
+
+e possono portare guadagno tramite:
+
+\begin{itemize}
+    \item down payment
+    \item milestone payment
+    \item royalties
+\end{itemize}
+
+Per determinare le royalties si possono utilizzare approcci:
+
+\begin{itemize}
+    \item comparativi (a licenze esistenti)
+    \item di mercato (pratiche di settore per invenzioni simili)
+    \item analitici (allocazione dei benefici economici)
+    \item prassi consolidate
+\end{itemize}
+
+Per determinare i valori dei brevetti invece si possono usare approcci:
+
+\begin{itemize}
+    \item di mercato
+    \item basato sul costo 
+    \item basato sui guadagni generati
+    \item delle opzioni reali
+\end{itemize}
+
+\section{Ecosistema dell'innovazione}
+
+Il ciclo di vita di una startup si articola in sette fasi:
+
+\begin{enumerate}
+    \item discovery: trovare la soluzione a un problema e verificare che sia sensata
+    \item validation: confermare che il prodotto possa avere una solida base di early adopter
+    \item efficiency: rifinire il business model dell'azienda in modo che possa scalare
+    \item scale: fare crescere l'azienda e la capacità organizzativa
+    \item sustain
+    \item maintain
+    \item decline
+\end{enumerate}
+
+Un ecosistema ecologico è una comunità di organismi e la rete delle interazioni tra di loro e con l'ambiente fisico.
+
+Un ecosistema dell'innovazione è una comunità di attori che interagiscono tra lor e con tante questioni e processi globali in modo da generare innovazioni.
+
+Entrambi i tipi di ecosistema si basano sulle interazioni tra pari e con l'ambiente per sostenersi e creare valore attraverso le loro interconnessioni (Adner 2017), il quale valore non potrebbero creare da sole (nemmeno in sommatoria, senza collaborare).
+
+Gli elementi di un ecosistema dell'innovazione sono:
+\begin{itemize}
+    \item politiche e regolamentazioni permissive
+    \item accessibilità del finanziamento
+    \item capitale umano
+    \item mercati che supportino l'innovazione
+    \item infrastrutture
+    \item cultura innovativa e imprenditoriale
+    \item networking
+    \item relazioni produttive tra attori e parti dell'ecosistema
+\end{itemize}
+
+Un ecosistema dell'innovazione è valutato secondo tre fattori:
+
+\begin{itemize}
+    \item quantità di startup \emph{innovative}
+    \item qualità delle startup \emph{innovative}
+    \item ambiente che supporti l'innovazione
+\end{itemize}
+
+ed è valutato su due dimensioni:
+
+\begin{itemize}
+    \item crescita del funding early-stage
+    \item crescita delle exit
+\end{itemize}
+
+Il ciclo di vita di un ecosistema, secondo il modello ELM, attraversa quattro fasi, durante le quali cresce la percentuale di unicorns, exit, successo a uno stadio iniziale:
+
+\begin{enumerate}
+    \item attivazione (obiettivo: incrementare le possibilità di funding iniziali)
+    \item globalizzazione (obiettivo: incrementare la connettività globale con altri ecosistemi)
+    \item attrazione (obiettivo: espansione)
+    \item integrazione (obiettivo: integrare l'ecosistema con il flusso globale, nazionale e locale di risorse)
+\end{enumerate}
+
+La governance di un ecosistema cambia nel tempo, seguendo tre fasi:
+
+\begin{enumerate}
+    \item birth: design gerarchico, con tanti attori che comunicano solo con un solo \emph{anchor tenant}
+    \item transizione
+    \item consolidation: design relazionale, con tanti attori che comunicano tra loro e l'anchor tenant che ricopre un ruolo ridotto
+\end{enumerate}
+
+Gli attori di un ecosistema, a seconda delle fasi, sono:
+
+\begin{enumerate}
+    \item ideation: istituzione di ricerca, amici/famiglia
+    \item research and development: incubatori/acceleratori, agenzie di sviluppo
+    \item proof of concept: angel investors, professionisti
+    \item transition to scale: venture capitalists, startup e imprenditori
+    \item scaling: private equity, facilitatori/intermediari
+    \item sustainable scale: governi, aziende private
+\end{enumerate}
+
+Le istituzioni di ricerca:
+
+\begin{itemize}
+    \item possono concentrarsi su ricerca ``blue-sky'' (senza applicazioni ben definite) o su progetti orientati la mercato
+    \item forniscono educazione terziaria
+\end{itemize}
+
+Gli incubatori:
+
+\begin{itemize}
+    \item forniscono un ambiente che supporti le startup
+    \item forniscono spazi per far incontrare gli innovatori e fare loro condividere idee
+    \item forniscono infrastrutture e tecnologia
+    \item foniscono accesso a una rete di advisor e mentor
+\end{itemize}
+
+Gli angel investor:
+
+\begin{itemize}
+    \item riempiono i gap di funding tra lo stadio di ricerca e sviluppo e quello di transition to scale
+    \item sono meno risk-averse dei VC
+    \item spesso prendono una posizione nella board delle start-up in cui investono
+\end{itemize}
+
+I venture capitalist:
+
+\begin{itemize}
+    \item forniscono capitale alle startup che non hanno accesso ai mercati di private equity
+    \item se queste startup hanno successo, guadagnano un enorme ritorno sull'investimento
+    \item altrimenti, le perdite sono notevoli, ma solitamente i VC sono abbastanza ricchi da poterselo permettere
+    \item solitamente investono molto di più degli angel investor
+    \item possono investire con equity, quasi-equity, prestiti semplici o condizionati all'inizio delle vendite
+    \item solitamente comprano il 50\% o meno dell'equity delle aziende in cui investono
+\end{itemize}
+
+Le imprese di private equity:
+
+\begin{itemize}
+    \item gestiscono i soldi di fondi pensionistici e investitori vari
+    \item sono solitamente interessate a aziende mature, o a aziende in deterioramento delle quali è possibile revitalizzare i profitti
+    \item solitamente comprano il 100\% delle aziende in cui investono
+\end{itemize}
+
+I governi:
+
+\begin{itemize}
+    \item possono favorire l'innovazione creando politiche e regolamentazioni che supportino le startup con incentivi fiscali od i partnership
+    \item assicurano che gli innovatori abbiano accesso all'infrastruttura di cui hanno bisogno
+    \item possono anche avere un ruolo ``imprenditoriale'' creando nuovi ambiti di sviluppo sostenibile, agendo poi come partner per aiutare innovazioni di successo a scalare
+\end{itemize}
+
+Amici e famiglia:
+
+\begin{itemize}
+    \item supportano psicologicamente o finanziariamente
+\end{itemize}
+
+Le agenzie di sviluppo:
+
+\begin{itemize}
+    \item possono essere bilaterali, multilaterali o private
+    \item affrontano problemi del Sud del mondo
+    \item tendono a concentrarsi su innovatori a uno stadio preliminare
+    \item spesso stimolano l'innovazione mediante competizioni a premi
+    \item possono comportarsi come VC e investire in aziende troppo grandi per la microfinanza e troppo piccole per gli investimenti mainstream
+\end{itemize}
+
+I professionisti:
+
+\begin{itemize}
+    \item sono il cuore di un'ecosistema
+    \item hanno diverse skill tecniche, passione, determinazione e propensione al rischio
+    \item se sono numerosi, riducono la competizione interna e aiutano la collaborazione e la fiducia tra attori
+\end{itemize}
+
+Le startup e le imprese:
+
+\begin{itemize}
+    \item sono tendenzialmente piccole
+    \item rappresentano un potente motore di innovazione
+    \item possono essere pionieri di nuove soluzioni
+    \item portano creatività e competizione in un ecosistema
+\end{itemize}
+
+I facilitatori e gli intermediari:
+
+\begin{itemize}
+    \item collegano le organizzazioni in un ecosistema
+    \item favoriscono il trasferimento di idee, tecnologia e risorse
+    \item sono entità piccole e agili (a volte individui)
+    \item sono percepiti come neutrali e imparziali
+    \item sono la ``colla'' che tiene insieme un ecosistema
+\end{itemize}
+
+Le aziende private:
+
+\begin{itemize}
+    \item giocano un ruolo cruciale negli ecosistemi dell'innovazione
+    \item lavorano in partnership con governi, istituzioni di ricerca, agenzie di sviluppo
+    \item sono principalmente guidate dal profitto, ma si occupano di problemi socioeconomici su larga scala che impediscono lo sviluppo di mercati e business (...e quindi impediscono di fare profitto)
+\end{itemize}
+
+\section{Analisi di settore}
+
+Un settore è un gruppo di imprese che offrono prodotti o servizi simili.
+I settori sono caratterizzati dai codici ATECO, SIC, NAICS, questi ultimi du eusati rispettivamente in US e in tutto il Nord America. Il NAICS, in particolare, riconosce anche settori tecnologici emergenti.
+
+Un settore è caratterizzato da:
+
+\begin{itemize}
+    \item strutture
+    \item attori chiave
+    \item rivali e prodotti sostitutivi
+    \item differenziazione
+    \item barriere all'entrata
+\end{itemize}
+
+Un mercato è l'insieme di acquirenti di un prodotto o servizio, attuali e potenziali, caratterizzato da:
+
+\begin{itemize}
+    \item consumatori
+    \item segmenti di mercato
+    \item selezione del segmento
+    \item problemi e bisogni del consumatore
+    \item trend del mercato
+\end{itemize}
+
+L'analisi di settore si compone di:
+\begin{enumerate}
+    \item definizione
+    \begin{itemize}
+        \item deve essere puntuale
+        \item deve identificare tutti i settori in cui l'impresa partecipa
+    \end{itemize}
+    \item dimensione, tasso di crescita, previsioni di crescita
+    \begin{itemize}
+        \item previsioni in orizzonte pluriennale
+        \item consigliato l'uso di grafici
+        \item informazione su base regionale
+        \item fondamentale non distorcere le informazioni
+    \end{itemize}
+    \item caratteristiche
+    \begin{itemize}
+        \item concentrazione (e.g. indice di Herfindal-Hirschman)
+        \item barriere all'entrata
+        \item rivali
+        \item tassi (profitto netto medio)
+        \item fattori critici di successo
+    \end{itemize}
+    \item forze competitive
+    \begin{itemize}
+        \item Forze di Porter
+        \item analisi SWOT (elementi interni, controllabili, ed esterni, incontrollabili)
+        \begin{itemize}
+            \item Strength (positivi interni)
+            \item Weaknesses (negativi interni)
+            \item Opportunities (positivi esterni)
+            \item Threats (negativi esterni)
+        \end{itemize}
+        \item matrice dei competitor di BCG
+        \item curva di valore
+    \end{itemize}
+    \item trend
+\end{enumerate}
+
+Le cinque forze competitive di Porter sono:
+\begin{enumerate}
+    \item concorrenti, la cui pressione dipende da:
+    \begin{itemize}
+        \item numerosità e forza 
+        \item tasso di sviluppo delle vendite
+        \item differenziazione
+        \item sfruttamento della capacità produttiva
+        \item barriere all'uscita
+        \item priorità strategiche
+    \end{itemize}
+    \item potenziali nuovi entranti, le cui barriere possono essere:
+    \begin{itemize}
+        \item fabbisogno di capitali
+        \item costi di riconversione
+        \item accesso ai canali distributivi
+        \item politica pubblica
+        \item differenziazione del prodotto
+    \end{itemize}
+    \item potere dei fornitori, che esiste quando:
+    \begin{itemize}
+        \item il loro settore è concentrato
+        \item non ci sono prodotti sostitutivi
+        \item il mercato è di sbocco marginale
+        \item il prodotto è un input importante
+        \item i beni sono differenziati
+        \item ci sono costi di conversione
+        \item minacciano l'integrazione a valle
+    \end{itemize}
+    \item potere dei clienti, che esiste quando:
+    \begin{itemize}
+        \item il settore è concentrato
+        \item ci sono prodotti sostitutivi con bassi costi di riconversione
+        \item il mercato è di sbocco marginale
+        \item il prodotto è economicamente importante
+        \item i beni sono indifferenziati
+        \item il bene acquistato non condiziona la loro qualità
+        \item possiedono informazioni dettagliate
+        \item possono minacciare l'integrazione a monte
+    \end{itemize}
+    \item minaccia di prodotti sostitutivi, che possono giustificare o richiedere iniziative comuni da parte delle imprese del settore, e la cui pressione dipende da:
+    \begin{itemize}
+        \item rapporto qualità/prezzo
+        \item costi di riconversione del cliente
+        \item rischi di sostituzione
+    \end{itemize}
+\end{enumerate}
+
+La strategia dell'oceano blu (Kim e Mauborgne) vede il mercato come ``due oceani'':
+\begin{itemize}
+    \item gli oceani rossi costituiti da settori esistenti, che hanno:
+    \begin{itemize}
+        \item confini del settore ben definiti
+        \item competizione sulla domanda
+        \item chiare regole competitive
+        \item strategie guidate dalla competizione (``bloody water'')
+    \end{itemize}
+    \item gli oceani blu, costituiti da settori non esistenti, nei quali:
+    \begin{itemize}
+        \item gli spazi di mercato sono sconosciuti, e vanno creati in modo che non siano congestionati
+        \item la domanda deve essere creata, o ne va catturata di nuova
+        \item vi sono alte opportunità di crescita, rompendo il trade-off valore/costo
+        \item le strategie sono guidate dall'innovazione di valore
+        \item si può ottenere sia differenziazione che low-cost
+    \end{itemize}
+\end{itemize}
+
+Nell'analisi di settore si può usare la curva di valore (Kim e Mauborgne), uno strumento che mostra dove viene creato valore nei prodotti e servizi di un'organizzazione.
+Sulle ascisse sono riportati gli attributi di valore, sulle ordinate i punteggi degli attributi.
+La curva di valore identifica come una determinata azienda si differenzia in termini di valore offerto.
+
+L'analisi PESTEL si basa su alcuni variabili del contesto che descrivono lo scenario attuale. Va considerato come parte della anlisi esterne e fornisce una panoramica di macro-fattori. 
+
+La ``desk research'' (dati secondari) fa riferimento a dati pubblicati in fonti affidabili che forniscono una buona base di dati per le analisi strategiche.
+Alcune fonti sono Lexis-Nexis, AIDA, AMADEUS, OSIRIS, le Camere di Commercio, Google Trends, riviste specialistiche, report e statistiche governative, imprese che forniscono ricerche di mercato.
+
+\section{Design thinking}
+ 
+Il tasso di fallimento dei nuovi prodotti è stimato nella fascia 35-40\% (Castellion, Markham, Crawford).
+Per evitare di fallire, è necessario un cambio di logica: invece di proporre una soluzione per un'intenzione, bisogna proporre all'utente un prodotto che risolva il loro problema.
+Spesso, formulare un problema è più complesso che risolverlo (Einstein).
+L'approccio user-centered prevede di entrare in empatia con l'utente per cui si progetta, ma spesso nemmeno l'utente sa cosa vuole (Ford).
+
+Gli obiettivi della definizione dei bisogni del cliente sono:
+
+\begin{itemize}
+    \item focalizzarsi sui bisogni
+    \item identificare bisogni espliciti ed espliciti
+    \item documentare le specifiche
+    \item non tralasciare bisogni primari
+    \item condividere le scelte all'interno di team e impresa
+\end{itemize}
+
+Le fasi del processo di analisi dei bisogni sono (Ulrich e Eppinger):
+
+\begin{enumerate}
+    \item definizione dello scopo della ricerca
+    \item raccolta di informazioni dai clienti
+    \item trasformazione dei dati in termini di bisogni
+    \item definizione delle priorità tra i bisogni identificati
+    \item valutazione dell'importanza di ogni bisogno 
+\end{enumerate}
+ 
+ Tra questi fasi vi sono vari gap:
+ \begin{itemize}
+     \item di percezione, tra bisogno del cliente e concept del prodotto
+     \item di progettazione, tra concept e sviluppo del prodotto
+     \item di conformità, tra sviluppo del prodotto e prestazione da erogare
+     \item di valore percepito, tra il bisogno del cliente e la prestazione da erogare, che attraversa tutto il processo
+ \end{itemize}
+ 
+Sinek illustra la sua teoria dei business come tre cerchi concentrici, contenenti (dal più interno al più esterno) le parole ``perché'', ``come'', ``cosa''.
+Secondo Sinek, la maggior parte delle organizzazioni pensano dall'esterno verso l'esterno, senza soffermarsi sul ``perché''.
+Il modo di pensare delle organizzazioni di successo, invece, inizia dal motivo per lo sviluppo di un'innovazione, per poi preoccuparsi del modo e della soluzione specifica.
+
+Il design thinking può essere descritto come la disciplina che usa il modo di pensare e i metodi del designer per incontrare i bisogni delle persoen con ciò che è tecnologicamente fattibile e quello che una valida strategia di business può convertire in valore per il cliente e opportunità di mercato. (Brown)
+Il design thinking mira alla comprensione approfondita dei bisogni delle persone (human-centered approach).
+
+Il Design Value Index è un indice che comprende 16 aziende design-driven, che in 10 anni hanno avuto un ritorno maggiore del 219\% rispetto allo Standard and Poors 500.
+In altre parole, il ROI del design è del 9900\%. (non sono del tutto sicuro di questo conto...)
+
+Il design thinking cerca di trovare una soluzione innovativa a un problema che soddisfi i crideri di:
+\begin{itemize}
+    \item desiderabilità
+    \item fattibilità
+    \item redditività
+\end{itemize}
+
+Soddisfare solo desiderabilità e redditività è una soluzione empatica su base esperienziale.
+Soddisfare solo desiderabilità e fattibilità è una soluzione creativa, di significato, basata sull'utilizzo.
+Soddisfare solo redditività e fattibilità è una soluzione razionale, basata sui processi.
+
+Il design thinking:
+\begin{itemize}
+    \item sviluppa soluzioni che hanno successo perché rispondono a un bisogno
+    \item migliora le esperienze esistenti, rimuove le frizioni
+    \item empatizza con utenti e clienti, rimuove le sofferenze
+    \item ha meno rischi nell'innovazione perché è basata su un metodo agile, su esperimenti, sulla mappatura degli stakeholder
+    \item aggiunge valore grazie a nuovi significati
+    \item contamina e intercetta nuove opportunità 
+    \item porta a meno incomprensioni grazie alla visualizzazione
+\end{itemize}
+ 
+Il modello Double Diamond (Design Council) divide il design thinking in quattro fasi:
+\begin{enumerate}
+    \item discover (divergente)
+    \item define (convergente, risulta nella definizione del problema)
+    \item develop (divergente)
+    \item deliver (convergente, risulta in un prototipo o in n prodotto)
+\end{enumerate}
+ 
+Il modello di Brown, invece, articola il design thinking in tre fasi principali:
+\begin{enumerate}
+    \item esplorazione (inspiration), riassumere il problema
+    \item ideazione (ideation), immaginare soluzioni alternative allo stesso problema
+    \item creazione (implementation), realizzazione di dimostratori dell'idea
+\end{enumerate}
+
+Il modello Stanford D-School articola il processo in cinque fasi:
+\begin{enumerate}
+    \item emphatize: osservare, coinvolgere, immedesimarsi, ottenere insight dai destinatari del servizio
+    \item define: identificare la vision del progetto, creare frasi che definiscano i bisogni e i problemi dell'utente e le opportunità da cogliere
+    \item ideate: generare tante idee e soluzioni, in modo iterativo, favorendo al libertà di espressione, condividendo e mescolando le idee
+    \item prototype: realizzare un piano d'azione sulle migliori idee, raggiungere il mercato, dare forma tangibile
+    \item test: ottenere feedback, generare apprendimento
+\end{enumerate}
+
+Il modello IDEO invece divide il design thinking in cinque fasi:
+
+\begin{enumerate}
+    \item discovery
+    \item interpretation
+    \item ideation
+    \item experimentation
+    \item evolution
+\end{enumerate}
+ 
+Il punto in comune tra i vari modelli è l'iterazione e la ricorsività.
+
+La ricerca primaria/qualitativa fa riferiemnto al reperimento di dati attraverso contatti diretti con le persone che vengono intervistate, o a cui vengono somministrati questionari.
+Alcune tecniche di ricerca primaria sono, in ordine crescete di dipendenza dal contesto:
+\begin{enumerate}
+    \item desk research
+    \item social media analytics
+    \item survey di mercato
+    \item focus group
+    \item etnografia applicata
+    \item beta-testing
+    \item dati open source
+\end{enumerate}
+
+Le survey per analisi di mercato sono modelli che forniscono dati statistici basati su una raccolta dati attraverso un questionario strutturato e somministrato a un elevato numero di persone sui cui bisogni si vuole raccogliere informazione.
+Le survey consentono di effettuare analisi statistiche e si possono implementare in modi diversi, e.g. per telefono, in diretta, via web. 
+
+Le interviste sono metodi qualitativi per raccogliere, attraverso una conversazione con l'intervistato, informazioni sulle esperienze. 
+Iofocus group sono interviste rivolte a un gruppo ristretto di clienti selezionati (6-10) la cui attenzione è focalizzata su un argomento specifico, condotti da un moderatore affiancato da un osservatore, mentre l'intervista si basa su una griglia di domande semistrutturate.
+
+Per condurre una intervista:
+
+\begin{itemize}
+    \item si chiede quando e perché si usa un prodotto
+    \item si chiede di mostrare esempi di utilizzo
+    \item si chiede un parere sui prodotti esistenti
+    \item si chiedono le considerazioni al momento di acquistare il prodotto
+    \item si chiedono i miglioramenti che si farebbero al prodotto
+    \item si ascolta più di quanto si parli
+    \item si chiede spesso ``perché''
+    \item si usano stimoli e supporti visivi
+    \item si evita di convergere sulle soluzioni
+    \item si presta attenzione alle espressioni non verbali.
+\end{itemize}
+
+Una survey è conclusiva, economica, mentre una focus group è esplorativa, cara, time consuming. In entrambi i casi, selezione e reclutamento sono complessi (importanti i tassi di risposta e la dimensione del campione nelle survey).
+
+Le osservazioni etnografiche consistono nell'osservare i clienti che interagiscono con un previsto in un contesto reale (non in laboratorio) per conoscere reazioni di fronte a carenze e bisogni non necessariamente noti a priori.
+Queste tecniche si basano sull'osservazione del partecipanti e la raccolta di informazioni scritte e visuali, analizzate e decodificate anche con software appositi.
+
+Il beta testing è il coinvolgimento ditetto del cliente nel processo di progettazione e permette di ricevere feedback.
+
+L'open source è un esempio avanzato di co-creazione e beta testing, in cui il codice è modificabile anche dalla comunità di utenti. Non è ristretto solo al settore tech (e.g. si veda l'industria alimentare).
+
+Ci sono diversi strumenti per la sintesi dei bisogni:
+\begin{itemize}
+    \item empathy map
+    \item personas
+    \item user cards
+    \item Value Proposition Canvas
+\end{itemize}
+
+La empathy map sintetizza ciò che il cliente dice, pensa, vede, sente, i suoi problemi e le sue necessità.
+
+Le Personas sono personaggi immaginari che danno vita a utenti tipo e permettono di immedesimarsi e mettersi dei panni dei clienti. Solitamente le personas includono:
+\begin{itemize}
+    \item tipo di Persona
+    \item nome fittizio
+    \item job title
+    \item demografia
+    \item obiettivi e compiti
+    \item ambiente fisico, sociale, tecnologico
+    \item interesse nel prodotto
+    \item foto informale o disegno
+\end{itemize}
+
+La value proposition indica i prodotti/servizi che rappresentano un valore per il clienti, rispondendo alla doamnda ``perché i clienti dovrebero sceglierli''.
+
+Il value proposition canvas individua i bisogni dell'utente e li mette in relazione con il valore che l'impresa può offrire.
+Al cerchio del cliente, formato da ``gains, pains, jobs'', è associato il quadrato dell'impresa, ``gain creators, pain relievers, product and services''.
+
+Per ordinare i bisogni in una gerarchia, si può usare la prioritizzazione MoSCoW:
+
+\begin{enumerate}
+    \item Must: requisiti fondamentali
+    \item Should: requisiti ad alta priorità
+    \item Could: auspicabile, non necessario, incluso tempo e risorse permettendo
+    \item Won't: accettati di non vedere implementati; forse in futuro
+\end{enumerate}
+
+Il modello Kano, invece, usa due assi (soddisfazione e funzionalità) per determinare la soddisfazione del cliente con le caratteristiche del prodotto, dividendo le feature in quattro categorie:
+
+\begin{enumerate}
+    \item performance
+    \item must-be
+    \item attraente
+    \item indifferente
+\end{enumerate}
+
+sulla base di due domande:
+\begin{itemize}
+    \item positiva: come si sente l'utente se c'è questa feature?
+    \item negativa: come si sente il cliente se NON c'è questa feature?
+\end{itemize}
+
+Per trasformare i dati in bisogni, si usano le seguenti linee guida:
+\begin{itemize}
+    \item cosa, non come
+    \item stesso livello di dettaglio usato
+    \item affermazione, non negazione
+    \item definire attributi del prodotto, non necessità (niente ``deve'')
+\end{itemize}
+
+Per prototipare e sperimentare si possono usare:
+\begin{itemize}
+    \item storyboard
+    \item prototipi e simulazioni
+    \item MVP
+    \item split test
+\end{itemize}
+
+Lo storyboard è una serie di immagini e didascalie che visualizza un processo/bene/evento e può essere usato nelle presentazioni per ottenere feedback e commenti.
+
+I prototipi:
+
+\begin{itemize}
+    \item fisici permettono di toccare con mano il risultato delle fasi di sviluppo
+    \item virtuali lo rappresentano dal punto di vista matematico e/o con simulazioni o modelli
+    \item generali sono modelli del prodotto finale totalmente funzionante
+    \item specifici considerano una o più caratteristiche da valutare in modo isolato
+    \item virtuali specifici sono adeguati solo per apprendimento
+    \item fisici specifici anche per comunicazione
+    \item fisici generali anche per integrazione e traguardi
+\end{itemize}
+
+I prototipi accorciano significativamente i tempi e i costi di design, costruzione, avvio e analisi.
+
+Il Minimum Viable Product:
+
+\begin{itemize}
+    \item è legato al modello lean startup
+    \item è il più semplificato possibile che si possa presentare agli early adopter
+    \item permette di testare e validare le idee di prodotto
+    \item accelera il processo di apprendimento sulle dinamiche di mercato
+\end{itemize}
+
+Lo split testing:
+
+\begin{itemize}
+    \item è un esperimento controllato che sottopone due varianti di un prodotto a due gruppi di utilizzatori
+    \item propone due varianti uguali, eccetto per alcuni aspetti differenti e isolati
+    \item questi agiscono come trattamento di cui si vuole verificare l'effetto
+    \item l'obiettivo è identificare i cambiamenti nel prodotto che incrementano in modo statisticamente significativo la risposta 
+\end{itemize}
+
+\section{Acronimi}
+\begin{itemize}
+    \item TRL: Technology Readiness Level
+    \item PCT: Patent Cooperation Treaty
+    \item ELM: Ecosysem Lifecycle Model
+    \item SWOT: Strength, Weaknesses, Opportunities, Threats
+    \item PESTEL: Political, Economic, Social, Technological, Envronmental, Legislative
+    \item BCG: Boston Consulting Group
+\end{itemize}
+
+\section{Autori/autrici e concetti}
+
+\begin{itemize}
+    \item OECD Oslo Manual: definizione di innovazione
+    \item Abernathy e Utterback: innovazione di prodotto/processo
+    \item Anderson e Tushman: innovazione radicale/incrementale, competence enhancing/destroying, modello ciclico di evoluzione dell'innovazione
+    \item Henderson e Clark: innovazione architetturale/modulare
+    \item Christennsen: innovazione disruptive/sustaining
+    \item Verganti: innovazione di significato e di funzione
+    \item Schumpeter: innovazione come distruzione creatrice
+    \item Fisher e Pry: modello logistico dell'innovazione
+    \item Moore: abisso tra early adopter e early majority
+    \item Teece: risorse complementari
+    \item Adner: ecosistema dell'innovazione
+    \item Kim e Mauborgne: oceano blu e rosso, curva di valore
+    \item Castellion, Markham, Crawfors: tasso di fallimento dei nuovi prodotti
+    \item Einstein: ``la formulazione di un problema è spesso più essenziale della sua soluzione'' (scusami davvero Albert, giuro, non sono stato io a inserirti in un corso di management)
+    \item Ford: ``se avessi chiesto alla gente cosa volevano, mi avrebbero risposto: un cavallo più veloce''
+    \item Ulrich e Eppinger: processo di analisi dei bisogni, linee guida per la trasformazione dati-bisogni
+    \item Sinek: Golden Circle
+    \item Brown: definizione di design thinking, modello iterativo 3I del design thinking
+    \item Design Council: modello Double Diamond
+    \item Osterwalder: Value Proposition Canvas
+    \item Blank: Value Proposition Template
+    \item Design Thinking for Educators: modello IDEO
+    \item Thomke: crash-test BMW
+    \item Ries: Lean Startup e MVP
+\end{itemize}
+
+\section{Domande}
+\begin{questions}
+\question \textbf{Gestione strategica dell’innovazione: contenuti e modelli di riferimento}
+\begin{parts}
+\part Fornire un esempio per ciascuna delle seguenti categorie di innovazione: (i) radicale, (ii) modulare e (iii) competence enhancing, motivando la scelta					\begin{solution}
+
+Un esempio di innovazione radicale è lo smartphone, perché ha portato a ripensare il telefono da strumento di comunicazione vocale, o al massimo testuale, a piattaforma di creazione e fruizione di contenuti, produttività e interconnessione.
+
+Una innovazione modulare è il chip M1 dei nuovi MacBook, perché migliora notevolmente la velocità di esecuzione in un ambiente di lavoro e sviluppo "classico" senza costituire un cambiamento radicale del paradigma di interazione, connessione e sviluppo, che rimangono le interfacce grafiche, Internet, i linguaggi di programmazione. 
+
+Una innovazione competence enhancing sono i framework di machine learning come PyTorch e TensorFlow, perché permettono alle aziende di assumere profili come le studenti di matematica applicata, che non hanno un background di programmazione in linguaggi di basso livello, e di sfruttare le loro competenze teoriche con applicazioni pratiche in linguaggi più semplici come Python.
+Questa categorizzazione dell'innovazione è l'unica che guarda dal punto di vista dell'impresa.
+\end{solution}
+\part Definire i principali strumenti di protezione della proprietà intellettuale descrivendone le principali caratteristiche e differenze
+\begin{solution}
+\begin{itemize}
+    \item Un \textbf{brevetto} protegge le invenzioni, e ha i requisiti di novità, attività inventiva e applicabilità industriale
+    \item un \textbf{marchio} protegge parole o simboli, e ha i requisiti di originalità, liceità, veridicità e capacità distintiva
+    \item il \textbf{copyright} protegge un lavoro originale artistico o letterario.
+    \item la protezione di \textbf{disegni o modelli} protegge le parti visibili di un prodotto e hanno i requisiti di originalità e novità
+    \item Piuttosto che rivelare informazioni dettagliare su un prodotto o un processo proprietario in cambio di un brevetto, inventori e imprese spesso sceglieranno di proteggere la propria proprietà intellettuale tenendola come \textbf{trade secret}. 
+    Quest'ultimo \emph{non è uno strumento legale}, gli altri 4 sì.
+    Uno dei rischi del trade secret è che un'altra azienda metta in commercio la stessa invenzione, questa volta brevettandola, impedendo quindi all'azienda con trade secret di trarre profitto dall'invenzione.
+\end{itemize}
+
+\end{solution}
+\part Spiegare il modello di Anderson e Tushman sulle dinamiche di innovazione
+\begin{solution}
+Il modello di Anderson e Tushman definisce il ciclo con cui si sviluppa la dinamica settoriale, ed è distinto dalla curva a S.
+Secondo loro, ogni discontinuità tecnologica innesca, nell'ordine:
+\begin{enumerate}
+    \item una fase di fermento in cui tutte le imprese iniziano a gestire autonomamente cercando di vincere la corsa verso lo sviluppo del design dominante/standardizzazione
+    \item l'affermazione di un modello dominante
+    \item una fase incrementale in cui tutte le imprese concorrono nel miglioramento della tecnologia dominante
+\end{enumerate}
+
+Questo modello è ciclico.
+\end{solution}
+\part Descrivere il processo di diffusione dell'innovazione e mostrare i possibili tipi di utilizzatori	
+\begin{solution}
+Il processo dell'innovazione segue un andamento definito ``curva a S'', o modello di Fisher-Pry.
+Secondo questo modello, la diffusione dell'innovazione segue un andamento logistico in funzione del tempo, e la performance tecnologica lo stesso andamento in funzione dell'impegno profuso.
+L'idea alla base del modello di Fisher-Pry è che inizialmente lo sviluppo è inefficiente perché la tecnologia è immatura: la diffusione è lenta e la penetrazione poco capillare.
+In seguito, lo sviluppo tecnologico accelera, e con esso la diffusione dell'innovazione.
+Nelle fasi finali, lo sviluppo e la diffusione rallentano.
+
+La curva a S può essere rappresentata come una campana, guardandone la derivata, ovvero la diffusione/lo sviluppo per unità di tempo.
+Rappresentando la curva a S in questo modo, è possibile vedere anche la distribuzione di utenti di un prodotto innovativo:
+\begin{enumerate}
+    \item innovators, persone che acquistano il prodotto anche senza l'intervento dell'azienda
+    \item early adopter, inseriti nel gruppo sociale ma con una certa reputazione
+        \begin{itemize}
+            \item abisso di Moore: la early majority è il gruppo a cui le aziende puntano maggiormente, raggiungerli è il passaggio più difficile. Per farlo, è necessaria una chiara value proposition, una strategia di marketing verticale, un sistema completo di prodotto
+        \end{itemize}
+    \item early majority, persone disponibili verso il prodotto, con attenzione ai costi e scelta ponderata
+    \item late majority, persone che adottano il prodotto solo dopo che lo ha fatto la maggioranza
+    \item laggards, persone che iniziano a utilizzare un prodotto solo quando è impossibile farne a meno
+\end{enumerate}
+\end{solution}
+\part Definire il concetto di marchio e spiegarne i requisiti di validità
+\begin{solution}
+Il marchio protegge immagini (e.g. tonalità cromatiche) o suoni (e.g. il suono del leone che ringhia nei film, o il suono della Ducati), che devono essere:
+\begin{enumerate}
+    \item nuovi, liberamente disponibili e appropriabili
+    \item con capacità distintiva rispetto alla concorrenza
+    \item leciti, e.g. non esserci già un marchio
+    \item veri, non ingannevoli
+\end{enumerate}
+Un marchio:
+\begin{itemize}
+    \item può o meno essere depositato
+    \item ha durata potenzialmente illimitata, ma deve essere rinnovato ogni 10 anni
+    \item può smettere di essere valido se viene volgarizzato o cade in disuso
+    \item è applicabile solo nell'ambito merceologico a cui appartiene
+\end{itemize} 
+\end{solution}
+\part Definire il concetto di innovazione radicale e incrementale fornendo un esempio per ciascuna delle due categorie
+\begin{solution}
+L'innovazione radicale modifica completamente il modo di intendere un prodotto o un processo, mentre quella incrementale si limita a migliorarne le caratteristiche.
+
+Un esempio di innovazione radicale è lo smartphone, che porta a ripensare il telefono da oggetto usato solo per telefonare a strumento di navigazione Internet, produttività ecc.
+Un esempio di innovazione incrementale sono modelli di smartphone sempre più veloci, complessi, funzionali eccetera.
+\end{solution}
+\part Descrivere il business model canvas.
+\begin{solution}
+Il business model canvas è un modo di riportare in maniera grafica i punti salienti di un'idea di business o di un business esistente. Nella sua forma classica è diviso in quattro parti articolate in nove punti: value proposition (1 punto), infrastruttura (3 punti), clientela (3 punti), costi/ricavi (2 punti). Ne esistono molte varianti, come il Lean Canvas per le startup innovative.  %% Qual è la logica? Come funziona? Ipotesi sui blocchi, poi modificati ecc ecc. Spiegare più nel dettaglio.
+
+Il business model canvas "classico" è composto da:
+
+\begin{itemize}
+    \item key activities: le attività più importanti nella produzione del valore dell'azienda
+    \item key partners: le altre entità con cui l'azienda ha a che fare durante la propria attività
+    \item key resources: le risorse necessarie per sostenere il business
+    \item value proposition: il valore che l'azienda ha per i propri clienti
+    \item customer relationships: come l'azienda ottiene nuovi clienti, mantiene quelli attuali e ne ottiene profitti
+    \item customer segments: quali sono i clienti dell'azienda
+    \item channels: i canali attraverso cui l'azienda distribuisce il proprio prodotto o eroga il proprio servizio
+    \item cost structure: struttura dell'azienda (minimizza il costo per il cliente o massimizza il valore?) e fonti di costi (fissi, variabili)
+    \item revenue streams: i modi in cui l'azienda guadagna dalle proprie operazioni
+\end{itemize}
+\end{solution}
+\end{parts}
+\question \textbf{Lo sviluppo del piano di progetto innovativo}
+\begin{parts}
+\part Descrivere il concetto di ``ecosistema dell'innovazione''.
+\begin{solution}
+L'ecosistema dell'innovazione è un insieme di imprese, piccole o grandi, che interagiscono tra di loro per cercare di creare un alto valore / potere innovativo, tendenzialmente superiore a quello che una singola impresa crea da sola. 
+In un ecosistema gli obiettivi sono allineati: così come in un ecosistema biologico l'obiettivo comune è la sopravvivenza, allo stesso modo nell'ecosistema dell'innovazione vi è come obiettivo l'autosostenibilità.
+Tutte le imprese agiscono in modo da andare nella stessa direzione, quella del raggiungimento di un obiettivo comune.
+Ogni singola impresa ha la possibilità di mettere al servizio delle altre il massimo valore innovativo che può offrire, all'interno di una soluzione innovativa in cui diverse imprese devono intervenire. 
+Ad esempio, nello sviluppo di un'auto a guida autonoma, tante imprese interconnesse hanno un valore come unione.
+
+Tre termini sono molto importanti: scalable, engagement, exponential. Le imprese devono essere engaged, attive, avere una motivazione per il loro coinvolgimento. L'ecosistema deve essere scalable, avere l'obiettivo di crescere.
+Più un ecosistema è scalable, più sarà in grado di crescere.
+Per questo ci deve essere un forte dinamismo.
+Un ecosistema, inoltre, permette di creare miglioramenti che siano esponenzialmente più dirompenti rispetto a quello che una impresa potrebbe fare da sola.
+
+L'ecosistema permette di creare delle partnership (legato al concetto di open innovation, in cui le imprese sviluppano non solo con la ricerca e sviluppo interna ma anche e soprattutto creando collaborazione con l'esterno). Quelli che sono solitamente competitor possono diventare partner. L'ecosistema permette di gestire proprio queste dinamiche collaborative.
+
+\end{solution}
+\part Commentare la seguente affermazione di Henry Ford: ``Se avessi chiesto alla gente cosa volevano, mi avrebbero risposto: un cavallo più veloce''
+\begin{solution}
+Questa affermazione fa riferimento alle complicazioni implicite nel processo di interrogazione del cliente sulle sue reali necessità.
+Molti utenti si fidano di tecnologie conosciute (il cavallo) e non riescono a concepire qualcosa che ancora non esiste (l'automobile).
+In questo senso, il design thinking procede da una richiesta del bisogno del cliente, ma il processo non è immediato perché il cliente non sa che cosa vuole.
+È quindi necessario focalizzarsi, in fase di sviluppo, sui bisogni espliciti e impliciti del cliente, accertandosi che nessun bisogno primario venga tralasciato, documentando e condividendo le scelte di design.
+\end{solution}
+\part Definire il concetto di design thinking
+\begin{solution}
+Il design thinking è un processo di innovazione \emph{human-centered}, che prende ispirazione dalle tecniche usate nell'ambito del design e parte dai bisogni dell'utente e non dal prodotto, dal problema da risolvere e non dalla soluzione.
+
+La parte di ``thinking'' si focalizza sulla definizione di una soluzione che unisca le dimensioni di:
+\begin{itemize}
+    \item desiderabilità (dall'utente)
+    \item redditività (nel mercato)
+    \item fattibilità (dai tecnici)
+\end{itemize}
+
+							
+\end{solution}
+\end{parts}
+\question \textbf{La gestione dei progetti innovativi}
+\begin{parts}
+\part Spiegare il concetto di Minimum Viable Product.
+\begin{solution}
+Il MVP è il prototipo che assolve ai requisiti minimi richiesti, implementando tutte le funzionalità progettate senza preoccuparsi eccessivamente di design (a meno che non sia una feature chiave), opzioni "nice to have" ecc.
+
+È legato al lean startup model e permette di ricevere i feedback continui fondamentali in una startup.
+
+Costituisce solitamente una "milestone" nonché uno dei "deliverable" chiave del prodotto, che mostra all* stakeholder che è possibile ottenere la value proposition pianificata e permette di avviare, ad esempio, fasi di beta testing o altri studi di mercato.  
+\end{solution}
+\part Fornire una definizione di Project Management con particolare riferimento alle 5 fasi/gruppi di processi di cui si compone
+\begin{solution}
+Il PM consiste nell'applicazione di metodi, tecniche e strumenti per gestire attività di progetto e raggiungere gli obiettivi rispettando i vincoli imposti.
+Si articola nelle seguenti fasi, o gruppi di processi, secondo il Project Management Body of Knowledge:
+\begin{enumerate}
+    \item \textbf{Avvio}: predisposizione e autorizzazione alla partenza
+        \begin{itemize}
+            \item analisi di fattibilità
+            \item definizione del project charter
+        \end{itemize}
+    \item \textbf{Pianificazione} delle azioni da svolgere, dopo aver individuato gli obiettivi e l'ambito del progetto
+    \begin{itemize}
+        \item definizione scope
+        \item sviluppo WBS, OBS, RAM
+        \item redazione project management plan
+    \end{itemize}
+    \item \textbf{Esecuzione} delle attività, raggiungendo tutti gli obiettivi predisposti
+    \begin{itemize}
+        \item raggiungimento milestones
+    \end{itemize}
+    \item \textbf{Monitoraggio e controllo} del raggiungimento degli obiettivi e del rispetto dei vincoli
+    \begin{itemize}
+        \item in parallelo alla fase di esecuzione
+        \item produzione dei deliverables
+    \end{itemize}
+    \item \textbf{Chiusura}: verifica del raggiungimento degli obiettivi
+    \begin{itemize}
+        \item comprendere i punti di forza e di debolezza
+    \end{itemize}
+\end{enumerate}
+\end{solution}
+\part Spiegare la differenze fra danno, pericolo e rischio all'interno del contesto di risk management nei progetti d'innovazione
+\begin{solution}
+Il danno è un impatto negativo su salute, proprietà o ambiente.
+Il pericolo è la fonte del danno.
+Il rischio è la combinazione delle due dimensioni, la probabilità che ci sia un evento che provochi un danno concreto e l'entità del danno conseguente.
+Il rischio è distinto dall'imprevisto, il quale per definizione è imprevedibile. 
+\end{solution}
+
+\part Presentare le principali caratteristiche degli approcci Agili al Project Management 
+\begin{solution}
+I modelli di project management tradizionali seguono un approccio sequenziale (waterfall), che diventa controproducente se i requisiti cambiano frequentemente.
+Per contrastare questa tendenza, lo sviluppo cosiddetto Agile aderisce a quattro punti principali, creando un processo ``a spirale'' e non lineare:
+\begin{itemize}
+    \item team multifunzionali, con forte responsabilizzazione dell'individuo, al contrario dell'idea di ``individuo nel processo'' prevista dal waterfall
+    \item divisione in microattività e ``deliverables'' (piccoli prototipi), al contrario della documentazione rigorosa prevista dal waterfall
+    \item collaborazione e confronto continuo con i clienti, al contrario del ``contratto'' previsto dal waterfall
+    \item aggiornamenti frequenti, responsivi al cambiamento, al contrario dell'``aderenza al piano'' prevista dal waterfall
+\end{itemize}
+
+Una tipologia di sviluppo agile è Scrum.
+In Scrum, il lavoro è diviso in \emph{sprint}, periodi in cui un team completa un numero predeterminato di blocchi di lavoro.
+Gli sprint hanno una durata costante, al massimo un mese, ma solitamente meno.
+Un progetto Scrum fa riferimento a tre documenti:
+\begin{itemize}
+    \item product backlog, lista ordinata per priorità di funzionalità da realizzare. Solitamente formattata come lista di user stories, ovvero descrizioni delle azioni dell'utente
+    \item sprint backlog, lista di user stories da essere completate entro uno sprint
+    \item burndown chart, lavoro che rimane in uno sprint
+\end{itemize}
+In un progetto Scrum, regolarmente il team svolge:
+\begin{itemize}
+    \item planning session, riunioni per pianificare il lavoro da svolgere durante lo sprint successivo (selezionato dal product backlog)
+    \item daily Scrum, riunioni giornaliere per fare rapporto sul giorno precedente e pianificare quello corrente
+    \item sprint review, incontri in cui si mostra al cliente il risultato dello sprint
+    \item sprint retrospective, incontri in cui si riflette sulle performance e i modi per migliorare
+\end{itemize}
+In Scrum, ogni persona in un team può essere assegnata a uno di tre ruoli: 
+\begin{itemize}
+    \item il product owner, responsabile di massimizzare la ROI, dare al team requisiti ad alto livello e obiettivi per il prodotto, redigere i criteri di accettabilità del lavoro svolto, ma lasciare che sia il team a decidere come lavorare
+    \item lo Scrum master, responsabile di comunicare con gli stakeholder, facilitare gli Scrum giornalieri e agevolare il lavoro del team
+    \item i team member, multi-funzionali (i.e. non solo programmatori, anche business analyst ecc.) che costituiscono la maggioranza di un team e operano con alti livelli di autorità. Sono responsabili di stimare la durata dei task e completare il lavoro a ogni sprint. 
+\end{itemize}
+
+\end{solution}
+\part Presentare le condizioni favorevoli all'applicazione dei metodi Agile di Project Management
+\begin{solution}
+La gestione di progetti agile è particolarmente indicata quando:
+\begin{itemize}
+    \item i vincoli esterni sono meno rigidi
+    \item i team sono esperti, collaborativi, hanno soft skill
+    \item i requisiti sono incerti
+    \item i tempi sono flessibili
+    \item gli errori possono essere trasformati in occasioni di apprendimento
+    \item l'innovazione prodotta non è immediatamente confrontabile con la tecnologia precedente
+\end{itemize}
+\end{solution}
+\part Spiegare le funzionalità delle WBS (Work Breakdown Structure), OBS (Organizational Breakdown Structure) e RAM (Responsibility Assignment Matrix) nei processi di pianificazione dei progetti d'innovazione e la loro integrazione.
+\begin{solution}
+La WBS fornisce una divisione dello stesso in una gerarchia di componenti detti \emph{work package}.
+Può seguire un processo di \emph{product breakdown}, di \emph{activity breakdown} o un misto tra i due.
+Un work package è un insieme di attività elementari identificato univocamente da input, output e attività interne, a cui sono associati risorse, tempi di esecuzione  reesponsabilità.
+I work package sono tanto più disaggregati quanto più finemente è possibile definire una valutazione consuntiva dei risultati.
+Le WBS devono:
+\begin{itemize}
+    \item essere esaustive (regola del 100\%)
+    \item avere una relazione di priorità (subordinati necessari e sufficienti) tra componenti
+    \item avere un unico criterio per livello di identificazione
+    \item identificare work package gestibili, omogenei e significativi
+    \item permettere una pianificazione delle milestone
+\end{itemize}
+
+Una WBS può essere:
+\begin{itemize}
+    \item su output se definisce in maniera gerarchica le caratteristiche fisiche del prodotto, ma non come esse vengono realizzate
+    \item su fasi se descrive le fasi di elaborazione del prodotto senza dividere il prodotto stesso
+    \item mista se si evolve in entrambe le dimensioni
+\end{itemize}
+
+Una OBS rappresenta la scomposizione gerarchica delle responsabilità di progetto.
+Da non confondersi con l'organigramma aziendale, include solo le funzioni aziendale coinvolte in un dato progetto e comprende anche figure esterne all'azienda.
+La OBS:
+\begin{itemize}
+    \item aiuta la comunicazione
+    \item individua le responsabilità
+    \item facilita il coordinamento e il controllo
+    \item ufficializza l'organizzazione
+    \item serve per redigere la RAM
+\end{itemize}
+
+
+La RAM integra OBS e WBS, in modo da:
+\begin{itemize}
+    \item evidenziare i compiti da svolgere e le persone incaricate, insieme ai loro ruoli
+    \item creare consapevolezza dell'impatto del lavoro individuale
+    \item responsabilizzare i componenti del team
+    \item favorire il commitment anche da parte dei responsabili
+\end{itemize}
+Una RAM può essere redatta servendosi della codifica RACI (Responsible, Accountable, Consult, Inform), che definisce, in ordine:
+\begin{itemize}
+    \item R: chi esegue materialmente un task
+    \item A: chi supervisiona R
+    \item C: chi supporta R fornendo informazioni utili
+    \item I: chi viene informato in merito al lavoro di R e prende decisioni sulla base di queste informazioni
+\end{itemize}
+
+Queste associazioni non sono necessariamente 1 a 1.
+
+\end{solution}
+\end{parts}
+\end{questions}
+\end{document}
