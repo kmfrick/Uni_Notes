@@ -1,5 +1,5 @@
 # College_Notes
-These are LaTeX source files for the notes I wrote for some of my college courses. 
+These are LaTeX source files for the notes I wrote for some of my university courses. 
 
 Included courses are, for the University of Bologna:
 - 28020 - Operating Systems T (A.Y. 2018-2019)
@@ -13,6 +13,7 @@ Included courses are, for the University of Bologna:
 - 72942 - Information Security M (A.Y. 2020-2021)
 - 72938 - Foundations of Artificial Intelligence M (A.Y. 2020-2021)
 - 72935 - Operations Research M (A.Y. 2020-2021)
+- 29206 - Innovation and Project Management M (A. Y. 2021-2022)
 
 And for the UPC BarcelonaTech:
 - VAR-MIRI - Virtual and Augmented Reality (A.Y. 2021-2022)
@@ -33,7 +34,8 @@ I corsi inclusi sono, per l'Università di Bologna:
 - 72937 - Calcolatori Elettronici M (A.A. 2020-2021)
 - 72942 - Sicurezza dell'Informazione M (A.A. 2020-2021)
 - 72938 - Fondamenti di Intelligenza Artificiale M (A.A. 2020-2021)
-- 72935 - Operations Research M (A.A. 2020-2021)
+- 72935 - Ricerca Operativa M (A.A. 2020-2021)
+- 29206 - Gestione dell'Innovazione e dei Progetti M (A.A. 2021-2022)
 
 E per la UPC BarcelonaTech:
 - VAR-MIRI - Virtual and Augmented Reality (A.A. 2021-2022)
