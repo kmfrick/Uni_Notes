@@ -1,6 +1,6 @@
 name: "Compile TeX"
 
-on: workflow-dispatch
+on: workflow_dispatch
 
 jobs:
   compile:
