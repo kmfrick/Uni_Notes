@@ -9,9 +9,9 @@ jobs:
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - uses: xu-cheng/latex-action@v2
+      - uses: xu-cheng/latex-action@v3
         with:
           root_file: |
             SM/SM.tex
@@ -32,7 +32,7 @@ jobs:
           work_in_root_file_dir: true
           continue_on_error: true
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: "PDFs"
           path: "./**/*.pdf"
