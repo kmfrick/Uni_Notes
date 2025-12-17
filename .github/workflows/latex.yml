@@ -1,6 +1,7 @@
 name: "Compile TeX"
 
 on:
+  workflow_dispatch
   push:
     branches:
       - main
